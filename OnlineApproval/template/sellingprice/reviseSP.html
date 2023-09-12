@@ -1,0 +1,578 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <center>
+            <h5>Revise Selling Price Request {{SP_Number}}</h5>
+        </center>
+
+        <h6>New SP Number</h6>
+        {{New_SP_Number}}
+        <br>
+        <br>
+       
+        <br>
+        <h6>Item Selling Price Request</h6>
+
+        <!-- HEADER -->
+        <div class="row" style="padding-left: 14px;">
+            <table style="font-size: small;">
+                <tr>
+                    <td style="width: 140px;">SP Number</td>
+                    <td>: {{SP.SP_Number}}</td>
+                </tr>
+                <tr>
+                    <td>Customer Name</td>
+                    <td>: {{SP.Cust_Name}}</td>
+                </tr>
+                <tr>
+                    <td>Customer Code</td>
+                    <td>: {{SP.Cust_Code}}</td>
+                </tr>
+                <tr>
+                    <td>Distribution Channel </td>
+                    <td>: {{SP.Dist_Channel}}</td>
+                </tr>
+                <tr>
+                    <td>Product Status</td>
+             
+                    <td>: {{SP.Product_Status}}</td>
+                </tr>
+                <tr>
+                    <td>Submit Date</td>
+                    <td>: {{SP.Submit_Date}}</td>
+                </tr>
+                <tr>
+                    <td>Supervisor Name</td>
+                    <td>: {{SP.SPV}}</td>
+                </tr>
+            </table>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div style="max-height: 5px;"><br></div>
+        <!-- TABEL -->
+        <table id="table" style="border-collapse: collapse; font-size: 12px; text-align: center; width: 100%;">
+            <thead>
+                <tr style=" height: 50px; word-break: normal; border: 1px solid">
+                    <th rowspan="2" style="vertical-align: middle; border: 1px solid ">Type</th>
+                    <th rowspan="2" style="vertical-align: middle; border: 1px solid">Material No</th>
+                    <th rowspan="2" style="vertical-align: middle; border: 1px solid">Material Description</th>
+                    <th rowspan="2" style="vertical-align: middle; border: 1px solid">Customer Material</th>
+                    <th colspan="5" style="border: 1px solid">Old Price</th>
+                    <th colspan="5" style="border: 1px solid">New Price</th>
+                    <th rowspan="2" style="vertical-align: middle; border: 1px solid">Ratio</th>
+                    <th rowspan="2" style="vertical-align: middle; border: 1px solid">Note</th>
+                </tr>
+                <tr style="border: 1px solid">
+                    <th style="padding: 5px; border: 1px solid">Price</th>
+                    <th style="padding: 5px; border: 1px solid">Depreciation</th>
+                    <th style="padding: 5px; border: 1px solid">Total</th>
+                    <th style="padding: 5px; border: 1px solid">UoM</th>
+                    <th style="padding: 5px; border: 1px solid">Valid From</th>
+                    <th style="padding: 5px; border: 1px solid">Price</th>
+                    <th style="padding: 5px; border: 1px solid">Depreciation</th>
+                    <th style="padding: 5px; border: 1px solid">Total</th>
+                    <th style="padding: 5px; border: 1px solid">UoM</th>
+                    <th style="padding: 5px; border: 1px solid">Valid From</th>
+                </tr>
+            </thead>
+            <form method="POST">
+                {% csrf_token %}
+                <tbody style="border: 1px solid black;">
+                    {% for item in itemlist%}
+                    <tr style="height: 30px; font-size:12px; border-collapse: collapse;">
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Type}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Material_No}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Material_Description}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Customer_Material}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Price}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Depreciation}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Total}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_UoM}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Valid_From}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Price}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Depreciation}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Total}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_UoM}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Valid_From}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Ratio_Variance}}</td>
+                        <td style="border: 1px solid black; border-collapse: collapse;">{{item.Note}}</td>
+                        <td><button class="btn btn-info" style="width:40px;padding: 5px;font-size: x-small;"
+                                type="button" data-toggle="modal" data-target="#Modal" data-item="{{item.SP_Number}}" 
+                                data-type="{{item.Type}}" data-materialno="{{item.Material_No}}" data-materialdesc="{{item.Material_Description}}"
+                                data-cust="{{item.Customer_Material}}" data-old-price="{{item.Old_Price}}" data-old-depreciation="{{item.Old_Depreciation}}" 
+                                data-old-total="{{item.Old_Total}}" data-old-uom="{{item.Old_UoM}}" data-old-valid-from="{{item.Old_Valid_From}}"
+                                data-new-price="{{item.New_Price}}" data-new-depreciation="{{item.New_Depreciation}}" data-new-total="{{item.New_Total}}" 
+                                data-new-uom="{{item.New_UoM}}" data-new-valid-from="{{item.New_Valid_From}}"
+                                data-ratio="{{item.Ratio_Variance}}" data-note="{{item.Note}}">edit</button></td>
+                        <td style="padding: 5px;"><button class="btn btn-danger"
+                                style="padding: 5px;font-size: x-small;" type="submit" name="Delete"
+                                value="{{item.id}}">delete</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </form>
+        </table>
+        <button class="btn btn-success" data-toggle="modal" data-target="#ModalAdd"
+            style="margin-top:10px;font-size: x-small;" type="submit" name="Add" value="{{item.SP_Number}}">Add new Item</button>
+        <br>
+
+        <!-- EDIT ITEM -->
+        <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr>
+                                            <th colspan="3" style="text-align: center;background-color: whitesmoke;">
+                                                Item Detail</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Type</td>
+                                            <td><input type="text" class="form-control" name="TypeEdit" id="TypeEdit"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Material No</td>
+                                            <td><input type="text" class="form-control" name="Material_No_Edit" id="Material_No_Edit"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Material Desc</td>
+                                            <td><input type="text" class="form-control" name="Material_Description_Edit" id="Material_Description_Edit" readonly></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer Material</td>
+                                            <td><input type="text" class="form-control" name="Customer_Material_Edit" id="Customer_Material_Edit"></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Note</td>
+                                            <td><input type="text" class="form-control" name="NoteEdit" id="NoteEdit"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr style="text-align: center;background-color: whitesmoke;">
+                                            <th>Item</th>
+                                            <th>Old Price</th>
+                                            <th>New Price</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Price</td>
+                                            <td><input type="text" class="form-control" placeholder="0,000" name="Old_Price_Edit" id="Old_Price_Edit" onkeypress="return hanyaAngka(event)" onkeyup="EditCalculate1(this)"></td>
+                                            <td><input type="text" class="form-control" placeholder="0,000" name="New_Price_Edit" id="New_Price_Edit" onkeypress="return hanyaAngka(event)" onkeyup="EditCalculate2(this)"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Depreciation</td>
+                                            <td><input type="text" class="form-control" name="Old_Depreciation_Edit" id="Old_Depreciation_Edit"onkeyup="EditCalculate1A(this)" onkeypress="return hanyaAngka(event)" value="0" onclick="this.value=''"></td>
+                                            <td><input type="text" class="form-control" name="New_Depreciation_Edit" id="New_Depreciation_Edit"onkeyup="EditCalculate2A(this)" onkeypress="return hanyaAngka(event)" value="0" onclick="this.value=''"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td><input type="text" class="form-control" placeholder="0,000" name="Old_Total_Edit" id="Old_Total_Edit" readonly></td>
+                                            <td><input type="text" class="form-control" placeholder="0,000" name="New_Total_Edit" id="New_Total_Edit" readonly></td>
+                                        </tr>
+                                        <tr>
+                                            <td>UoM</td>
+                                            <td><input type="text" class="form-control" name="Old_UoM_Edit" id="Old_UoM_Edit"></td>
+                                            <td><input type="text" class="form-control" name="New_UoM_Edit" id="New_UoM_Edit"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Valid From</td>
+                                            <td><input type="text" class="form-control datepicker" placeholder="dd.mm.yyyy" name="Old_Valid_From_Edit" id="Old_Valid_From_Edit"></td>
+                                            <td><input type="text" class="form-control datepicker" placeholder="dd.mm.yyyy" name="New_Valid_From_Edit" id="New_Valid_From_Edit"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ratio Variance</td>
+                                            <td colspan="2"><input type="text" class="form-control" name="Ratio_Variance_Edit" id="Ratio_Variance_Edit"  readonly></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="save" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+           
+                $('.datepicker').datepicker({ format: 'dd.mm.yyyy', autoclose: true, toggleActive: true, todayHighlight: true, });
+
+            });
+
+            function hanyaAngka(event) {
+                
+                var angka = (event.which) ? event.which : event.keyCode
+                if (angka != 46 && angka > 31 && (angka < 48 || angka > 57))
+                    return false;
+                return true;
+            };
+
+            $('#Modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                console.log(event);
+
+                if ( button.data('item') != undefined){
+                document.getElementById("id_SP_Number").value = button.data('item');
+                document.getElementById("TypeEdit").value = button.data('type');
+                document.getElementById("Material_No_Edit").value = button.data('materialno');
+                document.getElementById("Material_Description_Edit").value = button.data('materialdesc');
+                document.getElementById("Customer_Material_Edit").value = button.data('cust');
+                document.getElementById("Old_Price_Edit").value = button.data('oldPrice');
+                document.getElementById("Old_Depreciation_Edit").value = button.data('oldDepreciation');
+                document.getElementById("Old_Total_Edit").value=button.data('oldTotal');
+                document.getElementById("Old_UoM_Edit").value = button.data('oldUom');
+                document.getElementById("Old_Valid_From_Edit").value = button.data('oldValidFrom');
+                document.getElementById("New_Price_Edit").value = button.data('newPrice');
+                document.getElementById("New_Depreciation_Edit").value = button.data('newDepreciation');
+                document.getElementById("New_Total_Edit").value=button.data('newTotal');
+                document.getElementById("New_UoM_Edit").value = button.data('newUom');
+                document.getElementById("New_Valid_From_Edit").value = button.data('newValidFrom');
+                document.getElementById("NoteEdit").value=button.data('note');
+                document.getElementById("Ratio_Variance_Edit").value=button.data('ratio');
+                }
+            });
+
+            function EditCalculate1(Price) {
+                
+                document.getElementById("Old_Price_Edit").value = Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("Old_Price_Edit").value.toString() != "0") 
+                document.getElementById("Old_Total_Edit").value = (parseInt(Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("Old_Depreciation_Edit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("Old_Total_Edit").value = "0";
+                Editcalculate_ratio();
+                
+            };
+
+            function EditCalculate1A(Depreciation) {
+                document.getElementById("Old_Depreciation_Edit").value = Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("Old_Price_Edit").value.toString() != "") 
+                document.getElementById("Old_Total_Edit").value = (parseInt(document.getElementById("Old_Price_Edit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("Old_Total_Edit").value = "";
+                Editcalculate_ratio();
+            };
+
+            function EditCalculate2(Price) {
+                document.getElementById("New_Price_Edit").value = Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("New_Price_Edit").value.toString() != "") document.getElementById("New_Total_Edit").value = (parseInt(Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("New_Depreciation_Edit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("New_Total_Edit").value = "";
+                Editcalculate_ratio();
+            };
+
+            function EditCalculate2A(Depreciation) {
+                document.getElementById("New_Depreciation_Edit").value = Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("New_Price_Edit").value.toString() != "") 
+                document.getElementById("New_Total_Edit").value = (parseInt(document.getElementById("New_Price_Edit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("New_Total_Edit").value = "";
+                Editcalculate_ratio();
+            };
+
+            function Editcalculate_ratio()
+            {
+               // alert(document.getElementById("Old_Total_Edit").value);
+                if ( document.getElementById("Old_Total_Edit").value != "0" && document.getElementById("New_Total_Edit").value != ""){
+                    //rumus ratio
+                    let pengurangan = (parseFloat(document.getElementById("New_Total_Edit").value.toString().replace(".", "")) - parseFloat(document.getElementById("Old_Total_Edit").value.toString().replace(".", "")));
+         //           alert(pengurangan)
+                    let pembagian = pengurangan / parseFloat(document.getElementById("Old_Total_Edit").value.toString().replace(".", ""));
+           //         alert(pembagian)
+                    let ratio = pembagian * 100
+                    document.getElementById("Ratio_Variance_Edit").value = (ratio.toFixed(2)).replace(".", ",") + '%';
+                 } else 
+                document.getElementById("Ratio_Variance_Edit").value = '-';
+            };
+        </script>
+        <!-- ADD ITEMS -->
+        <div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="ModalAddLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalAddLabel">Add Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form id="item" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div>{{SPItemForm.SP_Number|add_class:"form-control"|attr:"hidden"}}</div>
+                        <div>{{SPItemForm.No|add_class:"form-control"|attr:"hidden"}}</div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr>
+                                            <th colspan="3" style="text-align: center;background-color: whitesmoke;">
+                                                Item Detail</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Type</td>
+                                            <td>{{SPItemForm.Type|add_class:"form-control"|attr:"required"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Material No</td>
+                                            <td>{{SPItemForm.Material_No|add_class:"form-control"|attr:"required"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Material Desc</td>
+                                            <td>{{SPItemForm.Material_Description|add_class:"form-control"|attr:"required"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer Material</td>
+                                            <td>{{SPItemForm.Customer_Material|add_class:"form-control"|attr:"required"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Note</td>
+                                            <td>{{SPItemForm.Note|add_class:"form-control"}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr style="text-align: center;background-color: whitesmoke;">
+                                            <th>Item</th>
+                                            <th>Old Price</th>
+                                            <th>New Price</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Price</td>
+                                            <td>{{SPItemForm.Old_Price|add_class:"form-control"|append_attr:"placeholder:0,000"|attr:"onkeypress:return hanyaAngka(event)"|attr:"onkeyup:Calculate1(this)"}}</td>
+                                            <td>{{SPItemForm.New_Price|add_class:"form-control"|append_attr:"placeholder:0,000"|attr:"onkeypress:return hanyaAngka(event)"|attr:"onkeyup:Calculate2(this)"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Depreciation</td>
+                                            <td>{{SPItemForm.Old_Depreciation|add_class:"form-control"|attr:"onkeyup:Calculate1A(this)"|attr:"onkeypress:return hanyaAngka(event)"|attr:"value:0"|attr:"onclick:this.value=''"}}</td>
+                                            <td>{{SPItemForm.New_Depreciation|add_class:"form-control"|attr:"onkeyup:Calculate2A(this)"|attr:"onkeypress:return hanyaAngka(event)"|attr:"value:0"|attr:"onclick:this.value=''"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td>{{SPItemForm.Old_Total|add_class:"form-control"|append_attr:"placeholder:0,000"|attr:"readonly"}}</td>
+                                            <td>{{SPItemForm.New_Total|add_class:"form-control"|append_attr:"placeholder:0,000"|attr:"readonly"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>UoM</td>
+                                            <td>{{SPItemForm.Old_UoM|add_class:"form-control"}}</td>
+                                            <td>{{SPItemForm.New_UoM|add_class:"form-control"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Valid From</td>
+                                            <td>{{SPItemForm.Old_Valid_From|add_class:"form-control datepicker"|append_attr:"placeholder:dd.mm.yyyy"|attr:"value:-"|attr:"onclick:this.value=''"}}</td>
+                                            <td>{{SPItemForm.New_Valid_From|add_class:"form-control datepicker"|append_attr:"placeholder:dd.mm.yyyy"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ratio Variance</td>
+                                            <td colspan="2">{{SPItemForm.Ratio_Variance|add_class:"form-control"|attr:"readonly"}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" name ="add">Add Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ADD NEW ITEM -->
+        <script>
+            function Calculate1(Price) {
+                document.getElementById("id_Old_Price").value = Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_Old_Price").value.toString() != "0") 
+                document.getElementById("id_Old_Total").value = (parseInt(Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_Old_Depreciation").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_Old_Total").value = "0";
+                calculate_ratio();
+            }
+
+            function Calculate1A(Depreciation) {
+                document.getElementById("id_Old_Depreciation").value = Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_Old_Price").value.toString() != "") 
+                document.getElementById("id_Old_Total").value = (parseInt(document.getElementById("id_Old_Price").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_Old_Total").value = "";
+                calculate_ratio();
+            }
+
+            function Calculate2(Price) {
+                document.getElementById("id_New_Price").value = Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_New_Price").value.toString() != "") document.getElementById("id_New_Total").value = (parseInt(Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_New_Depreciation").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_New_Total").value = "";
+                calculate_ratio();
+            }
+
+            function Calculate2A(Depreciation) {
+                document.getElementById("id_New_Depreciation").value = Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_New_Price").value.toString() != "") 
+                document.getElementById("id_New_Total").value = (parseInt(document.getElementById("id_New_Price").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_New_Total").value = "";
+                calculate_ratio();
+            }
+
+            function calculate_ratio()
+            {
+            //    alert(document.getElementById("id_Old_Total").value);
+                if ( document.getElementById("id_Old_Total").value != "0" && document.getElementById("id_New_Total").value != ""){
+                    //rumus ratio
+                    let pengurangan = (parseFloat(document.getElementById("id_New_Total").value.toString().replace(",", "")) - parseFloat(document.getElementById("id_Old_Total").value.toString().replace(",", "")));
+         //           alert(pengurangan)
+                    let pembagian = pengurangan / parseFloat(document.getElementById("id_Old_Total").value.toString().replace(",", ""));
+           //         alert(pembagian)
+                    let ratio = pembagian *100
+             //       alert(ratio)
+                    
+                    document.getElementById("id_Ratio_Variance").value = (ratio.toFixed(2)).replace(".", ",") + '%';
+                 } else 
+                document.getElementById("id_Ratio_Variance").value = '-';
+            }
+        </script>
+
+        <!-- APPROVAL -->
+        <br>
+        <h6>Approval</h6>
+        <div style="max-height: 5px;"><br></div>
+
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;" >
+            <tbody >
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Created By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Checked By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Checked By</td>
+                    <td colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">SAP Input By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Confrimed By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{SP.User_Submit}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{SP.SPV_Approval_Status|default_if_none:''}}
+                        {{SP.SPV_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{SP.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{SP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DIV">
+                        {{SP.Div_Head_Approval_Status|default_if_none:''}}
+                        {{SP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="PRDIR">
+                        {{SP.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{SP.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="ACC">
+                        {{SP.Acc_Input_Status|default_if_none:''}}
+                        {{SP.Acc_Input_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPTACC">
+                        {{SP.Dept_Acc_Confirm_Status|default_if_none:''}}
+                        {{SP.Dept_Acc_Confirm_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.UserName}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.SPV}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.Dept_Head|default_if_none:'N/A'}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{SP.Div_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{SP.PresDirektur}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.Acc}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.Dept_Acc}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing Admin</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing SPV</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing Dept Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Bussiness Dev Div Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Press Director</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Finance SPV</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Finance Dept Head</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h6>Quotation (Penawaran) Attachment</h6>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% with 'Attachment1, Attachment2, Attachment3, Attachment4, SP Number' as list%}
+            {% for form in SPform %}
+                {% if form.label not in list %}
+                {{form|attr:"hidden"}}
+                {% endif %}
+            {% endfor %}
+            {% endwith %}
+            <table>
+                <input type="text" name="SP_Number" id="id_SP_number" value="{{New_SP_Number}}" hidden>
+                {% if SP.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{SP.Attachment1}}">{{SP.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif SP.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{SPform.Attachment1}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">upload</button></td>
+                </tr>
+                {% endif %}
+                {% if SP.Attachment2  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{SP.Attachment2}}">{{SP.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif SP.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{SPform.Attachment2}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">upload</button></td>
+                </tr>
+                {% endif %}
+                {% if SP.Attachment3  %}
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{SP.Attachment3}}">{{SP.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif SP.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{SPform.Attachment3}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">upload</button></td>
+                </tr>
+                {% endif %}
+                {% if SP.Attachment4  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{SP.Attachment4}}">{{SP.Attachment4|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif SP.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{SPform.Attachment4}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">upload</button></td>
+                </tr>
+                {% endif %}
+            </table>
+            <button style="float: right;" class="btn btn-warning" type="submit" name="Finish">Finish Revision</button>
+        </form>
+        <br>
+        <br>
+    </div>
+</div>
+{% endblock %}

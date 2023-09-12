@@ -1,0 +1,162 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h6>{{Judul}}</h6>
+        </center>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+        <table id="table" class="table table-bordered" style="text-align: center;font-size:small;" class="display">
+            <thead style ="text-align:center;font-size:small;background-color: lightcyan;" >
+            <tr>
+                <th>No</th>
+                <th>PO Number</th>
+                <th>PO Date</th>
+                <th>Revision</th>
+                <th>Submit Date</th>
+                <th>Vendor Number</th>
+                <th>Vendor Name</th>
+                <th>Supervisor</th>
+                <th>Dept Head</th>
+                <th>Direktur</th>
+                <th>Presiden Direktur</th>
+                <th>Status</th>
+                <th>Note</th>
+
+                <!-- <th>PDF</th> -->
+            </tr>
+            </thead>
+            {% for PO in POData %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><a href="/PO/ListPO/{{PO.PO_Number}}/{{PO.Revision_Status}}">{{PO.PO_Number}}</a></td>
+                <td>{{PO.PO_Date}}</td>
+                <td>{{PO.Revision_Status}}</td>
+                <td>{{PO.PO_Submit}}</td>
+                <td>{{PO.Vendor_Number}}</td>
+                <td>{{PO.Vendor_Name}}</td>
+
+                <td>
+                    <div>{{PO.PO_SPV_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{PO.PO_SPV_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PO.PO_SPV|default_if_none:"N/A"}}</div>
+                </td>
+                <td>
+                    <div>{{PO.PO_Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{PO.PO_Dept_Head_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PO.PO_Dept_Head|default_if_none:"N/A"}}</div>
+                </td>
+                <td>
+                    {% if PO.PO_Direktur != None %}
+                    <div>{{PO.PO_Direktur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    {% else %}
+                    <div>-</div>
+                    {% endif %}
+                    
+                    <div>{{PO.PO_Direktur_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PO.PO_Direktur|default_if_none:""}}</div>
+                </td>
+                <td>
+                    {% if PO.PO_PresDirektur != None %}
+                    <div>{{PO.PO_PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    {% else %}
+                    <div>-</div>
+                    {% endif %}
+                    <div>{{PO.PO_PresDirektur_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PO.PO_PresDirektur|default_if_none:""}}</div>
+                </td>
+                <td>{{PO.PO_Status}}
+
+                    <div>{% if "Finished" in PO.PO_Status  %}
+                        <div><a href="/Media/SignedPO/PO {{PO.PO_Number}}rev{{PO.Revision_Status}}.pdf">Download</a></div>
+                        <br>
+                        <div><a href="/PO/Revise/{{PO.PO_Number}}/{{PO.Revision_Status}}">Revise PO</a></div>
+                       
+                        {% elif PO.PO_Status == "NeedRevise" %}
+                        <div>{{PO.Cancel_Message}}</div>
+                        <a href="/PO/Revise/{{PO.PO_Number}}/{{PO.Revision_Status}}">Revise PO</a>
+                        {% elif PO.PO_Status == "Revised" %}
+                        <div>{{PO.Cancel_Message}}</div>
+                        {% elif PO.PO_Status == "Rejected" %}
+                            {{PO.Cancel_Message}}
+                        {% endif %}</div>
+                        
+                    
+                </td>
+                <td>
+                    <div>{{PO.User_Note|default_if_none:"-"}}</div>
+                    <div><input type="text" name="PO{{PO.PO_Number}}rev{{PO.Revision_Status}}"></div>
+                </td>
+          
+            </tr>
+            {% endfor %}
+
+        </table>
+        <div style="height: 4px;"><br></div>
+        <button class="btn btn-success" style="width: 200px;float: right;">Save Note</button>
+        <a class="btn btn-info" style="width: 200px;float: right;margin-right: 20px;" href="/PO/ListPOExport/"> Download ListPO as .xls</a>
+        
+       
+        </form>
+        
+
+        <style>
+            thead input {
+                width: 100%;
+            }
+
+            thead {
+                width: auto;
+            }
+
+            table {
+                width: 100%;
+            }
+        </style>
+
+        <script>
+
+            $(document).ready(function () {
+                // Setup - add a text input to each footer cell
+
+                $('#table thead tr').clone(true).appendTo('#table thead');
+                $('#table thead tr:eq(1) th').each(function (i) {
+                    var title = $(this).text();
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+                    $('input', this).on('keyup change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+
+                });
+
+                var table = $('#table').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true
+                });
+
+
+            });
+
+
+
+
+
+
+
+        </script>
+
+    </div>
+</div>
+{% endblock %}

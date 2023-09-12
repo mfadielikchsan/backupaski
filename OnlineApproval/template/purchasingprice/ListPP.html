@@ -1,0 +1,255 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h5>Purchasing Price Request Monitoring</h5>
+        </center>
+        <div class="row">
+            <h6 style="margin-left: 12px;margin-right: 8px;margin-top: 10px;">Show List Purchasing Price Request by</h6>
+
+            <select name="listtype" id="id_listtype" class="form-control" style="width:fit-content; margin: 16px;"
+                onchange="ChangeList(this)">
+                <option value="Header"><b>PP Header</b></option>
+                <option value="Item"><b>PP Item</b></option>
+            </select>
+        </div>
+
+        <hr>
+        <div id="sphead">
+            <form method="POST">
+                {% csrf_token %}
+
+                <table class="table table-bordered" id="table" class="display">
+                    <thead style="text-align:center;font-size:small;background-color: lightcyan;">
+                        <tr>
+                            <th style="vertical-align: middle;">No</th>
+                            <th style="vertical-align: middle;">PP Number</th>
+                            <th style="vertical-align: middle;">Type</th>
+                            <th style="vertical-align: middle;">Date Created</th>
+                            <th style="vertical-align: middle;">Admin</th>
+                            <th style="vertical-align: middle;">SPV Approval</th>
+                            <th style="vertical-align: middle;">Dept Head Approval</th>
+                            <th style="vertical-align: middle;">Mkt Head Approval</th>
+                            <th style="vertical-align: middle;">Div Head Approval</th>
+                            <th style="vertical-align: middle;">President Director Approval</th>
+                            <th style="vertical-align: middle;">Finance Input</th>
+                            <th style="vertical-align: middle;">Finance Dept Head Confirm</th>
+                            <th style="vertical-align: middle;">Status</th>
+                        </tr>
+                    </thead>
+
+
+                    {% for PP in ListPP %}
+                    <tr style="font-size:small;text-align: center;">
+                        <td>{{forloop.counter}}</td>
+                        <td>
+                            <div><a href="{{PP.PP_Number}}/">{{PP.PP_Number}}</a></div>
+
+                        </td>
+                        <td>{{PP.Type}}</td>
+                        <td>{{PP.Submit}}</td>
+                        <td>{{PP.Admin}}</td>
+                        <td>
+                            <div>{{PP.SPV_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                            <div>{{PP.SPV_Approval_Date|default_if_none:""}}</div>
+                            <div>{{PP.SPV|default_if_none:""}}</div>
+                        </td>
+                        
+                        <td>
+                            {%if PP.Dept_Head == None%}
+                            <div>-</div>
+                            {% else %}
+                            <div>{{PP.Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                            <div>{{PP.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                            <div>{{PP.Dept_Head|default_if_none:""}}</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div>{{PP.Mkt_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                            <div>{{PP.Mkt_Head_Approval_Date|default_if_none:""}}</div>
+                            <div>{{PP.Mkt_Head|default_if_none:""}}</div>
+                        </td>
+                        <td>
+                            <div>{{PP.Div_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                            <div>{{PP.Div_Head_Approval_Date|default_if_none:""}}</div>
+                            <div>{{PP.Div_Head|default_if_none:""}}</div>
+                        </td>
+                        <td>
+                            <div>{{PP.PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                            <div>{{PP.PresDirektur_Approval_Date|default_if_none:""}}</div>
+                            <div>{{PP.PresDirektur|default_if_none:""}}</div>
+                        </td>
+                        <td>
+                            <div>{{PP.Fin_Input_Status|default_if_none:"Waiting Input"}}</div>
+                            <div>{{PP.Fin_Input_Date|default_if_none:""}}</div>
+                            <div>{{PP.Fin|default_if_none:""}}</div>
+                        </td>
+                        <td>
+                            <div>{{PP.Dept_Fin_Confirm_Status|default_if_none:"Waiting Confirmation"}}</div>
+                            <div>{{PP.Dept_Fin_Confirm_Date|default_if_none:""}}</div>
+                            <div>{{PP.Dept_Fin|default_if_none:""}}</div>
+                        </td>
+                        <td>
+                            <div>{{PP.Status}}</div>
+                            <div>{% if PP.Status == "Finished" %}
+                                
+                                <div style="margin-top: 10px;"><a href="/Media/Price/{{PP.PP_Number}}.pdf">Document</a></div>
+                            
+                                <div  style="margin-top: 10px;"><a href="/Media/Price/Confirmation Letter {{PP.PP_Number}}.pdf">Conf Letter</a></div>
+                                {% elif PP.Status == "NeedRevise"%}
+                                <div>{{PP.Revise_Request}}</div>
+                                <a href="/PP/Revise/{{PP.PP_Number}}" class="btn btn-warning">Revise</a>
+                                {% elif PP.Status == "Revised"%}
+                                <div>{{PP.Revise_Request}}</div>
+                                {% elif PP.Status == "Rejected"%}
+                                <div>{{PP.Revise_Request}}</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+                <br>
+                <br>
+                <!-- {%if user.username in "admin , FINANCE"%}
+<a class="btn btn-info" style="width: 200px;float: right;margin-right: 20px;" href="/SP/ListSPExport/"> Download ListSP as .xls</a>
+{% endif %} -->
+            </form>
+            <br>
+        </div>
+        <div id="itemhead">
+            <table class="display table table-bordered" id="tableitem"
+                style=" font-size: small;text-align: center; width: 100%;">
+                <thead style="text-align:center;font-size:small;background-color: lightcyan;">
+                    <tr>
+                        <th>No</th>
+                        <th>PP Number</th>
+                        <th>Vendor Code</th>
+                        <th>Vendor Name</th>
+                        <th>Material No</th>
+                        <th>Material Description</th>
+                        <th>Qty</th>
+                        <th>UoM</th>
+                        <th>Old Price</th>
+                        <th>Old Delivery </th>
+                        <th>New Price</th>
+                        <th>New Delivery </th>
+                        <th>Ratio Variance </th>
+                    </tr>
+                </thead>
+                <tbody >
+                    {% for Item in ListPPItem%}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="{{Item.PP_Number}}/">{{Item.PP_Number}}</a></td>
+                        <td>{{Item.Vend_Code}}</td>
+                        <td>{{Item.Vend_Name}}</td>
+                        <td>{{Item.Material}}</td>
+                        <td>{{Item.Material_Desc}}</td>
+                        <td>{{Item.Qty}}</td>
+                        <td>{{Item.UoM}}</td>
+                        <td>{{Item.Currency}} {{Item.Old_Price}}</td>
+                        <td>{{Item.Old_Delivery}}</td>
+                        <td>{{Item.Currency}} {{Item.New_Price}}</td>
+                        <td>{{Item.New_Delivery}}</td>
+                        <td>{{Item.Ratio}}</td>
+
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+
+        </div>
+
+        <style>
+            thead input {
+                width: 100%;
+            }
+
+            thead {
+                width: auto;
+            }
+
+            table {
+                max-width: 100%;
+            }
+        </style>
+
+        <script>
+
+            $(document).ready(function () {
+                // Setup - add a text input to each footer cell
+
+                $('#table thead tr').clone(true).appendTo('#table thead');
+                $('#table thead tr:eq(1) th').each(function (i) {
+                    var title = $(this).text();
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+                    $('input', this).on('keyup change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+
+                });
+
+                $('#tableitem thead tr').clone(true).appendTo('#tableitem thead');
+                $('#tableitem thead tr:eq(1) th').each(function (i) {
+                    var title = $(this).text();
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+                    $('input', this).on('keyup change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+
+                });
+
+                var table = $('#table').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true
+                });
+
+                var tableitem = $('#tableitem').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true
+                });
+
+
+                $("#sphead").show();
+                $("#itemhead").hide();
+
+            });
+
+            function ChangeList(select) {
+                console.log(select.value);
+                if (select.value == "Header") {
+                    $("#sphead").show();
+                    $("#itemhead").hide();
+                }
+                else if (select.value == "Item") {
+                    $("#sphead").hide();
+                    $("#itemhead").show();
+                };
+            };
+
+        </script>
+        <br>
+        <br>
+    </div>
+</div>
+{% endblock %}

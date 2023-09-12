@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header" style="background-color:white">
+        <b><a href="/CP/Filter/">Filtering</a></b>
+        /
+        <b>Summary</b>
+    </div>
+    <div class="card-body">
+        <h6>Summary of Capex</h6>
+        <table id="table" class="table table-bordered">
+            <thead style="text-align: center;">
+                <th>Department</th>
+                <th>Sum of {{CP.Year}}</th>
+                <th>Sum of {{ CP.Next_Year1 }}</th>
+                <th>Sum of {{ CP.Next_Year2 }}</th>
+            </thead>
+            <tbody>
+            {% for CP in listCP %}
+            <tr>
+                {% for I in CP %}
+                <td style="text-align: center;">{{I}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            {% for CP in listCPlast %}
+            <tr>
+                {% for I in CP %}
+                <td style="text-align: center;"><b>{{I}}</b></td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <h6>Summary of Expense</h6>
+        <table id="table" class="table table-bordered">
+            <thead style="text-align: center;">
+                <th>Department</th>
+                <th>Sum of {{CP.Year}}</th>
+                <th>Sum of {{ CP.Next_Year1 }}</th>
+                <th>Sum of {{ CP.Next_Year2 }}</th>
+            </thead>
+            <tbody>
+            {% for CP in listexpense %}
+            <tr>
+                {% for I in CP %}
+                <td style="text-align: center;">{{I}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            {% for CP in listexpenselast %}
+            <tr>
+                {% for I in CP %}
+                <td style="text-align: center;"><b>{{I}}</b></td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <h6>Grand Total</h6>
+        <table id="table" class="table table-bordered">
+            <thead style="text-align: center;">
+                <th>Department</th>
+                <th>Sum of {{CP.Year}}</th>
+                <th>Sum of {{ CP.Next_Year1 }}</th>
+                <th>Sum of {{ CP.Next_Year2 }}</th>
+            </thead>
+            <tbody>
+                {% for CP in listtotal%}
+                <tr>
+                    {% for I in CP %}
+                    <td style="text-align: center;"><b>{{I}}</b></td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <form  action="" method="post">
+            {% csrf_token%}
+            <button type="submit" class="btn btn-success" name="Finish" id="Finish"
+                    style="width: 150px;margin-left: auto;margin-right: 16px;display: block;">
+                    Finish
+            </button>                                                                   
+        </form>
+        <br>
+    </div>
+</div>
+
+{% endblock %}

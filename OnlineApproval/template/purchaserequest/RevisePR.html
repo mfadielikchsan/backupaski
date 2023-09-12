@@ -1,0 +1,806 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<!-- <center><h1>{{Judul}}</h1></center> -->
+<div class="card">
+    <div class="card-body">
+
+        <center>
+            <h5>Revise Purchase Request {{PP_Number}}</h5>
+        </center>
+
+        <h6>New PP Number</h6>
+        {{New_PP_Number}}
+        <br>
+        <br>
+
+        <h6>Revision Message</h6>
+      
+
+        <table style="margin-left: 15px;">
+            <tr><i>Revision {{forloop.counter}}</i></tr>
+            <tr>
+                <td style="width: 140px;">PP Number</td>
+                <td>:</td>
+                <td>{{revision.PP_Number}}</td>
+            </tr>
+            <tr>
+                <td>Revise Order by</td>
+                <td>:</td>
+                <td>{{revision.Email_By}}</td>
+            </tr>
+            <tr>
+                <td>Revise Message</td>
+                <td>:</td>
+                <td>{{revision.Comment}}</td>
+            </tr>
+            <tr>
+                <td>Order Date</td>
+                <td>:</td>
+                <td>{{revision.HistoryDate}}</td>
+            </tr>
+
+
+        </table>
+       
+        <br>
+        <h6>Item Purchase Request</h6>
+
+        <div class="row" style="padding-left: 14px;">
+            <div class="col-sm-10">
+                <table>
+                    <tr>
+                        <td style="width: 140px;">Company</td>
+                        <td>: {{PRheader.Company}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bussiness Area</td>
+                        <td>: {{PRheader.Bussiness_Area}}</td>
+                    </tr>
+                    <tr>
+                        <td>Date Created</td>
+                        <td>: {{PRheader.Date_Created|date:'d M Y'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Jenis PP </td>
+                        <td>: {{PRheader.Jenis_PP}}</td>
+                    </tr>
+                    <tr>
+                        <td>PP Number</td>
+                        <td>: {{PRheader.PP_Number}}</td>
+                    </tr>
+                    <tr>
+                        <td>User Name</td>
+                        <td>: {{PRheader.User_Name}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+
+        <div style="max-height: 5px;"><br></div>
+
+
+        <table id="table" class="style" style="border: 1px solid black; font-size: small;text-align: center;">
+            <thead style="border: 1px solid black;">
+                <tr style="border: 1px solid black; height: 50px; word-break: normal;">
+                    <th rowspan="2" style="border: 1px solid black;">NO</th>
+                    <th rowspan="2" style="border: 1px solid black;">A* (Exp)</th>
+                    <th rowspan="2" style="border: 1px solid black;">I* (Jenis)</th>
+                    <th rowspan="2" style="border: 1px solid black;">Kode Barang</th>
+                    <th rowspan="2" style="border: 1px solid black;">Nama Barang / Deskripsi Service</th>
+                    <th colspan="2" style="border: 1px solid black;">Dipesan</th>
+                    <th colspan="2" style="border: 1px solid black;">Perkiraan Harga</th>
+                    <th rowspan="2" style="border: 1px solid black;">Tanggal Kedatangan</th>
+                    <th colspan="2" style="border: 1px solid black; word-break: keep-all;">Account Assignment</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Min Stock</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Act Stock</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Avg Usage</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Budget</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Un-Budget</th>
+                    <th rowspan="2" style="border: 1px solid black; width: 100px;">Catatan</th>
+                </tr>
+                <tr style="height:50px">
+                    <th style="border: 1px solid black;">Jumlah</th>
+                    <th style="border: 1px solid black;">UoM</th>
+                    <th style="border: 1px solid black;">Satuan</th>
+                    <th style="border: 1px solid black;">Total</th>
+                    <th style="border: 1px solid black;">Cost Center</th>
+                    <th style="border: 1px solid black;">Asset No./GL Account</th>
+                </tr>
+            </thead>
+            <form method="POST">
+                {% csrf_token %}
+                <tbody style="border: 1px solid black;">
+                    {% for item in itemlist%}
+                    <tr style="height: 30px;">
+                        <td style="border: 1px solid black;">{{forloop.counter}}</td>
+                        <td style="border: 1px solid black;">{{item.Expense|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Jenis_Barang|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Kode_Barang|default_if_none:''}}</td>
+                        <td style="border: 1px solid black; text-align: left;padding-left: 5px;">{{item.Nama_Barang}}
+                        </td>
+                        <td style="border: 1px solid black;">{{item.Jumlah_Order}}</td>
+                        <td style="border: 1px solid black;">{{item.Unit_Order}}</td>
+                        <td style="border: 1px solid black;">{{item.Harga_Satuan|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Harga_Total|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Tgl_Kedatangan}}</td>
+                        <td style="border: 1px solid black;">{{item.Cost_Center}}</td>
+                        <td style="border: 1px solid black;">{{item.Asset_No_GL_Account|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Minimal_Stock|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Actual_Stock|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Average_Usage|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{%if item.Budget == 'Budget' %}x{% endif %}</td>
+                        <td style="border: 1px solid black;">{%if item.Budget == 'UnBudget' %}x{% endif %}</td>
+                        <td style="border: 1px solid black;">{{item.Note}}</td>
+                        <td><button class="btn btn-info" style="width:40px;padding: 5px;font-size: x-small;"
+                                type="button" data-toggle="modal" data-target="#Modal" data-item="{{item.Nama_Barang}}"
+                                data-jumlah="{{item.Jumlah_Order}}" data-harga="{{item.Harga_Satuan}}"
+                                data-tgl="{{item.Tgl_Kedatangan}}" data-cost="{{item.Cost_Center}}"
+                                data-note="{{item.Note}}">edit</button></td>
+                        <td style="padding: 5px;"><button class="btn btn-danger"
+                                style="padding: 5px;font-size: x-small;" type="submit" name="Delete"
+                                value="{{item.Nama_Barang}}">delete</button></td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </form>
+        </table>
+
+        <button class="btn btn-success" data-toggle="modal" data-target="#ModalAdd"
+            style="margin-top:10px;font-size: x-small;" type="submit" name="Add" value="{{item.Nama_Barang}}">Add new
+            Item</button>
+        <br>
+
+
+
+        <style>
+            .select2-selection__rendered {
+                line-height: 31px !important;
+            }
+
+            .select2-container .select2-selection--single {
+                height: 40px !important;
+                padding-left: 10px;
+                padding-top: 2px;
+
+            }
+
+            .select2-selection__arrow {
+                height: 34px !important;
+            }
+        </style>
+
+        <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-3"> Name Item</div>
+                                <div class="col-sm-9">
+
+                                    <input type="text" class="form-control" name="Nama_BarangEdit" id="selectEdit"
+                                        readonly>
+
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    Jumlah Order
+                                </div>
+                                <div class="col-sm-9">
+
+                                    <input type="number" name="Jumlah_OrderEdit" onkeyup="Calculate2Edit(this)"
+                                        class="form-control" required id="id_Jumlah_OrderEdit">
+
+                                </div>
+                            </div>
+                            <div style="max-height: 2px;"><br></div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    Harga Satuan
+                                </div>
+                                <div class="col-sm-9">
+
+                                    <input type="text" name="Harga_SatuanEdit" maxlength="20"
+                                        placeholder="in Indonesian Rupiah (IDR)" onkeyup="Calculate1Edit(this)"
+                                        class="form-control" required id="id_Harga_SatuanEdit">
+
+                                </div>
+                            </div>
+                            <div style="max-height: 2px;"><br></div>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    Tgl Kedatangan
+                                </div>
+                                <div class="col-sm-9">
+
+                                    <input type="text" name="Tgl_KedatanganEdit" maxlength="50"
+                                        class="form-control datepicker" id="id_Tgl_KedatanganEdit">
+
+                                </div>
+                            </div>
+                            <div style="max-height: 2px;"><br></div>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    Cost Center
+                                </div>
+                                <div class="col-sm-9">
+
+                                    <select class="form-control2edit" style="width: 100%;" name="Cost_CenterEdit"
+                                        id="id_Cost_CenterEdit" required>
+                                        <option disabled selected value> --------- </option>
+                                        {% for cost in CostCenter %}
+
+                                        {% if '1' in PRheader.Company %}
+                                        {%if cost.Plant in 'Plant 1,Common' %}
+                                        <option style="font-size: xx-small;" value="{{cost.Cost_Center}}">
+                                            {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+                                        {% endif %}
+                                        {% else %}
+                                        {%if cost.Plant in 'Plant 2,Common' %}
+                                        <option style="font-size: xx-small;" value="{{cost.Cost_Center}}">
+                                            {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+                                        {% endif %}
+                                        {% endif %}
+
+                                        {% endfor %}
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div style="max-height: 2px;"><br></div>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    Note
+                                </div>
+                                <div class="col-sm-9">
+
+                                    <input type="text" name="NoteEdit" maxlength="250" class="form-control" required
+                                        id="id_NoteEdit">
+
+                                </div>
+                            </div>
+                            <div style="max-height: 2px;"><br></div>
+                            <input type="text" name="Harga_TotalEdit" maxlength="250" class="form-control" required
+                                id="id_Harga_TotalEdit" hidden>
+
+
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="save" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            var itemsel = {{ ItemSelect| safe}};
+            var date = new Date();
+            date.setDate(date.getDate() + 1);
+
+            $(document).ready(function () {
+                $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+                $('.form-control2edit').select2();
+                $('.form-control2').select2();
+
+
+                $('.datepicker').datepicker({ startDate: date, format: 'dd/mm/yyyy', autoclose: true, toggleActive: true, todayHighlight: true, });
+
+                $('.datepickeradd').datepicker({ startDate: date, format: 'dd/mm/yyyy', autoclose: true, toggleActive: true, todayHighlight: true, });
+                var sel = document.getElementById('select');
+
+                for (var i = 0; i < itemsel.length; i++) {
+                    var opt = document.createElement('option');
+                    opt.appendChild(document.createTextNode(itemsel[i].fields.Nama_Barang));
+                    opt.value = i;
+                    sel.appendChild(opt);
+                }
+
+
+                var table = document.getElementById("table"), sumVal = 0;
+
+                //console.log(table.rows[2].cells[8].innerHTML);
+                for (var i = 2; i < table.rows.length; i++) {
+                    sumVal = sumVal + parseInt((table.rows[i].cells[8].innerHTML).toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""));
+                }
+                console.log(sumVal);
+                document.getElementById("PP_calc").innerText = sumVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " IDR";
+                document.getElementById("final_calc").innerText = (parseInt(document.getElementById("sisabudget").innerText.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) - sumVal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " IDR";
+                document.getElementById("id_PP_diAjukan").value = document.getElementById("PP_calc").innerText;
+                document.getElementById("id_Sisa_Final").value = document.getElementById("final_calc").innerText;
+            });
+
+
+
+
+            function SelectItem(Item) {
+                var selectedText = Item.options[Item.selectedIndex].innerHTML;
+                var selectedValue = Item.value;
+                //console.log(selectedText);
+                //console.log(selectedValue);
+                document.getElementById("id_Expense").value = itemsel[selectedValue].fields.Expense;
+                document.getElementById("id_Jenis_Barang").value = itemsel[selectedValue].fields.Jenis_Barang;
+                document.getElementById("id_Kode_Barang").value = itemsel[selectedValue].fields.Kode_Barang;
+                document.getElementById("id_Nama_Barang").value = itemsel[selectedValue].fields.Nama_Barang;
+                document.getElementById("id_Unit_Order").value = itemsel[selectedValue].fields.Unit_Order;
+
+
+            }
+
+
+
+
+            function Calculate1(Item) {
+
+
+                document.getElementById("id_Harga_Satuan").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("id_Jumlah_Order").value.toString() != "") document.getElementById("id_Harga_Total").value = (parseInt(Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(document.getElementById("id_Jumlah_Order").value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("id_Harga_Total").value = "";
+            }
+            function Calculate2(Item) {
+
+                //document.getElementById("id_Harga_Satuan").value = Item.value.toString().replace(/\D/g,'').replace(/\./g,"").replace(".","").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("id_Harga_Satuan").value.toString() != "") document.getElementById("id_Harga_Total").value = (parseInt(document.getElementById("id_Harga_Satuan").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(Item.value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("id_Harga_Total").value = "";
+            }
+
+            function Calculate1Edit(Item) {
+
+                document.getElementById("id_Harga_SatuanEdit").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("id_Jumlah_OrderEdit").value.toString() != "") document.getElementById("id_Harga_TotalEdit").value = (parseInt(Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(document.getElementById("id_Jumlah_OrderEdit").value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("id_Harga_TotalEdit").value = "";
+            }
+            function Calculate2Edit(Item) {
+
+                //document.getElementById("id_Harga_Satuan").value = Item.value.toString().replace(/\D/g,'').replace(/\./g,"").replace(".","").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("id_Harga_SatuanEdit").value.toString() != "") document.getElementById("id_Harga_TotalEdit").value = (parseInt(document.getElementById("id_Harga_SatuanEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(Item.value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("id_Harga_TotalEdit").value = "";
+            }
+            $('#Modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                //var recipient = button.data('whatever'); // Extract info from data-* attributes
+                // console.log(recipient);
+                document.getElementById("selectEdit").value = button.data('item');
+                document.getElementById("id_Jumlah_OrderEdit").value = button.data('jumlah');
+                document.getElementById("id_Harga_SatuanEdit").value = button.data('harga');
+                document.getElementById("id_Tgl_KedatanganEdit").value = button.data('tgl');
+                //document.getElementById("id_Cost_Center").value = button.data('cost');
+                document.getElementById("id_NoteEdit").value = button.data('note');
+                $('.form-control2edit').val(button.data('cost')).trigger('change');
+                document.getElementById("id_Harga_TotalEdit").value = (parseInt(document.getElementById("id_Harga_SatuanEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(document.getElementById("id_Jumlah_OrderEdit").value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+            })
+
+            $('#ModalAdd').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                //var recipient = button.data('whatever'); // Extract info from data-* attributes
+                // console.log(recipient);
+
+                document.getElementById("select").value = "";
+                document.getElementById("id_Jumlah_Order").value = "";
+                document.getElementById("id_Harga_Satuan").value = "";
+                document.getElementById("id_Tgl_Kedatangan").value = "";
+                document.getElementById("id_Note").value = "";
+                $('.form-control2add').val('').trigger('change');
+
+
+
+            })
+
+
+        </script>
+
+        <!-- Modal -->
+        <div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="ModalAddLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalAddLabel">Add Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-sm-12">
+
+                                    <input type="hidden" id="PP_Number" name="PP_Number" value="{{New_PP_Number}}">
+
+                                    <script>
+                                        function Calculate1(Item) {
+
+                                            document.getElementById("id_Harga_Satuan").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            if (document.getElementById("id_Jumlah_Order").value.toString() != "") document.getElementById("id_Harga_Total").value = (parseInt(Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(document.getElementById("id_Jumlah_Order").value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            else document.getElementById("id_Harga_Total").value = "";
+                                        }
+                                        function Calculate2(Item) {
+
+                                            //document.getElementById("id_Harga_Satuan").value = Item.value.toString().replace(/\D/g,'').replace(/\./g,"").replace(".","").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            if (document.getElementById("id_Harga_Satuan").value.toString() != "") document.getElementById("id_Harga_Total").value = (parseInt(document.getElementById("id_Harga_Satuan").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(Item.value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            else document.getElementById("id_Harga_Total").value = "";
+                                        }
+                                    </script>
+
+                                    <style>
+                                        .select2-selection__rendered {
+                                            line-height: 31px !important;
+                                        }
+
+                                        .select2-container .select2-selection--single {
+                                            height: 40px !important;
+                                            padding-left: 10px;
+                                            padding-top: 2px;
+
+                                        }
+
+                                        .select2-selection__arrow {
+                                            height: 34px !important;
+                                        }
+                                    </style>
+
+                                    <div class="row">
+                                        <div class="col-sm-3"> Select Item</div>
+                                        <div class="col-sm-9">
+
+
+                                            <select style="width: 100%;vertical-align: middle;" class="form-control2"
+                                                id="select" name="state" onchange="SelectItem(this)" required>
+                                                <option disabled selected value> --------- </option>
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 5px;"><br></div>
+
+
+
+                                    {% for item in formPRitem %}
+                                    {% if item.label == "PP Number" %}
+                                    <div></div>
+
+                                    {% elif item.label == "Tgl Kedatangan" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control datepicker"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+                                    {% elif item.label in 'Detail Spec,Currency,Expense,Jenis Barang,Kode Barang,Nama Barang,Harga Total,Asset No GL Account,Minimal Stock,Actual Stock,Average Usage,Budget,Unit Order' %}
+
+                                    <div class="row">
+                                        {{item|attr:"hidden"}}
+                                    </div>
+                                    {% elif item.label == "Cost Center" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            <select class="form-control2" style="width: 100%;" name="Cost_Center"
+                                                id="id_Cost_Center" required>
+                                                <option disabled selected value> --------- </option>
+                                                {% for cost in CostCenter %}
+
+                                                {% if '1' in PRheader.Company %}
+                                                {%if cost.Plant in 'Plant 1,Common' %}
+                                                <option style="font-size: xx-small;" value="{{cost.Cost_Center}}">
+                                                    {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+                                                {% endif %}
+                                                {% else %}
+                                                {%if cost.Plant in 'Plant 2,Common' %}
+                                                <option style="font-size: xx-small;" value="{{cost.Cost_Center}}">
+                                                    {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+                                                {% endif %}
+                                                {% endif %}
+
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+
+                                    {% elif item.label == "Jumlah Order" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control"|attr:"onkeyup:Calculate2(this)"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+                                    {% elif item.label == "Harga Satuan" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control"|attr:"onkeyup:Calculate1(this)"|attr:"placeholder:in Indonesian Rupiah (IDR)"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+
+                                    {% else %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+
+                                    {%endif%}
+                                    {%endfor%}
+
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" name ="add">Add Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h6>Approval</h6>
+
+        <div style="max-height: 5px;"><br></div>
+
+
+
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Pemesan</td>
+                    {%if Approval.DivHead is None%}
+                    <td colspan="3"
+                        style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Disetujui/Mengetahui</td>
+                    {%elif Approval.DeptHead is None%}
+                    <td colspan="3"
+                        style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Disetujui/Mengetahui</td>
+                    {% else %}
+                    <td colspan="4"
+                        style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Disetujui/Mengetahui</td>
+                    {% endif %}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Purchasing</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td
+                        style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">
+                        Created {{PRheader.Submit|date:'r'}}</td>
+                    {%if Approval.DeptHead is not None%}
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="DEPH">{{ PRheader.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{ PRheader.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    {% endif %}
+                    {%if Approval.DivHead is not None%}
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="DIVH">{{ PRheader.Div_Head_Approval_Status |default_if_none:''}}
+                        {{ PRheader.Div_Head_Approval_Date|date:'r' |default_if_none:''}}</td>
+                    {% endif %}
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="FIN">{{ PRheader.Finance_Approval_Status |default_if_none:''}}
+                        {{ PRheader.Finance_Approval_Date|date:'r' |default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="DIR">{{ PRheader.Direktur_Approval_Status |default_if_none:''}}
+                        {{ PRheader.Direktur_Approval_Date|date:'r' |default_if_none:''}}</td>
+                    <td
+                        style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">
+                    </td>
+                </tr>
+                <tr style="height:20px;">
+                    <td
+                        style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        {{PRheader.User_Name|upper}}</td>
+                    {%if Approval.DeptHead is not None%}
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.DeptHead}}</td>
+                    {% endif %}          
+                    {%if Approval.DivHead is not None%}
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.DivHead |default_if_none:''}}
+                    </td>
+                    {% endif %}
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.Finance}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.Direktur}}</td>
+                    <td
+                        style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        {{approval.Purchase}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">User
+                    </td>
+                    {%if Approval.DeptHead is not None%}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Dept
+                        Head</td>
+                    {% endif %}    
+                    {%if Approval.DivHead is not None%}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Div
+                        Head</td>
+                    {% endif %}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Fin&Acc</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Pres Dir</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Purchasing</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+        <br>
+        <h6>Budget (Khusus PR Asset / ZRAT)</h6>
+        <table>
+            <tr>
+                <td style="width: 100px;">Budget No</td>
+                <td style="width: 200px;">: {{PRheader.Budget_No|default_if_none:'-'}}</td>
+            </tr>
+            <tr>
+                <td style="width: 100px;">Budget Total</td>
+                <td style="width: 200px;">: {{PRheader.Budget_Rp|default_if_none:'-'}}</td>
+            </tr>
+            <tr>
+                <td style="width: 100px;">PP diproses</td>
+                <td style="width: 200px;">: {{PRheader.PP_diProses|default_if_none:'-'}}</td>
+            </tr>
+            <tr>
+                <td style="width: 100px;">Sisa</td>
+                <td style="width: 200px;">: <span id="sisabudget">{{PRheader.Sisa_Budget|default_if_none:'-'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 100px;">PP diajukan</td>
+                <td style="width: 200px;">: <span id="PP_calc"></span></td>
+            </tr>
+            <tr>
+                <td style="width: 100px;">Sisa</td>
+                <td style="width: 200px;">: <span id="final_calc"></span></td>
+            </tr>
+        </table>
+
+        <script>
+
+
+        </script>
+
+        <br>
+
+        <h6>Quotation (Penawaran) Attachment</h6>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% with 'Attachment1, Attachment2, Attachment3, PP Number' as list%}
+            {% for form in PRheaderform %}
+                {% if form.label not in list %}
+                {{form|attr:"hidden"}}
+                {% endif %}
+            {% endfor %}
+            {% endwith %}
+            <table>
+
+                <input type="text" name="PP_Number" id="id_PP_number" value="{{New_PP_Number}}" hidden>
+                {% if PRheader.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{PRheader.Attachment1}}">{{PRheader.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif PRheader.PR_Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{PRheaderform.Attachment1}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">upload</button></td>
+                </tr>
+                {% endif %}
+                {% if PRheader.Attachment2  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{PRheader.Attachment2}}">{{PRheader.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif PRheader.PR_Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{PRheaderform.Attachment2}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">upload</button></td>
+                </tr>
+                {% endif %}
+                {% if PRheader.Attachment3  %}
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{PRheader.Attachment3}}">{{PRheader.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif PRheader.PR_Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{PRheaderform.Attachment3}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">upload</button></td>
+                </tr>
+                {% endif %}
+
+
+
+            </table>
+
+
+
+
+            <button style="float: right;" class="btn btn-warning" type="submit" name="Finish">Finish Revision</button>
+        </form>
+        <br>
+        <br>
+    </div>
+</div>
+
+
+{% endblock %}

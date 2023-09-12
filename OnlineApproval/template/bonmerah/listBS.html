@@ -1,0 +1,125 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+{% load extras %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+      
+<center><h6>{{Judul}}</h6></center>
+<a class="btn btn-info" style="width: 200px;float: right;margin-right: 0px;" href="/BS/BSExport/"> Download as .xls</a>
+<br>
+<br>
+<table class="table table-bordered" id="table" style="text-align: center;">
+    <thead style ="text-align:center;font-size:small;background-color: lightcyan;" >
+    <tr>
+        <th>No</th>
+        <th>BS Number</th>
+        <th>Date Created</th>
+        <th>User Name</th>
+        <th>Note</th>
+        <th>Value</th>
+        <th>DeptHead</th>
+        <th>Finance</th>
+        <th>Received By</th>
+        <th>Days Open</th>
+        <th>Status</th>
+        <!-- <th>PDF</th> -->
+    </tr>
+    </thead>
+    {% for BS in ListBS %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td><a href="{{BS.BS_Number}}/">{{BS.BS_Number}}</a></td>
+        <td>{{BS.Date_Created}}</td>
+        <td>{{BS.User_Name}}</td>
+        <td>{{BS.Note|slice:"0:10"}}...</td>
+        <td>Rp. {{BS.Jumlah}},-</td>
+        <td><div>{{BS.DeptHead_Approval|default_if_none:"Waiting Approval"}}</div><div>{{BS.DeptHead_Approval_Date|default_if_none:""}}</div><div>{{BS.DeptHead|default_if_none:""}}</div></td>
+        <td><div>{{BS.Finance_Approval|default_if_none:"Waiting Approval"}}</div><div>{{BS.Finance_Approval_Date|default_if_none:""}}</div><div>{{BS.Finance|default_if_none:""}}</div></td>
+        <td><div>{{BS.Received_Date|default_if_none:""}}</div><div>{{BS.Receiver_Name|default_if_none:""}}</div></td>
+        <td>
+            {% if BS.BS_Status == "Finished" %}
+            <span>{{ BS.Received_Date|days_range  }} Days</span>
+            {%else%}
+            <span>-</span>
+            {%endif%}
+        </td>
+        <td><div>{{BS.BS_Status}}</div>
+            <div>
+            {% if BS.BS_Status == "Finished" %}
+            <a href="/Media/Document/{{BS.BS_Number}}.pdf">Download</a>
+            <a href="/BS/CreateFP/{{BS.BS_Number}}"class="btn  btn-warning">Closing Bon</a>
+            {% elif BS.BS_Status == "Closed" %}
+            <a href="/Media/Document/{{BS.BS_Number}}.pdf">Download</a>
+            {% elif BS.BS_Status == "Rejected" %}
+
+            {{BS.Reject_Message}}
+            {% endif %}
+        </div>
+        </td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+
+<style>
+    thead input {
+        width: 100%;
+    }
+
+    thead {
+        width: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+</style>
+
+<script>
+
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+
+        $('#table thead tr').clone(true).appendTo('#table thead');
+        $('#table thead tr:eq(1) th').each(function (i) {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+            $('input', this).on('keyup change', function () {
+                if (table.column(i).search() !== this.value) {
+                    table
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+
+
+        });
+
+        var table = $('#table').DataTable({
+            orderCellsTop: true,
+            fixedHeader: true,
+                    
+        });
+
+
+    });
+
+
+
+
+
+
+
+</script>
+
+
+
+</div>
+</div>
+{% endblock %}
+

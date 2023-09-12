@@ -1,0 +1,170 @@
+<html>
+<head>
+    <meta name="pdfkit-page-size" content="A4" />
+    <meta name="pdfkit-orientation" content="Landscape" />
+</head>
+<body>
+<style>
+    .table-header {
+        table-layout: auto;
+        border: 1px solid #dee2e6;
+        width: 100%;
+        font-size: small;
+        border-collapse: collapse;
+        align-items: center;
+    }
+
+    .table-header td {
+        white-space: nowrap;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    .table-header tr td {
+        border: 1px solid #000000;
+        padding: 5px;
+    }
+
+    .table-approve {
+        border: 1px solid #000000;
+        border-collapse: collapse;
+        font-size: small;
+    }
+
+    .table-approve tr th,
+    .table-approve tr td {
+        border: 1px solid #000000;
+    }
+</style>
+<div id="watermark" style="min-height: 80vh;">
+<table style="font-size: x-small; width: 100%" class="table-header">
+    <tr>
+        <td rowspan="3" style="width: 15%;  text-align: center; border-bottom: 1px solid black;"><h1>PT. ASTRA KOMPONEN INDONESIA</h1></td>
+        <td rowspan="3" style="text-align: center;  border-bottom: 1px solid black;">
+            <h3>Daftar Normatif Biaya Entertainment dan Sejenisnya</h3>
+            <br>
+            <h4>Tahun : 2023</h4>
+        </td>
+    </tr>
+</table>
+<br>
+<table name="table " class="table table-approve" style="width: 100%; text-align: center;font-size:small;">
+    <tr>
+        <th rowspan="2" style="vertical-align: middle;">No</th>
+        <th colspan="4" style="vertical-align: middle;">Pemberian Entertainment dan Sejenisnya</th>
+        <th colspan="5" style="vertical-align: middle;">Relasi Usaha yang diberikan Entertainment dan Sejenisnya</th>
+        <th rowspan="2" style="vertical-align: middle;">No. Document SAP <br>(diisi oleh Fin. Dept)</th>
+    </tr>
+    <tr>
+        <th>Tanggal</th>
+        <th>Tempat</th>
+        <th>Alamat</th>
+        <th>Jenis</th>
+        <th>Jumlah (Rp)</th>
+        <th>Nama</th>
+        <th>Posisi</th>
+        <th>Nama Perusahaan</th>
+        <th>Jenis Usaha</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>23-07-2023</td>
+        <td style="text-align: left;">Ayam Bakar mana yaaa</td>
+        <td style="text-align: left; width: 250px;">disitu2 aja</td>
+        <td>agenda audit</td>
+        <td>3999000</td>
+        <td style="text-align: left;">
+            <diV>External :</diV>
+            jfsjd
+            <div><br></div>
+            <diV>Internal :</diV>
+            hjj
+        </td>
+        <td style="text-align: left;">
+            <div>External :</div>
+            hjj
+            <div><br></div>
+            <div>Internal :</div>
+            hhh
+        </td>
+        <td style="text-align: left;">
+            <div>External :</div>
+            jjk
+            <div><br></div>
+            <div>Internal :</div>
+            mllk
+        </td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+</table>
+<br>
+<table>
+<tr>
+    <td style="width:75%;">
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;"class="table-approve" >
+            <tbody >
+                <tr style="height:10px;">
+                    <th style="width: 230px;text-align: center;vertical-align: bottom;">Prepared By</th>
+                    <th colspan="2" style="width: 230px;text-align: center;vertical-align: bottom;">Approved By</th>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created 2356879</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT"></td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="PRDIR"></td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">""" + CP.SPV.title() + """</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">""" + CP.Dept_Head.title() + """</td>
+                    <td style="text-align: center;vertical-align: bottom;">""" + CP.PresDirektur.title() + """</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="width: 230px;text-align: center;vertical-align: bottom;">Supervisior</td>
+                    <td style="width: 230px;text-align: center;vertical-align: bottom;">Department Head</td>
+                    <td style="width: 230px;text-align: center;vertical-align: bottom;">President Director</td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+</table>
+<br>
+<hr>
+<p> Please give your response by click approval button bellow and then click send button. A response at your earliest convenience would be much appreciated. </p>
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table cellspacing="0" cellpadding="0">
+                <tr>
+                    <td style="border-radius: 2px;width : 150px;text-align: center;" bgcolor="#4bf542">
+                        <a href="mailto:online.approval@aski.component.astra.co.id?subject=Approve: """ + str(CP.CP_Number) + """&body=Capital Expenditure Request with ID """ + str(CP.CP_Number) + """ %0DApproval Message:" target="_blank" style="padding: 8px 12px; border: 1px solid #4bf542;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                            APPROVE
+                        </a>
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td style="border-radius: 2px;width: 150px;text-align: center;" bgcolor="#ED2939">
+                        <a href="mailto:online.approval@aski.component.astra.co.id?subject=Reject: """ + str(CP.CP_Number) + """&body=Reject Capital Expenditure Request with ID """ + str(CP.CP_Number) + """ %0DReject Message:" target="_blank" style="padding: 8px 12px; border: 1px solid #ED2939;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                            REJECT
+                        </a>
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td style="border-radius: 2px;width: 150px;text-align: center;" bgcolor="#ebde34">
+                        <a href="mailto:online.approval@aski.component.astra.co.id?subject=Revise: """ + str(CP.CP_Number) + """&body=Need Revise Capital Expenditure Request with ID """ + str(CP.CP_Number) + """ %0DRevision Message:" target="_blank" style="padding: 8px 12px; border: 1px solid #ebde34;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #000000;text-decoration: none;font-weight:bold;display: inline-block;">
+                            REVISE
+                        </a>
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td style="border-radius: 2px;width: 150px;text-align: center;" bgcolor="#cccccc">
+                        <a href="mailto:""" + str(CP.SPV_Email) + """?subject=Ask User: """ + str(CP.CP_Number) + """&body=Ask User about Capital Expenditure Request with ID """ + str(CP.CP_Number) + """ %0DAsk User Message: " target="_blank" style="padding: 8px 12px; border: 1px solid #cccccc;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #000000;text-decoration: none;font-weight:bold;display: inline-block;">
+                            ASK USER
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<br>
+<i>This email is automatically generated by Online Approval System PT Astra Komponen Indonesia<i>
+</body>
+</html>

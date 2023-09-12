@@ -1,0 +1,37 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<center>
+    <h1>{{Judul}}</h1>
+</center>
+
+<br>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% with 'Attachment1, Attachment2, Attachment3' as list%}
+    {% for form in PRheaderform %}
+    {% if form.label == "PP Number" %}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-2">{{form.label}}</div>
+        <div class="col-sm-6">{{form|add_class:"form-control"|attr:"readonly"}}</div>
+    </div>
+    <br>
+    {% elif form.label in list %}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-2">{{form.label}}</div>
+        <div class="col-sm-6">{{form|add_class:"form-control"}}</div>
+    </div>
+    <br>
+    {% endif %}
+    {% endfor %}
+    {% endwith %}
+    <br>
+
+    <button type="submit" class="btn btn-success"
+        style=" width: 200px; display: block;margin-left: auto;margin-right: 200px;">Send</button>
+
+</form>
+{% endblock %}

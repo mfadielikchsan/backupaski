@@ -1,0 +1,775 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <br>
+        <br>
+        <h6>Item Capex Request</h6>
+        <div class="row" style="padding-left: 14px;">
+            <table>
+                <tr>
+                    <td style="width: 140px;">Doc Number</td>
+                    <td>: {{CP.CP_Number}}</td>
+                </tr>
+                <tr>
+                    <td>Business Unit</td>
+                    <td>: {{CP.Business_Unit}}</td>
+                </tr>
+                <tr>
+                    <td>Division</td>
+                    <td>: {{CP.Division}}</td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td>: {{CP.Department}}</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <div style="overflow-x:auto;">
+            <table name="table" id="table" class="table table-bordered" style="text-align: center;font-size: small;">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="vertical-align: middle">No</th>
+                        <th rowspan="2" style="vertical-align: middle">Capex Item</th>
+                        <th rowspan="2" style="vertical-align: middle">Project</th>
+                        <th rowspan="2" style="vertical-align: middle">Asset Class</th>
+                        <th rowspan="2" style="vertical-align: middle">Priority</th>
+                        <th rowspan="2" style="vertical-align: middle">Reason</th>
+                        <th rowspan="2" style="vertical-align: middle">Remarks</th>
+                        <th colspan="3" style="vertical-align: middle">Capex Capitalization (in million Rp)</th>
+                        <th colspan="15" style="vertical-align: middle">Capex Payment (in a million Rp)</th>
+                        <th colspan="3" style="vertical-align: middle">Payment Check</th>
+                        <th rowspan="2" colspan="2" style="vertical-align: middle">Action</th>
+                    </tr>
+                    <tr>
+                        <th>{{ CP.Year }}</th>
+                        <th>{{ CP.Next_Year1 }}</th>
+                        <th>{{ CP.Next_Year2 }}</th>
+                        <th>Jan</th>
+                        <th>Feb</th>
+                        <th>Mar</th>
+                        <th>Apr</th>
+                        <th>May</th>
+                        <th>Jun</th>
+                        <th>Jul</th>
+                        <th>Augt</th>
+                        <th>Sept</th>
+                        <th>Oct</th>
+                        <th>Nov</th>
+                        <th>Dec</th>
+                        <th>{{ CP.Year }}</th>
+                        <th>{{ CP.Next_Year1 }}</th>
+                        <th>{{ CP.Next_Year2 }}</th>
+                        <th>{{ CP.Year }}</th>
+                        <th>{{ CP.Next_Year1 }}</th>
+                        <th>{{ CP.Next_Year2 }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in ListItem %}
+                <tr style="border-collapse: collapse; font-size: small;">
+                    <td>{{ forloop.counter }}</td>
+                    <td style="text-align: left; white-space: nowrap; " >{{ item.CP_Name }}</td>
+                    <td style="white-space: nowrap;">{{ item.Project }}</td>
+                    <td style="white-space: nowrap;">{{ item.Asset_Class }}</td>
+                    <td style="white-space: nowrap; text-align: center;">{{ item.Priority }}</td>
+                    <td style="white-space: nowrap;">{{ item.Reason }}</td>
+                    <td style="white-space: nowrap;">{{ item.Remarks }}</td>
+                    <td >{{ item.Summary_Current_Year |default_if_none:'0'}} </td>
+                    <td >{{ item.Summary_Next_Year1|default_if_none:'0'}} </td>
+                    <td >{{ item.Summary_Next_Year2|default_if_none:'0' }} </td>
+                    <td>{{ item.Jan_payment }}</td>
+                    <td>{{ item.Feb_payment }}</td>
+                    <td>{{ item.Mar_payment }}</td>
+                    <td>{{ item.April_payment }}</td>
+                    <td>{{ item.May_payment }}</td>
+                    <td>{{ item.Jun_payment }}</td>
+                    <td>{{ item.Jul_payment }}</td>
+                    <td>{{ item.Augst_payment }}</td>
+                    <td>{{ item.Sept_payment }}</td>
+                    <td>{{ item.Oct_payment }}</td>
+                    <td>{{ item.Nov_payment }}</td>
+                    <td>{{ item.Dec_payment }}</td>
+                    <td>{{ item.Summary_Current_Year }}</td>
+                    <td>{{ item.Summary_Next_Year1}}</td>
+                    <td>{{ item.Summary_Next_Year2 }}</td>
+                    <td>{{ item.Payment_Check1 }}</td>
+                    <td>{{ item.Payment_Check2 }}</td>
+                    <td>{{ item.Payment_Check3 }}</td>
+                    <td style="padding: 5px;"><button class="btn btn-info" style="width:40px;padding: 5px;font-size: x-small;"
+                        type="button" data-toggle="modal" data-target="#Modal" data-item="{{item.CP_Number}}" data-name="{{item.CP_Name}}"
+                        data-project="{{item.Project}}" data-assetclass="{{item.Asset_Class}}" data-priority="{{item.Priority}}" data-reason="{{item.Reason}}"
+                        data-remarks="{{item.Remarks}}" data-sumcurrentyear="{{item.Summary_Current_Year}}" data-sumnextyear1="{{item.Summary_Next_Year1}}" 
+                        data-sumnextyear2="{{item.Summary_Next_Year2}}"data-jan="{{item.Jan_payment}}" data-feb="{{item.Feb_payment}}" data-mar="{{item.Mar_payment}}" 
+                        data-apr="{{item.April_payment}}" data-may="{{item.May_payment}}"data-jun="{{item.Jun_payment}}" data-jul="{{item.Jul_payment}}" 
+                        data-ags="{{item.Augst_payment}}" data-sep="{{item.Sept_payment}}" data-oct="{{item.Oct_payment}}"data-nov="{{item.Nov_payment}}" 
+                        data-dec="{{item.Dec_payment}}" data-check1="{{item.Payment_Check1}}" data-check2="{{item.Payment_Check2}}" data-check3="{{item.Payment_Check3}}">
+                        edit</button></td>
+                    <form action="" method="POST">{% csrf_token %}
+                    <td style="padding: 5px;"><button class="btn btn-danger"style="padding: 5px;font-size: x-small;" 
+                        type="submit" name="Delete" value="{{item.id}}">delete</button></td></form>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- EDIT ITEM -->
+        <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <table class="table">
+                                <tr>
+                                    <th colspan="3" style="text-align: center;background-color: whitesmoke;">
+                                        Item Detail</th>
+                                </tr>
+                            </table>
+                            <div class="row">
+                            <div class="col-sm-6">
+                                <table class="table">
+                                    <tr>
+                                        <td>Item Name</td>
+                                        <td><input type="text" class="form-control" name="NameEdit" id="NameEdit" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Project</td>
+                                        <td><input type="text" class="form-control" name="ProjectEdit" id="ProjectEdit"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Asset Class</td>
+                                        <td><select class="form-control" name="Asset_ClassEdit" id="Asset_ClassEdit">
+                                            <option value="  Building ">  Building </option>
+                                            <option value="  Building Eqp.">  Building Eqp.</option>
+                                            <option value="  Machinery Eqp">  Machinery Eqp</option>
+                                            <option value="  Transportation">  Transportation</option>
+                                            <option value="  Office Eqp.">  Office Eqp.</option>
+                                            <option value="  Furniture & Fixture">  Furniture & Fixture</option>
+                                            <option value="  Tools & Eqp.">  Tools & Eqp.</option>
+                                            <option value="  Asset under cap.lease">  Asset under cap.lease</option>
+                                            <option value="  Mold ISAK 8">  Mold ISAK 8</option>
+                                        </select></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-sm-6">
+                                <table class="table">
+                                    <tr>
+                                        <td>Priority</td>
+                                        <td><select class="form-control" name="PriorityEdit" id="PriorityEdit">
+                                            <option value="  H I g h">  H I g h</option>
+                                            <option value="  M e d I u m">  M e d I u m</option>
+                                            <option value="  L o w">  L o w</option>
+                                        </select></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Reason</td>
+                                        <td><select class="form-control" name="ReasonEdit" id="ReasonEdit">
+                                            <option value="  Penambahan">  Penambahan</option>
+                                            <option value="  Penggantian ">  Penggantian </option>
+                                            <option value="  Model Baru">  Model Baru</option>
+                                            <option value="  Quality Control">  Quality Control</option>
+                                            <option value="  Local Comp.">  Local Comp.</option>
+                                            <option value="  Keselamatan Kerja">  Keselamatan Kerja</option>
+                                            <option value="  Peningkatan produk">  Peningkatan produk</option>
+                                            <option value="  Others">  Others</option>
+                                        </select></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Remarks</td>
+                                        <td><input type="text" class="form-control" name="RemarksEdit" id="RemarksEdit"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table name="table" id="table" class="table table-bordered" style="text-align: center;">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3" style="vertical-align: middle">Capex Capitalization (in million Rp)</th>
+                                            <th colspan="15" style="vertical-align: middle">Capex Payment (in a million Rp)</th>
+                                            <th colspan="3" style="vertical-align: middle">Payment Check</th>
+                                        </tr>
+                                        <tr>
+                                            <th>{{ CP.Year }}</th>
+                                            <th>{{ CP.Next_Year1 }}</th>
+                                            <th>{{ CP.Next_Year2 }}</th>
+                                            <th>Jan</th>
+                                            <th>Feb</th>
+                                            <th>Mar</th>
+                                            <th>Apr</th>
+                                            <th>May</th>
+                                            <th>Jun</th>
+                                            <th>Jul</th>
+                                            <th>Augt</th>
+                                            <th>Sept</th>
+                                            <th>Oct</th>
+                                            <th>Nov</th>
+                                            <th>Dec</th>
+                                            <th>{{ CP.Year }}</th>
+                                            <th>{{ CP.Next_Year1 }}</th>
+                                            <th>{{ CP.Next_Year2 }}</th>
+                                            <th>{{ CP.Year }}</th>
+                                            <th>{{ CP.Next_Year1 }}</th>
+                                            <th>{{ CP.Next_Year2 }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Summary_Current_Year" id="Summary_Current_Year" onkeyup="current(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Summary_Next_Year1" id="Summary_Next_Year1" onkeyup="summary2(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Summary_Next_Year2" id="Summary_Next_Year2" onkeyup="summary3(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="JanEdit" id="JanEdit" onkeyup="jan(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="FebEdit" id="FebEdit" onkeyup="feb(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="MarEdit" id="MarEdit" onkeyup="mar(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="AprEdit" id="AprEdit" onkeyup="apr(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="MayEdit" id="MayEdit" onkeyup="may(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="JunEdit" id="JunEdit" onkeyup="jun(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="JulEdit" id="JulEdit" onkeyup="jul(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="AgsEdit" id="AgsEdit" onkeyup="agst(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="SepEdit" id="SepEdit" onkeyup="sept(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="OctEdit" id="OctEdit" onkeyup="oct(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="NovEdit" id="NovEdit" onkeyup="nov(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="DecEdit" id="DecEdit" onkeyup="dec(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Summary_Current_YearEdit" id="Summary_Current_YearEdit" onkeyup="summary1()" readonly></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Summary_Next_Year1Edit" id="Summary_Next_Year1Edit" readonly></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Summary_Next_Year2Edit" id="Summary_Next_Year2Edit" readonly></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Payment_Check1Edit" id="Payment_Check1Edit" onkeyup="check1()" readonly></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Payment_Check2Edit" id="Payment_Check2Edit" onkeyup="check2()" readonly></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Payment_Check3Edit" id="Payment_Check3Edit" onkeyup="check3()" readonly></td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="save" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            $('#Modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                console.log(button);
+                document.getElementById("NameEdit").value = button.data('name');
+                document.getElementById("ProjectEdit").value = button.data('project');
+                document.getElementById("RemarksEdit").value = button.data('remarks');
+                document.getElementById("Asset_ClassEdit").value = button.data('assetclass');
+                document.getElementById("PriorityEdit").value = button.data('priority');
+                document.getElementById("ReasonEdit").value = button.data('reason');
+                document.getElementById("Summary_Current_Year").value = button.data('sumcurrentyear');
+                document.getElementById("Summary_Next_Year1").value = button.data('sumnextyear1');
+                document.getElementById("Summary_Next_Year2").value = button.data('sumnextyear2');
+                document.getElementById("JanEdit").value = button.data('jan');
+                document.getElementById("FebEdit").value = button.data('feb');
+                document.getElementById("MarEdit").value = button.data('mar');
+                document.getElementById("AprEdit").value = button.data('apr');
+                document.getElementById("MayEdit").value = button.data('may');
+                document.getElementById("JunEdit").value = button.data('jun');
+                document.getElementById("JulEdit").value = button.data('jul');
+                document.getElementById("AgsEdit").value = button.data('ags');
+                document.getElementById("SepEdit").value = button.data('sep');
+                document.getElementById("OctEdit").value = button.data('oct');
+                document.getElementById("NovEdit").value = button.data('nov');
+                document.getElementById("DecEdit").value = button.data('dec');
+                document.getElementById("Summary_Current_YearEdit").value = button.data('sumcurrentyear');
+                document.getElementById("Summary_Next_Year1Edit").value = button.data('sumnextyear1');
+                document.getElementById("Summary_Next_Year2Edit").value = button.data('sumnextyear2');
+                document.getElementById("Payment_Check1Edit").value = button.data('check1');
+                document.getElementById("Payment_Check2Edit").value = button.data('check2');
+                document.getElementById("Payment_Check3Edit").value = button.data('check3');
+
+            });
+
+            function current(payment){
+                document.getElementById("Summary_Current_Year").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                check1();
+            }
+
+            function jan(payment){
+                document.getElementById("JanEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function feb(payment){
+                document.getElementById("FebEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function mar(payment){
+                document.getElementById("MarEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function apr(payment){
+                document.getElementById("AprEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function may(payment){
+                document.getElementById("MayEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function jun(payment){
+                document.getElementById("JunEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function jul(payment){
+                document.getElementById("JulEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function agst(payment){
+                document.getElementById("AgsEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function sept(payment){
+                document.getElementById("SepEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function oct(payment){
+                document.getElementById("OctEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function nov(payment){
+                document.getElementById("NovEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function dec(payment){
+                document.getElementById("DecEdit").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                summary1();
+            }
+
+            function summary1(){
+                document.getElementById("Summary_Current_YearEdit").value = (parseInt(document.getElementById("JanEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("FebEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("MarEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("AprEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("MayEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("JunEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("JulEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) +
+                parseInt(document.getElementById("AgsEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("SepEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("OctEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("NovEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("DecEdit").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                check1();
+            }
+
+            function summary2(Sum){
+                document.getElementById("Summary_Next_Year1").value = Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("Summary_Next_Year1").value.toString() != "0") 
+                document.getElementById("Summary_Next_Year1Edit").value = (parseInt(Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("Summary_Next_Year1Edit").value = "0";
+                check2();
+            }
+
+            function summary3(Sum){
+                document.getElementById("Summary_Next_Year2").value = Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("Summary_Next_Year2").value.toString() != "0") 
+                document.getElementById("Summary_Next_Year2Edit").value = (parseInt(Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("Summary_Next_Year2Edit").value = "0";
+                check3();
+            }
+
+            function check1(){
+                sum_awal = document.getElementById("Summary_Current_Year").value;
+                sum_calculate = document.getElementById("Summary_Current_YearEdit").value;
+                if (sum_calculate == sum_awal){
+                    document.getElementById("Payment_Check1Edit").value = "OK"
+                } else{
+                    document.getElementById("Payment_Check1Edit").value = "ERROR"
+                }
+            }
+
+            function check2(){
+                sum_awal = document.getElementById("Summary_Next_Year1").value;
+                sum_calculate = document.getElementById("Summary_Next_Year1Edit").value;
+                if (sum_calculate == sum_awal){
+                    document.getElementById("Payment_Check2Edit").value = "OK"
+                } else{
+                    document.getElementById("Payment_Check2Edit").value = "ERROR"
+                }
+            }
+
+            function check3(){
+                sum_awal = document.getElementById("Summary_Next_Year2").value;
+                sum_calculate = document.getElementById("Summary_Next_Year2Edit").value;
+                if (sum_calculate == sum_awal){
+                    document.getElementById("Payment_Check3Edit").value = "OK"
+                } else{
+                    document.getElementById("Payment_Check3Edit").value = "ERROR"
+                }
+            }
+        </script>
+        
+        <button class="btn btn-success" data-toggle="modal" data-target="#ModalAdd"
+            style="margin-top:10px;font-size: small;" type="submit" name="Add" value="{{item.CP_Number}}">Add new Item</button>
+
+        <!-- ADD ITEMS -->
+        <div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="ModalAddLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalAddLabel">Add Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form id="item" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{CPForm.CP_Number|attr:"hidden"}}
+                        {{CPForm.No|attr:"hidden"}}
+                        {{CPForm.Dept|attr:"hidden"}}
+                        {{CPForm.PIC|attr:"hidden"}}
+                        {{CPForm.Item_Year|attr:"hidden"}}
+                        {{CPForm.After_Current_Year|attr:"hidden"}}
+                        {{CPForm.After_Next_Year1|attr:"hidden"}}
+                        {{CPForm.After_Next_Year2|attr:"hidden"}}
+                        <div class="modal-body">
+                            <table class="table">
+                                <tr>
+                                    <th colspan="3" style="text-align: center;background-color: whitesmoke;">
+                                        Item Detail</th>
+                                </tr>
+                            </table>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr>
+                                            <td>Item Name</td>
+                                            <td>{{CPForm.CP_Name|add_class:"form-control"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Project</td>
+                                            <td>{{CPForm.Project|add_class:"form-control"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Asset Class</td>
+                                            <td>{{CPForm.Asset_Class|add_class:"form-control"}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr>
+                                            <td>Priority</td>
+                                            <td>{{CPForm.Priority|add_class:"form-control"}}</td>
+    
+                                        </tr>
+                                        <tr>
+                                            <td>Reason</td>
+                                            <td>{{CPForm.Reason|add_class:"form-control"}}</td>
+    
+                                        </tr>
+                                        <tr>
+                                            <td>Remarks</td>
+                                            <td>{{CPForm.Remarks|add_class:"form-control"}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table name="table" id="table" class="table table-bordered" style="text-align: center;font-size: small;">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3" style="vertical-align: middle">Capex Capitalization (in million Rp)</th>
+                                            <th colspan="15" style="vertical-align: middle">Capex Payment (in a million Rp)</th>
+                                            <th colspan="3" style="vertical-align: middle">Payment Check</th>
+                                        </tr>
+                                        <tr>
+                                            <th>{{CP.Year}}</th>
+                                            <th>{{CP.Next_Year1}}</th>
+                                            <th>{{CP.Next_Year2}}</th>
+                                            <th>Jan</th>
+                                            <th>Feb</th>
+                                            <th>Mar</th>
+                                            <th>Apr</th>
+                                            <th>May</th>
+                                            <th>Jun</th>
+                                            <th>Jul</th>
+                                            <th>Augt</th>
+                                            <th>Sept</th>
+                                            <th>Oct</th>
+                                            <th>Nov</th>
+                                            <th>Dec</th>
+                                            <th>{{CP.Year}}</th>
+                                            <th>{{CP.Next_Year1}}</th>
+                                            <th>{{CP.Next_Year2}}</th>
+                                            <th>{{CP.Year}}</th>
+                                            <th>{{CP.Next_Year1}}</th>
+                                            <th>{{CP.Next_Year2}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Current_Year" id="Current_Year" onkeyup="sum_current(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Next_Year1" id="Next_Year1" onkeyup="sum2(this)"></td>
+                                        <td style="min-width:90px"><input type="text" class="form-control" name="Next_Year2" id="Next_Year2" onkeyup="sum3(this)"></td>
+                                        <td style="min-width:90px">{{CPForm.Jan_payment|add_class:"form-control"|attr:"onkeyup:januari(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Feb_payment|add_class:"form-control"|attr:"onkeyup:februari(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Mar_payment|add_class:"form-control"|attr:"onkeyup:maret(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.April_payment|add_class:"form-control"|attr:"onkeyup:april(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.May_payment|add_class:"form-control"|attr:"onkeyup:mei(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Jun_payment|add_class:"form-control"|attr:"onkeyup:juni(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Jul_payment|add_class:"form-control"|attr:"onkeyup:juli(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Augst_payment|add_class:"form-control"|attr:"onkeyup:agustus(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Sept_payment|add_class:"form-control"|attr:"onkeyup:september(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Oct_payment|add_class:"form-control"|attr:"onkeyup:oktober(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Nov_payment|add_class:"form-control"|attr:"onkeyup:november(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Dec_payment|add_class:"form-control"|attr:"onkeyup:desember(this)"|attr:"value:0" |attr:"onclick:this.value=''"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Summary_Current_Year|add_class:"form-control"|attr:"readonly"|attr:"onkeyup:sum1(this)"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Summary_Next_Year1|add_class:"form-control"|attr:"readonly"}} </td>
+                                        <td style="min-width:90px">{{CPForm.Summary_Next_Year2|add_class:"form-control"|attr:"readonly"}} </td>
+                                        <td style="min-width:90px">{{CPForm.Payment_Check1|add_class:"form-control"|attr:"readonly"|attr:"onkeyup:payment_check1()"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Payment_Check2|add_class:"form-control"|attr:"readonly"|attr:"onkeyup:payment_check2()"}}</td>
+                                        <td style="min-width:90px">{{CPForm.Payment_Check3|add_class:"form-control"|attr:"readonly"|attr:"onkeyup:payment_check3()"}}</td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="add" class="btn btn-primary">Add Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            function sum_current(payment){
+                document.getElementById("Current_Year").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                payment_check1();
+            }
+            function januari(payment){
+                document.getElementById("id_Jan_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function februari(payment){
+                document.getElementById("id_Feb_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function maret(payment){
+                document.getElementById("id_Mar_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function april(payment){
+                document.getElementById("id_April_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function mei(payment){
+                document.getElementById("id_May_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function juni(payment){
+                document.getElementById("id_Jun_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function juli(payment){
+                document.getElementById("id_Jul_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function agustus(payment){
+                document.getElementById("id_Augst_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function september(payment){
+                document.getElementById("id_Sept_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function oktober(payment){
+                document.getElementById("id_Oct_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function november(payment){
+                document.getElementById("id_Nov_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function desember(payment){
+                document.getElementById("id_Dec_payment").value = payment.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                sum1();
+            }
+
+            function sum1(){
+                document.getElementById("id_Summary_Current_Year").value = (parseInt(document.getElementById("id_Jan_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("id_Feb_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_Mar_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("id_April_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_May_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("id_Jun_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_Jul_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) +
+                parseInt(document.getElementById("id_Augst_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_Sept_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("id_Oct_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_Nov_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + 
+                parseInt(document.getElementById("id_Dec_payment").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                payment_check1();
+            }
+
+            function sum2(Sum){
+                document.getElementById("Next_Year1").value = Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("Next_Year1").value.toString() != "0") 
+                document.getElementById("id_Summary_Next_Year1").value = (parseInt(Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("id_Summary_Next_Year1").value = "0";
+                payment_check2();
+            }
+
+            function sum3(Sum){
+                document.getElementById("Next_Year2").value = Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (document.getElementById("Next_Year2").value.toString() != "0") 
+                document.getElementById("id_Summary_Next_Year2").value = (parseInt(Sum.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                else document.getElementById("id_Summary_Next_Year2").value = "0";
+                payment_check3();
+            }
+
+            function payment_check1(){
+                sum_awal = document.getElementById("Current_Year").value;
+                sum_calculate = document.getElementById("id_Summary_Current_Year").value;
+                if (sum_calculate == sum_awal){
+                    document.getElementById("id_Payment_Check1").value = "OK"
+                } else{
+                    document.getElementById("id_Payment_Check1").value = "ERROR"
+                }
+
+                document.getElementById('id_After_Current_Year').value = sum_calculate
+            }
+
+            function payment_check2(){
+                sum_awal = document.getElementById("Next_Year1").value;
+                sum_calculate = document.getElementById("id_Summary_Next_Year1").value;
+                if (sum_calculate == sum_awal){
+                    document.getElementById("id_Payment_Check2").value = "OK"
+                } else{
+                    document.getElementById("id_Payment_Check2").value = "ERROR"
+                }
+
+                document.getElementById('id_After_Next_Year1').value = sum_calculate
+            }
+
+            function payment_check3(){
+                sum_awal = document.getElementById("Next_Year2").value;
+                sum_calculate = document.getElementById("id_Summary_Next_Year2").value;
+                if (sum_calculate == sum_awal){
+                    document.getElementById("id_Payment_Check3").value = "OK"
+                } else{
+                    document.getElementById("id_Payment_Check3").value = "ERROR"
+                }
+
+                document.getElementById('id_After_Next_Year2').value = sum_calculate
+            }
+
+
+        </script>
+        <div><br></div>
+        
+        <h6>Approval</h6>
+        {% if CP.Dept_Head == null %}
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse; width: 100%;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 270px;text-align: center;vertical-align: bottom;">Prepared By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{CP.SPV_Submit}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DIV">
+                        {{CP.Div_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{CP.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Div_Head}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Division Head</td>
+                </tr>
+            </tbody>
+        </table>
+        {% elif CP.Div_Head == null %}
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse; width: 100%;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 270px;text-align: center;vertical-align: bottom;">Prepared By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{CP.SPV_Submit}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{CP.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{CP.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Dept_Head}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Department Head</td>
+                </tr>
+            </tbody>
+        </table>
+        {% else %}
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse; width: 100%;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 270px;text-align: center;vertical-align: bottom;">Prepared By</td>
+                    <td colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{CP.SPV_Submit}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{CP.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DIV">
+                        {{CP.Div_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{CP.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Dept_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Div_Head}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Department Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Division Head</td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+        <br>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for form in CPform %}
+            {{form|attr:"hidden"}}
+        {% endfor %}
+        <button style="float: right;" class="btn btn-warning" type="submit" name="Finish">Finish Revision</button>
+    </form>
+    </div>
+</div>
+{% endblock %}

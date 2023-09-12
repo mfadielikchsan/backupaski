@@ -1,0 +1,155 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+
+        <br>
+        <div class="row">
+            <div class="col sm-6">
+                <center>
+                    <h6>Current Item List</h6>
+                </center>
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="display compact" style="font-size: small;" id="table">
+                            <thead style="text-align:center;font-size:small;background-color: lightcyan;">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Expense</th>
+                                    <th>Jenis Barang</th>
+                                    <th>Kode Barang</th>
+                                    <th>Nama Barang</th>
+                                    <th>Unit Order</th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="text-align:center;font-size:small;">
+                                {% for item in itemlist %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{item.Expense}}</td>
+                                    <td>{{item.Jenis_Barang}}</td>
+                                    <td>{{item.Kode_Barang}}</td>
+                                    <td>{{item.Nama_Barang}}</td>
+                                    <td>{{item.Unit_Order}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </div>
+            <div class="col-sm-6">
+                <center>
+                    <h6>Add New Item</h6>
+                </center>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% for item in formitem %}
+                            {% if item.label not in 'Harga Satuan,Currency'%}
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    {{item.label}}
+                                </div>
+                                <div class="col-sm-9">
+                                    {{item|add_class:"form-control"}}
+                                </div>
+                            </div>
+                            <div style="height: 5px;"><br></div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="row">
+                                <div class="col">
+                                <button style="width: 100px;float: right;"
+                                    type="submit" class="btn btn-success" name="add">Add</button>
+                                </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+
+                <br>
+                <center>
+                    <h6>Delete Item</h6>
+                </center>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="row">
+                                {% csrf_token %}
+                                <div class="col-sm-12">
+                                    <select class="form-control2" name="DeleteItem" id="DeleteItem" style="width:100%" >
+                                        <option value disabled selected></option>
+                                        {% for item in itemlist %}
+                                        <option value="{{item.Nama_Barang}}">
+                                            {{item.Nama_Barang}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="col-sm-12" style="margin-top: 10px;">
+                                <button style="float: right;width: 100px;"  type="submit" class="btn btn-danger"
+                                    name="delete">Delete</button>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <br>
+                <center>
+                    <h6>
+                        Download Item
+                    </h6>
+                    <div class="row" >
+                  
+                            <a class="btn btn-info" style="width: 150px;margin-left: auto;margin-right: auto;" href="/PR/ItemListExport/"> Download as
+                                .xls</a>
+                   
+                    </div>
+                </center>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.form-control2').select2();
+        $('#table').DataTable();
+    });
+
+
+</script>
+
+<style>
+    .select2-selection__rendered {
+        line-height: 31px !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 40px !important;
+        padding-left: 10px;
+        padding-top: 2px;
+
+    }
+
+    .select2-selection__arrow {
+        height: 34px !important;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+      
+<center><h6>{{Judul}} Add Asset No</h6></center>
+
+
+<table class="table table-bordered">
+    <thead style ="text-align:center;font-size:small;background-color: lightcyan;">
+    <tr>
+        <th>No</th>
+        <!-- <th>Company</th>
+        <th>Bussiness Area</th> -->
+        <th>PP Number</th>
+        <th>Jenis PP</th>
+        <th>Date Created</th>
+        <th>User Name</th>
+        <th>Supervisor Approval</th>
+        <th>Dept Head Approval</th>
+        <th>Div Head Approval</th>
+        <th>Finance Approval</th>
+        <th> Pres Dir Approval</th>
+        <th>PR Number</th>
+        <th>PR Date</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+
+    <tbody style ="text-align:center;font-size:small;">
+        {% for header in PRheader %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td><a href="/PR/Asset/{{header.PP_Number}}">{{header.PP_Number}}</a></td>
+            <td>{{header.Jenis_PP}}</td>
+            <td>{{header.Date_Created}}</td>
+            <td>{{header.User_Name}}</td>
+            <td>{{header.SPV_Approval_Status|default_if_none:''}} {{header.SPV_Approval_Date|default_if_none:''}}</td>
+            <td>{{header.Dept_Head_Approval_Status|default_if_none:''}} {{header.Dept_Head_Approval_Date|default_if_none:''}}</td>
+            <td>{{header.Div_Head_Approval_Status|default_if_none:''}} {{header.Div_Head_Approval_Date|default_if_none:''}}</td>
+            <td>{{header.Finance_Approval_Status|default_if_none:''}} {{header.Finance_Approval_Date|default_if_none:''}}</td>
+            <td>{{header.Direktur_Approval_Status|default_if_none:''}} {{header.Direktur_Approval_Date|default_if_none:''}}</td>
+            <td>{{header.PR_Number|default_if_none:''}}</td>
+            <td>{{header.PR_Date|default_if_none:''}}</td>
+            <td>{{header.PR_Status|default_if_none:''}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+<br>
+<br>
+</div>
+</div>
+{% endblock %}
+

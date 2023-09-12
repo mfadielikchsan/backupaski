@@ -1,0 +1,238 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+      
+<center><h5>{{Judul}} Monitoring</h5></center>
+<div class="row" >
+        <h6 style="margin-left: 12px;margin-right: 8px;margin-top: 10px;">Show List Selling Price Request by</h6>
+
+        <select name="listtype" id="id_listtype" class="form-control" style="width:fit-content; margin: 16px;" onchange="ChangeList(this)">
+            <option value="Header"><b>SP Header</b></option>
+            <option value="Item"><b>SP Item</b></option>
+        </select>
+</div>
+ 
+<hr>
+<div id="sphead">
+<form method="POST">
+    {% csrf_token %}
+
+<table class="table table-bordered" id ="table" class="display">
+    <thead style ="text-align:center;font-size:small;background-color: lightcyan;" >
+    <tr>
+        <th style="vertical-align: middle;">No</th>
+        <th style="vertical-align: middle;">SP Number</th>
+        <th style="vertical-align: middle;">Product Status</th>
+        <th style="vertical-align: middle;">Date Created</th>
+        <th style="vertical-align: middle;">Supervisor Approval</th>
+        <th style="vertical-align: middle;">Dept Head Approval</th>
+        <th style="vertical-align: middle;">Div Head Approval</th>
+        <th style="vertical-align: middle;">President Director Approval</th>
+        <th style="vertical-align: middle;">Accounting Input SAP</th>
+        <th style="vertical-align: middle;">Accounting Dept Confirm</th>
+        <th style="vertical-align: middle;">Status</th>
+    </tr>
+    </thead>
+
+    <tbody style ="text-align:center;font-size:small;">
+        {% for SP in ListSP %}
+                <tr style="font-size:small;">
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                        <div><a href="{{SP.SP_Number}}/">{{SP.SP_Number}}</a></div>
+                        
+                    </td>
+                    <td>{{SP.Product_Status}}</td>
+                    <td>{{SP.Submit_Date}}</td>
+                    <td>
+                        <div>{{SP.SPV_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{SP.SPV_Approval_Date|default_if_none:""}}</div>
+                        <div>{{SP.SPV|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        {%if SP.Dept_Head == None%}
+                        <div>-</div>
+                        {% else %}
+                        <div>{{SP.Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{SP.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                        <div>{{SP.Dept_Head|default_if_none:""}}</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div>{{SP.Div_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{SP.Div_Head_Approval_Date|default_if_none:""}}</div>
+                        <div>{{SP.Div_Head|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        <div>{{SP.PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{SP.PresDirektur_Approval_Date|default_if_none:""}}</div>
+                        <div>{{SP.PresDirektur|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        <div>{{SP.Acc_Input_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{SP.Acc_Input_Date|default_if_none:""}}</div>
+                        <div>{{SP.Acc|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        <div>{{SP.Dept_Acc_Confirm_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{SP.Dept_Acc_Confirm_Date|default_if_none:""}}</div>
+                        <div>{{SP.Dept_Acc|default_if_none:""}}</div>
+                    </td>
+         
+                    <td><div>{{SP.Status}}</div>
+                        <div>{% if SP.Status == "Finished" %}
+                            <br>
+                            <div><a href="/Media/Price/{{SP.SP_Number}}.pdf">Download</a></div>
+                            {% elif SP.Status == "NeedRevise"%}
+                            <div>{{SP.Message}}</div>
+                            <a href="/SP/Revise/{{SP.SP_Number}}" class="btn btn-warning">Revise</a>
+                            {% elif SP.Status == "Revised"%}
+                            <div>{{SP.Message}}</div>
+                            {% elif SP.Status == "Rejected"%}
+                            <div>{{SP.Message}}</div>
+                            {% endif %}</div>
+                    </td>
+                </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+<br>
+{%if user.username in "admin , FINANCE"%}
+<a class="btn btn-info" style="width: 200px;float: right;margin-right: 20px;" href="/SP/ListSPExport/"> Download ListSP as .xls</a>
+{% endif %}
+</form>
+<br>
+</div>
+<div id ="itemhead">
+<table class="display table table-bordered"  id ="tableitem" style=" font-size: small;text-align: center; width: 100%;">
+    <thead  style ="text-align:center;font-size:small;background-color:rgb(219, 250, 210);">
+        <tr style=" height: 50px; word-break: normal;">
+            <th rowspan="2">NO</th>
+            <th rowspan="2"> SP Number</th>
+            <th rowspan="2">Item</th>
+            <th rowspan="2" style="vertical-align: middle; ">Type</th>
+            <th rowspan="2" style="vertical-align: middle;">Material No</th>
+            <th rowspan="2" style="vertical-align: middle;">Material Description</th>
+            <th rowspan="2" style="vertical-align: middle;">Customer Material</th>
+            <th colspan="5" >Old Price</th>
+            <th colspan="5" >New Price</th>
+            <th rowspan="2" style="vertical-align: middle;">Ratio</th>
+            <th rowspan="2" style="vertical-align: middle;">Note</th>
+        </tr>
+        <tr>
+            <th style="padding: 5px;">Price</th>
+            <th style="padding: 5px;">Depreciation</th>
+            <th style="padding: 5px;">Total</th>
+            <th style="padding: 5px;">UoM</th>
+            <th style="padding: 5px;">Valid From</th>
+            <th style="padding: 5px;">Price</th>
+            <th style="padding: 5px;">Depreciation</th>
+            <th style="padding: 5px;">Total</th>
+            <th style="padding: 5px;">UoM</th>
+            <th style="padding: 5px;">Valid From</th>
+        </tr>
+    </thead>
+    <tbody >
+        {% for item in ListSPItem %}
+                <tr style="font-size:small;">
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                        <div><a href="{{item.SP_Number}}/">{{item.SP_Number}}</a></div>
+                    </td>
+                    <td>{{item.No}}</td>
+                    <td style="border-collapse: collapse;">{{item.Type}}</td>
+                    <td style="border-collapse: collapse;">{{item.Material_No}}</td>
+                    <td style="border-collapse: collapse;">{{item.Material_Description}}</td>
+                    <td style="border-collapse: collapse;">{{item.Customer_Material}}</td>
+                    <td style="border-collapse: collapse;">{{item.Old_Price}},-</td>
+                    <td style="border-collapse: collapse;">{{item.Old_Depreciation}}</td>
+                    <td style="border-collapse: collapse;">{{item.Old_Total}},-</td>
+                    <td style="border-collapse: collapse;">{{item.Old_UoM}}</td>
+                    <td style="border-collapse: collapse;">{{item.Old_Valid_From}}</td>
+                    <td style="border-collapse: collapse;">{{item.New_Price}},-</td>
+                    <td style="border-collapse: collapse;">{{item.New_Depreciation}}</td>
+                    <td style="border-collapse: collapse;">{{item.New_Total}},-</td>
+                    <td style="border-collapse: collapse;">{{item.New_UoM}}</td>
+                    <td style="border-collapse: collapse;">{{item.New_Valid_From}}</td>
+                    <td style="border-collapse: collapse;">{{item.Ratio_Variance}}</td>
+                    <td style="border-collapse: collapse;">{{item.Note}}</td>
+                </tr>
+                {% endfor %}
+    </tbody>
+</table>
+
+</div>
+
+<style>
+    thead input {
+        width: 100%;
+    }
+    thead {
+        width: auto;
+    }
+    table {
+        max-width: 100%;
+    }
+</style>
+
+<script>
+
+    $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+
+    $('#table thead tr').clone(true).appendTo( '#table thead' );
+    $('#table thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+
+
+    } );
+ 
+    var table = $('#table').DataTable( {
+        orderCellsTop: true,
+        fixedHeader: true
+    } );
+ 
+    var tableitem = $('#tableitem').DataTable( {
+        orderCellsTop: true,
+        fixedHeader: true
+    } );
+   
+   
+    $("#sphead").show();
+    $("#itemhead").hide();
+  
+    });
+
+    function ChangeList(select){
+        console.log(select.value);
+        if (select.value == "Header"){
+            $("#sphead").show();
+           $("#itemhead").hide();
+        }
+        else if (select.value == "Item"){
+            $("#sphead").hide();
+             $("#itemhead").show();
+        };
+    };
+
+</script>
+<br>
+<br>
+</div>
+</div>
+{% endblock %}
+

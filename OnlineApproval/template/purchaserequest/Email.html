@@ -1,0 +1,42 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h6>{{Judul}}</h6>
+        </center>
+
+<form action="" method="post">
+    {% csrf_token %}
+        <h6 style="margin-top: 20px;">email to :</h6>
+        <input name="emailto" id="emailto" class="form-control" style="width: 30%;">
+        </input>
+        <h6 style="margin-top: 20px;">header :</h6>
+        <input name="header" id="header" class="form-control" style="width: 30%;">
+    </input>
+   
+        <h6 style="margin-top: 20px;">mail message :</h6>
+        <textarea type="text" name="messagebody" id="messagebody" class="form-control"></textarea>
+        <br>
+        <h6>Attach1</h6>
+        <input type="text" class="form-control" name="attach1">
+        <br>
+        <h6>Attach2</h6>
+        <input type="text" class="form-control" name="attach2">
+        <br>
+        <h6>Attach3</h6>
+        <input type="text" class="form-control" name="attach3">
+        <br>
+
+        <button type="submit">send</button>
+    </form>
+
+
+        <br>
+        <br>
+    </div>
+</div>
+{% endblock %}

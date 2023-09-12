@@ -1,0 +1,200 @@
+{%extends 'base.html'%}
+{%load static%}
+{% load widget_tweaks %}
+{%block content%}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>{{Judul}}</h5>
+            <h5>Tahun Pajak : {{BE.Tahun_Pajak}}</h5>
+        </center>
+        <table style="width: 100%; font-size: small;">
+            <tr>
+                <td style="width: 10%;">Doc Number</td>
+                <td>:</td>
+                <td>{{BE.BE_Number}}</td>
+            </tr>
+        </table>
+        <br>
+        <h6>Entertainment Items</h6>
+        <table name="table" style="border-collapse: collapse; font-size: 12px; text-align: center; width: 100%;">
+            <tr style=" height: 50px; word-break: normal; border: 1px solid">
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">No</th>
+                <th colspan="4" style="vertical-align: middle; border: 1px solid">Pemberian Entertainment dan Sejenisnya</th>
+                <th colspan="5" style="vertical-align: middle; border: 1px solid">Relasi Usaha yang diberikan Entertainment dan Sejenisnya</th>
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">No. Document SAP <br>(diisi oleh Fin. Dept)</th>
+            </tr>
+            <tr style="border: 1px solid">
+                <th style="padding: 5px; border: 1px solid">Tanggal</th>
+                <th style="padding: 5px; border: 1px solid">Tempat</th>
+                <th style="padding: 5px; border: 1px solid">Alamat</th>
+                <th style="padding: 5px; border: 1px solid">Jenis</th>
+                <th style="padding: 5px; border: 1px solid">Jumlah (Rp)</th>
+                <th style="padding: 5px; border: 1px solid">Nama</th>
+                <th style="padding: 5px; border: 1px solid">Posisi</th>
+                <th style="padding: 5px; border: 1px solid">Nama Perusahaan</th>
+                <th style="padding: 5px; border: 1px solid">Jenis Usaha</th>
+            </tr>
+            {% for Item in ListItem %}
+            <tr>
+                <td rowspan="2" style="padding: 5px; border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{forloop.counter}}</td>
+                <td rowspan="2" style="padding: 5px; border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{Item.Date}}</td>
+                <td rowspan="2" style="padding: 5px; text-align: left; border: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;width: 250px;">{{Item.Place}}</td>
+                <td rowspan="2" style="padding: 5px; text-align: left; border: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;width: 250px;">{{Item.Address}}</td>
+                <td rowspan="2" style="padding: 5px; text-align: left; border: 1px solid black; border-collapse: collapse; vertical-align: top; width: 250px;">{{Item.Type}}</td>
+                <td rowspan="2" style="padding: 5px;border: 1px solid black; border-collapse: collapse; vertical-align: top;">Rp. {{Item.Jumlah}}</td>
+                <td style="padding: 5px; text-align: left; border-top: 1px solid black; border-right: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>External</b></diV>{{Item.Name_External}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-top: 1px solid black; border-right: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>External</b></diV>{{Item.Posisi_External}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-top: 1px solid black; border-right: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>External</b></diV>{{Item.Company_Name_External}}
+                </td>
+                <td rowspan="2" style="border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{Item.Company_Type}}</td>
+                <td rowspan="2" style="border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{Item.SAP_Number}}</td>
+            </tr>
+            <tr>
+                <td style="padding: 5px; text-align: left; border-bottom: 1px solid black; border-right: 1px solid black;  border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>Internal</b></diV>{{Item.Name_Internal}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-bottom: 1px solid black; border-right: 1px solid black;  border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>Internal</b></diV>{{Item.Posisi_Internal}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-bottom: 1px solid black; border-right: 1px solid black;  border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>Internal</b></diV>{{Item.Company_Name_Internal}}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <h6>Approval</h6>
+        <table style="width: 80%; border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Created By</th>
+                    <th colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{BE.SPV_Submit}}</td>
+                    <td style="padding:20px;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{BE.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{BE.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic; border-right: 1px solid black;color: green;" id="PRDIR">
+                        {{BE.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{BE.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{BE.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{BE.Dept_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom; border-right: 1px solid black;">{{BE.PresDirektur}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Dept Head </td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">President Director</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h6>Attachment</h6>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% with 'Attachment1, Attachment2, Attachment3, Attachment4, Attachment5, Attachment6 ' as list%}
+                {% for form in BEform %}
+                    {% if form.label not in list %}
+                        {{form|attr:"hidden"}}
+                    {% endif %}
+                {% endfor %}
+            {% endwith %} 
+            <table>
+                {% if BE.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment1}}">{{BE.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if BE.Attachment2  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment2}}">{{BE.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if BE.Attachment3  %}
+                <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{BE.Attachment3}}">{{BE.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if BE.Attachment4  %}
+                <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{BE.Attachment4}}">{{BE.Attachment4|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if BE.Attachment5  %}
+                <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{BE.Attachment5}}">{{BE.Attachment5|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if BE.Attachment6  %}
+                <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{BE.Attachment6}}">{{BE.Attachment6|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+            </table>
+        </form>
+
+        <div class="row" style="margin: 16px;">
+            <button class="btn btn-light" style="width: 100px;margin-right: 10px;margin-left: auto;"><a
+                    href="mailto:{{BE.SPV_Email}}?subject=Ask User: {{BE.BE_Number}}&body=Ask User about Entertainment Costs Request with ID {{BE.BE_Number}} %0DAsk User Message: ">
+                    Ask User</a></button>
+            <button type="submit" name ="revise" class="btn btn-warning" style="width: 100px;margin-left: 0px;margin-right: 10px;" data-toggle="modal" data-target="#ReviseSP">Revise</button>
+            <form method="post" id="finishform">
+                {% csrf_token %}
+                <input type="text" name = "finish" hidden>
+                <button type="submit" id="finishbtn" name="finishbtn" class="btn btn-primary" >Finish</button>
+            </form>
+        </div>
+
+        <!-- MODAL REVISE USER -->
+        <div class="modal fade" id="ReviseSP" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Send Revise Request to User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <form method="POST" id ="reviseform">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <h6>Revision Note</h6>
+                        <textarea class ="form-control" name="revisemessage" id="revisemessage"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button style="width: 150px;" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button style="width: 150px;" type="submit" class="btn btn-success" name="revision" id="revision" >Send Revise</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+    $("#finishform").submit(function () {
+        $("#finishbtn").attr("disabled", true);
+        return true;
+    });
+});
+</script>
+{%endblock%}

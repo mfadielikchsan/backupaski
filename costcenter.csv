@@ -1,0 +1,101 @@
+﻿No;Cost Ctr;Plant;Area;Description
+1;AK01100351;Plant 1;Plastic Injection;Machine 35 MT
+2;AK01100551;Plant 1;Plastic Injection;Machine 55 MT
+3;AK01100801;Plant 1;Plastic Injection;Machine 80 MT
+4;AK01101001;Plant 1;Plastic Injection;Machine 100 MT
+5;AK01101401;Plant 1;Plastic Injection;Machine 140 MT
+6;AK01101601;Plant 1;Plastic Injection;Machine 160 MT
+7;AK01101801;Plant 1;Plastic Injection;Machine 180 MT
+8;AK01102101;Plant 1;Plastic Injection;Machine 210 MT
+9;AK01102501;Plant 1;Plastic Injection;Machine 250 MT
+10;AK01102801;Plant 1;Plastic Injection;Machine 280 MT
+11;AK01103001;Plant 1;Plastic Injection;Machine 300 MT
+12;AK01103501;Plant 1;Plastic Injection;Machine 350 MT
+13;AK01104501;Plant 1;Plastic Injection;Machine 450 MT
+14;AK01106001;Plant 1;Plastic Injection;Machine 600 MT
+15;AK01108001;Plant 1;Plastic Injection;Machine 800 MT
+16;AK0111000J;Plant 1;Plastic Injection;Machine 1000 MT JSW
+17;AK0111000T;Plant 1;Plastic Injection;Machine 1000 MT Toshiba
+18;AK01110601;Plant 1;Plastic Injection;Machine 1060 MT
+19;AK01113001;Plant 1;Plastic Injection;Machine 1300 MT JSW
+20;AK0111300T;Plant 1;Plastic Injection;Machine 1300 MT Toshiba
+21;AK01116001;Plant 1;Plastic Injection;Machine 1600 MT
+22;AK011AMCB1;Plant 2;Assy Mirror 4W;Assy Mirror Line D12 Cibitung
+23;AK011AMCB2;Plant 2;Assy Mirror 4W;Assy Mirror Line D14 Cibitung
+24;AK011AMCB3;Plant 2;Assy Mirror 4W;Assy Mirror Line D17 Cibitung
+25;AK011ASR02;Plant 1;Plastic Injection;Mirror Assy R2 Line 2
+26;AK011ASR21;Plant 1;Plastic Injection;Mirror Assy R2 Line 1
+27;AK011Assy1;Plant 1;Plastic Injection;Assembling
+28;AK011BM2CB;Plant 2;Assy Mirror;Back Mirror Assy 2W Cibitung
+29;AK011BMEMB;Plant 1;Embedding;Machine Embedding
+30;AK011BRE01;Plant 1;Rearview;Back Mirror VM Chamfer
+31;AK011BRE02;Plant 1;Rearview;Back Mirror VM Breaker Auto
+32;AK011BRK01;Plant 1;Rearview;Back Mirror VM Breaker
+33;AK011BUF01;Plant 1;Painting;Painting Buffing
+34;AK011BUFPI;Plant 1;Plastic Injection;Buffing Plastic Injection
+35;AK011BUMPI;Plant 1;Plastic Injection;Buffing Manual Plastic Injection
+36;AK011BURPI;Plant 1;Plastic Injection;Buffing Robot Plastic Injection
+37;AK011CCH00;Plant 1;Cover Comp Head;Line Assy
+38;AK011CNC01;Plant 1;Rearview;Back Mirror VM CNC
+39;AK011CON01;Plant 1;Rearview;Back Mirror VM Convex and Cooling
+40;AK011CRS01;Plant 1;Crusher;Crusher
+41;AK011DEF01;Plant 1;Plastic Injection;Deflasher Machine PSB-3A 3HP
+42;AK011FIN01;Plant 1;Plastic Injection;Finishing
+43;AK011FINCB;Plant 2;Assy Mirror;Finishing
+44;AK011FIP01;Plant 1;Assy Mirror 2W;Back Mirror VM Final Inspection
+45;AK011FOA01;Plant 1;Seat Assy 2W; Foaming
+46;AK011FOA02;Plant 1;Seat Assy 4W; Foaming 4W
+47;AK011HAN01;Plant 1;Rearview;Back Mirror VM Hanger
+48;AK011HTM01;Plant 1;Plastic Injection;Mesin Hot Melting
+49;AK011MAB00;Plant 1;Plastic Injection;Machine Air Blow
+50;AK011MAS01;Plant 1;Painting;Painting Masking
+51;AK011MPT01;Plant 1;Rearview;Back Mirror VM Painting
+52;AK011OVE01;Plant 1;Painting;OVEN TEMP 200 
+53;AK011PAKCB;Plant 2;Assy Mirror 4W;Packaging
+54;AK011PAKM1;Plant 1;Assy Mirror 4W;Packaging
+55;AK011PLT01;Plant 1;Crusher;Peletizing
+56;AK011POL01;Plant 1;Rearview;Back Mirror VM Polygon
+57;AK011PPR01;Plant 1;Painting;Painting Auto Line 3
+58;AK011PPR02;Plant 1;Painting;Painting Auto 1,2 dan 4
+59;AK011PPR03;Plant 1;Painting;Production Manual Visteon
+60;AK011PTA01;Plant 1;Painting;Painting Assy
+61;AK011RVA01;Plant 1;RearView;Back Mirror VM Assy
+62;AK011SAC01;Plant 1;RearView;Back Mirror VM Semi Auto Cutting
+63;AK011SAN01;Plant 1;Painting;Painting Sanding
+64;AK011SB4CB;Plant 2;Seat Assy 4W;Plant 2
+65;AK011SBA01;Plant 1;Seat Assy 4W;Plant 1
+66;AK011SBACB;Plant 2;Seat Assy 2W; Assy 2W Cibitung
+67;AK011SBC01;Plant 1;Seat Assy 2W; Cutting
+68;AK011SBR01;Plant 1;Seat Assy 2W; Assy Robot
+69;AK011SE101;Plant 1;Seat Assy 2W; Seaming 1
+70;AK011SE201;Plant 1;Seat Assy 2W; Seaming 2
+71;AK011TOU01;Plant 1;Painting;Painting Touch Up
+72;AK011ULS01;Plant 1;Ultrasonic;Mesin Ultrasonic
+73;AK011VAB01;Plant 1;Seat Assy 2W;Vacuum
+74;AK011VAC01;Plant 1;Rearview;Back Mirror VM Vacuum
+75;AK011VMC01;Plant 1;Rearview;Back Mirror VM Cutting
+76;AK011WAS01;Plant 1;Rearview;Back Mirror VM Washing
+77;AK012BMCBT;Plant 2;Assy Mirror 2W;General Plant 2
+78;AK012MBOGE;Plant 1;Assy Mirror 2W;General Plant 1
+79;AK012MRCBT;Plant 2;Assy Mirror 4W;General Plant 2
+80;AK012MRRGE;Plant 1;Assy Mirror 4W;General Plant 1
+81;AK012PIJGE;Plant 1;Plastic Injection;General
+82;AK012PPRGE;Plant 1;Painting;General
+83;AK012SBCBT;Plant 2;Seat Assy ;General Plant 2
+84;AK012SBCON;Common;Subcontracting;
+85;AK012SBOGE;Plant 1;Seat Assy;General Plant 1
+86;AK012SUCBT;Plant 2;General;Plant 2
+87;AK0130QC01;Common;Quality Assurance;
+88;AK013ENG01;Common;Engineering;
+89;AK013PDV01;Common;RND;
+90;AK013PPC01;Common;PPIC;
+91;AK014COR01;Common;Corporate;
+92;AK014SUPGE;Plant 1;General;Plant 1
+93;AK015MKT01;Plant 1;Marketing;Plant 1
+94;AK015MKT02;Plant 2;Marketing;Plant 2
+95;AK016FIN01;Common;Finance;
+96;AK016HRG01;Plant 1;HRGA ;Plant 1
+97;AK016HRG02;Plant 2;HRGA ;Plant 2
+98;AK016MGM01;Common;Managing Director;
+99;AK016PUR01;Plant 1;Purchase;Plant 1
+100;AK016PUR02;Plant 2;Purchase;Plant 2

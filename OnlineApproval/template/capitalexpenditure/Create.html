@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header" style="background-color:white">
+        <form action="" method="post" enctype="multipart/form-data" >
+            {% csrf_token%}
+            <br>
+            <h6>Capital Expenditure Upload</h6>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 10%">Upload Capex Form</td>
+                    <td style="width: 1%">:</td>
+                    <td style="width: 40%">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile02" name="CP_Form"
+                                    required>
+                                <label class="custom-file-label" for="inputGroupFile02"
+                                    aria-describedby="inputGroupFileAddon02">Choose file</label>
+                            </div>
+                        </div>
+                    </td>
+                    <td><button class="btn btn-warning" style="width: 150px;margin-left: 10px;display: block" type="submit" name="upload">Upload</button></td>
+                    <td><button class="btn btn-dark" style="margin-left: auto;margin-right: 0px;display: block;"><a href="/Media/Capex/capex_form.xlsx" style="color: white;">Download Capex template</a></button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="card-body">
+        <form action="" id="header" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h6 >Capital Expenditure Items</h6>
+            <div class="row">
+                {{ CPForm.Submit_Date | add_class:"form-control" | attr:"hidden" }}
+                <table style="width: 100%;margin-left: 10px; margin-bottom: 16px">
+                    <tr>
+                        <td style="width:150px;">Document No</td>
+                        <td>:</td>
+                        <td>{{CPForm.CP_Number|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td style="width: 50px;"></td>
+                    </tr>
+                    <tr>
+                        <td>Business Unit</td>
+                        <td>:</td>
+                        <td>{{CPForm.Business_Unit|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Division</td>
+                        <td>:</td>
+                        <td>{{CPForm.Division|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td>:</td>
+                        <td>{{CPForm.Department|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>SPV Name</td>
+                        <td>:</td>
+                        <td>
+                            <select class="form-control" name="SPV_Select" id="id_SPV_Select" 
+                                onchange="ChangeUser(this)">
+                                {% for App in approval %}
+                                <option value="{{forloop.counter}}">{{App.SPV}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        <div style="overflow-x:auto;">
+            <table name="table" id="table" class="table table-bordered" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="vertical-align: middle">No</th>
+                        <th rowspan="2" style="vertical-align: middle">Capex Item</th>
+                        <th rowspan="2" style="vertical-align: middle">Project</th>
+                        <th rowspan="2" style="vertical-align: middle">Asset Class</th>
+                        <th rowspan="2" style="vertical-align: middle">Priority</th>
+                        <th rowspan="2" style="vertical-align: middle">Reason</th>
+                        <th rowspan="2" style="vertical-align: middle">Remarks</th>
+                        <th colspan="3" style="vertical-align: middle">Capex Capitalization (in million Rp)</th>
+                        <th colspan="15" style="vertical-align: middle">Capex Payment (in a million Rp)</th>
+                        <th colspan="3" style="vertical-align: middle">Payment Check</th>
+                    </tr>
+                    <tr>
+                        <th>{{ CPForm.Year|attr:"readonly" |add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th>{{ CPForm.Next_Year1|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th>{{ CPForm.Next_Year2|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th style="vertical-align: middle">January</th>
+                        <th style="vertical-align: middle">February</th>
+                        <th style="vertical-align: middle">March</th>
+                        <th style="vertical-align: middle">April</th>
+                        <th style="vertical-align: middle">May</th>
+                        <th style="vertical-align: middle">June</th>
+                        <th style="vertical-align: middle">July</th>
+                        <th style="vertical-align: middle">August</th>
+                        <th style="vertical-align: middle">September</th>
+                        <th style="vertical-align: middle">October</th>
+                        <th style="vertical-align: middle">November</th>
+                        <th style="vertical-align: middle">December</th>
+                        <th>{{ CPForm.Year|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th>{{ CPForm.Next_Year1|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th>{{ CPForm.Next_Year2|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th>{{ CPForm.Year|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th>{{ CPForm.Next_Year1|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                        <th>{{ CPForm.Next_Year2|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for Item in ListItem %}
+                <tr>
+                    {% for I in Item %}
+                    {% if forloop.counter > 4 %}
+                    <td style="text-align: center; white-space: nowrap;">{{I}}</td>
+                    {% else %}
+                    <td style="text-align: left; white-space: nowrap;">{{I}}</td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+                {{ CPItem.PIC|add_class:"form-control"|attr:'hidden' }}
+                {{ CPItem.Dept|add_class:"form-control"|attr:'hidden' }}
+            </table>
+        </div>
+        <br><br>
+        <h6>Summary of Capex</h6>
+        <table style="width: 100%; margin-bottom: 16px">
+            <tr>
+                <td style="width:100px;">Summary of </td>
+                <td style="width:80px;">{{ CPForm.Year|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</td>
+                <td style="width: 10px;">:</td>
+                <td>{{CPForm.Sum_Year|attr:"readonly"|add_class:"form-control" |attr:"style:width:200px"}}</td>
+                <td style="width: 50px;"></td>
+            </tr>
+            <tr>
+                <td>Summary of</td>
+                <td>{{ CPForm.Next_Year1|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</td>
+                <td>:</td>
+                <td>{{CPForm.Sum_NextYear1|attr:"readonly"|add_class:"form-control"|attr:"style:width:200px" }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Summary of</td>
+                <td>{{ CPForm.Next_Year2|attr:"readonly"|add_class:"form-control" |attr:"style:width:65px" }}</td>
+                <td>:</td>
+                <td>{{CPForm.Sum_NextYear2|attr:"readonly"|add_class:"form-control"|attr:"style:width:200px" }}</td>
+                <td></td>
+            </tr>
+        </table>
+        <br>
+        <h6>Approval</h6>
+        <table style=" text-align: center; border-collapse: collapse; width: 100%" class="table table-bordered">
+            <thead>
+                <tr style="height:10px;">
+                    <th style="width: 230px;text-align: center;vertical-align: bottom;">Prepared By</th>
+                    <th colspan="2" style="width: 230px;text-align: center;vertical-align: bottom;">Approved By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 100px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>{{CPForm.SPV|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                    <td>{{CPForm.Dept_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                    </td>
+                    <td>{{CPForm.Div_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                </tr>
+                {{CPForm.SPV_Email|attr:"hidden"}}
+                {{CPForm.SPV_Submit|attr:"hidden"}}
+                {{CPForm.Dept_Head_Email|attr:"hidden"}}
+                {{CPForm.Div_Head_Email|attr:"hidden"}}
+                {{CPForm.PresDirektur|attr:"hidden"}}
+                {{CPForm.PresDirektur_Email|attr:"hidden"}}
+                <tr style="height:10px;">
+                    <td style="width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="width: 230px;text-align: center;vertical-align: bottom;">Department Head</td>
+                    <td style="width: 230px;text-align: center;vertical-align: bottom;">Division Head</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="height: 10px;"><br></div>
+        <div class="row">
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-success" name="Finish" id="Finish"
+                    style="width: 150px;margin-left: auto;margin-right: 0px;display: block;">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<script>
+    $('#inputGroupFile02').on('change', function (e) {
+        var fileName = e.target.files[0].name;
+        $(this).next('.custom-file-label').html(fileName);
+    })
+
+    var capex = {{ Data| safe }};
+    $(document).ready(function () {
+        document.getElementById("id_Division").value = capex[0].fields.Division;
+        document.getElementById("id_Department").value = capex[0].fields.Department;
+        document.getElementById('id_Business_Unit').value = capex[0].fields.Business_Unit;
+        document.getElementById("id_Dept").value = capex[0].fields.Department;
+        document.getElementById("id_SPV").value = capex[0].fields.SPV;
+        document.getElementById("id_SPV_Email").value = capex[0].fields.SPV_Email;
+        document.getElementById("id_Div_Head").value = capex[0].fields.Div_Head;
+        document.getElementById("id_PresDirektur").value = capex[0].fields.PresDirektur;
+        document.getElementById("id_Div_Head_Email").value = capex[0].fields.Div_Head_Email;
+        document.getElementById("id_PresDirektur_Email").value = capex[0].fields.PresDirektur_Email;
+        document.getElementById("id_Dept_Head").value = capex[0].fields.Dept_Head;
+        document.getElementById("id_Dept_Head_Email").value = capex[0].fields.Dept_Head_Email;
+        if (capex[0].fields.Dept_Head == null){
+            document.getElementById("id_PIC").value = capex[0].fields.Div_Head; 
+        } else {
+            document.getElementById("id_PIC").value = capex[0].fields.Dept_Head;
+        }
+    });
+
+    function ChangeUser(item){
+        var selectedText = item.options[item.selectedIndex].innerHTML;
+            var selectedValue = item.value;
+            document.getElementById("id_SPV_Email").value = capex[selectedValue - 1].fields.SPV_Email;
+            document.getElementById("id_SPV").value = capex[selectedValue - 1].fields.SPV;
+            document.getElementById("id_Dept_Head_Email").value = capex[selectedValue - 1].fields.Dept_Head_Email;
+            document.getElementById("id_Dept_Head").value = capex[selectedValue - 1].fields.Dept_Head;
+            document.getElementById("id_Div_Head_Email").value = capex[selectedValue - 1].fields.Div_Head_Email;
+            document.getElementById("id_Div_Head").value = capex[selectedValue - 1].fields.Div_Head;
+            document.getElementById("id_PresDirektur_Email").value = capex[selectedValue - 1].fields.PresDirektur_Email;
+            document.getElementById("id_PresDirektur").value = capex[selectedValue - 1].fields.PresDirektur;
+    }
+</script>
+{% endblock %}

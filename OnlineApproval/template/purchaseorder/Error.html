@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;" >
+
+    <div class="card-body">
+        <h4>Process Failed!</h4>
+           <p> {{Error |linebreaks}}</p>
+    </div>
+</div>
+{% endblock %}

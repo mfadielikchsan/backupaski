@@ -1,0 +1,311 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+
+
+
+<div class="card" style="min-height: 78vh;">
+
+
+    <div class="card-body">
+        <center>
+            <h5>Create Purchase Request from MRP</h5>
+        </center>
+        <br>
+        <h6>PR Header</h6>
+        <div style="height: 5px;"><br></div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Company
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Company}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Bussiness Area
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Bussiness_Area}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Date Created
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Date_Created}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        PP Number
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.PP_Number}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        PP Type
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.PP_Type}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        MRP Month
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.MRP_Month}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        User Name
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.User_Name}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        User Email
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.User_Email}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="PP_Number" value="{{HeadItem.PP_Number}}" hidden>
+                    <button type="submit" class="btn btn-success" name="finish"
+                        style="float: right;width: 150px;">Finish</button>
+                </form>
+
+
+              
+
+            </div>
+        </div>
+
+        <br>
+        <h6>Approval</h6>
+        <table class="table-bordered" style="margin-left: 10px;">
+            <tbody>
+                <tr style="height:150px;">
+                    <td id="USER"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.User_Name|upper}}</td>
+                    <td id="SPV"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.SPV_Name}}
+                    </td>
+                    <td id="DEPTHEAD"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Dept_Head_Name}}
+                    </td>
+                    <td id="FINANCE"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Div_Head_Name}}
+                    </td>
+                    <td id="DIREKTUR"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Direktur_Name}}</td>
+                    <td id="PURCHASE"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Purchase_Name}}</td>
+                </tr>
+                <tr style="height:15px;">
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        User</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Supervisor</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Dept Head</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Div Head</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Direktur</td>
+                    <td id="PURCHASE"
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Purchase</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h6>Attachment</h6>
+        <button type="submit" class="btn btn-info" name="save"
+        style="float: right;width: 150px;" form="revise">Save</button>
+        <form id="revise" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% with 'Attachment1, Attachment2, MRP Item' as list%}
+            {% for form in MRPForm %}
+            {% if form.label not in list %}
+            {{form|attr:"hidden"}}
+            {% endif %}
+            {% endfor %}
+            {% endwith %}
+            <table>
+                {% if HeadItem.Attachment1 %}
+                <tr>
+                    <td style="width: 140px;">Attachment1 </td>
+                </tr>
+                <tr>
+                    <td><a class="btn btn-outline-success"
+                            href="/Media/{{HeadItem.Attachment1}}">{{HeadItem.Attachment1|cut:"Uploads/"}}</a></td>
+                    <td style="width: 100px;padding-left: 10px;">Change File</td>
+                    <td>
+
+                        <div style="padding-top: 12px;" class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile03" name="Attachment1"
+                                    >
+                                <label class="custom-file-label" for="inputGroupFile03"
+                                    aria-describedby="inputGroupFileAddon03">Choose file</label>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+
+                    <td style="width: 100px;">Attachment1</td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <div style="padding-top: 12px;" class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile03" name="Attachment1"
+                                    >
+                                <label class="custom-file-label" for="inputGroupFile03"
+                                    aria-describedby="inputGroupFileAddon03">Choose file</label>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {% endif %}
+                {% if HeadItem.Attachment2 %}
+                <tr>
+                    <td>Attachment2 </td>
+                </tr>
+                <tr>
+                    <td ><a class="btn btn-outline-success"
+                            href="/Media/{{HeadItem.Attachment2}}">{{HeadItem.Attachment2|cut:"Uploads/"}}</a></td>
+                    <td style="padding-left: 10px;">Change File</td>
+                    <td>
+
+                        <div style="padding-top: 12px;" class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile04" name="Attachment2"
+                                    >
+                                <label class="custom-file-label" for="inputGroupFile04"
+                                    aria-describedby="inputGroupFileAddon04">Choose file</label>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {%else%}
+                <tr>
+
+                    <td>Attachment2</td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+
+                        <div style="padding-top: 12px;" class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile04" name="Attachment2"
+                                    >
+                                <label class="custom-file-label" for="inputGroupFile04"
+                                    aria-describedby="inputGroupFileAddon04">Choose file</label>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+            <br>
+            <h6>Change PR Item</h6>
+            <div style="height: 5px;"><br></div>
+            <div class="row" style="width:50%;padding-left: 20px;">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02" name="MRP_Item" >
+                        <label class="custom-file-label" for="inputGroupFile02"
+                            aria-describedby="inputGroupFileAddon02">Choose file</label>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <br>
+        <h6>Current PR Item</h6>
+        <div style="height: 5px;"><br></div>
+
+        <table id="table" class="table table-bordered" style="text-align: center;">
+
+            <tbody>
+                {% for Item in ListItem %}
+                <tr>
+                    {% for I in Item %}
+                    <td>{{I}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <script>
+
+            $(document).ready(function () {
+                $('#table').DataTable();
+
+
+            });
+
+            $('#inputGroupFile02').on('change', function (e) {
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            })
+
+            $('#inputGroupFile03').on('change', function (e) {
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            })
+            $('#inputGroupFile04').on('change', function (e) {
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            })
+        </script>
+
+
+
+    </div>
+  
+</div>
+
+
+{% endblock %}

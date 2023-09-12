@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>Detail Purchasing Price {{PP_Number}}</h5>
+        </center>
+        <br>
+
+
+        <h6>Purchasing Price Data</h6>
+
+
+        <table style="width: 50%;">
+            <tbody>
+                <tr>
+                    <td style="width: 5%;white-space: nowrap;padding-right: 16px;">Doc Number</td>
+                    <td>:</td>
+                    <td>{{PP.PP_Number}}</td>
+                </tr>
+                <tr>
+                    <td>Part Type</td>
+                    <td>:</td>
+                    <td>{{PP.Type}}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>:</td>
+                    <td>{{PP.Status}}</td>
+                </tr>
+                {% if PP.Revise_Note is not None %}
+                <tr>
+                    <td>Revise Message</td>
+                    <td>:</td>
+                    <td>{{PP.Revise_Note}}</td>
+                </tr>
+                {%endif%}
+            </tbody>
+        </table>
+        <br>
+
+        <table name="table " class="table table-bordered" style="text-align: center;font-size: small;">
+            <tr>
+                <th>Vendor Code</th>
+                <th>Vendor Name</th>
+                <th>Material No</th>
+                <th>Material Description</th>
+                <th>Qty</th>
+                <th>UoM</th>
+                <th>Old Price</th>
+                <th>Old Delivery </th>
+                <th>New Price</th>
+                <th>New Delivery </th>
+                <th>Ratio Variance </th>
+            </tr>
+            {% for Item in PPItem%}
+            <tr>
+                <td>{{Item.Vend_Code}}</td>
+                <td>{{Item.Vend_Name}}</td>
+                <td>{{Item.Material}}</td>
+                <td>{{Item.Material_Desc}}</td>
+                <td>{{Item.Qty}}</td>
+                <td>{{Item.UoM}}</td>
+                <td>{{Item.Currency}} {{Item.Old_Price}}</td>
+                <td>{{Item.Old_Delivery}}</td>
+                <td>{{Item.Currency}} {{Item.New_Price}}</td>
+                <td>{{Item.New_Delivery}}</td>
+                <td>{{Item.Ratio}}</td>
+
+            </tr>
+            {%endfor%}
+
+
+        </table>
+        <h6>Note :</h6>
+        <div id="Note">{{PP.Note|safe}}</div>
+
+        {% if PP.Comment_Message %}
+        <br>
+        <h6>Comment Message</h6>
+        <div id="message">{{PP.Comment_Message|safe}}</div>
+        {% endif %}
+        <br>
+        <h6>Approval</h6>
+
+        <table class="table table-bordered" style="text-align: center;font-size: small;">
+            <thead>
+                <tr>
+                    <th style="width: 12,5%;">Created By</th>
+                    <th style="width: 12,5%;">Checked By</th>
+                    <th style="width: 12,5%;">Checked By</th>
+                    <th style="width: 12,5%;">Approved By</th>
+                    <th style="width: 12,5%;">Approved By</th>
+                    <th style="width: 12,5%;">Approved By</th>
+                    <th style="width: 12,5%;">Input By</th>
+                    <th style="width: 12,5%;">Confirm By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 120px; font-style:italic; color: green; text-align: center;">
+                    <td>
+                        <div>Created</div>
+                        <div>{{PP.Submit}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.SPV_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.SPV_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Dept_Head_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Mkt_Head_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.Mkt_Head_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Div_Head_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.PresDirektur_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Fin_Input_Status|default_if_none:''}}</div>
+                        <div>{{PP.Fin_Input_Date|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Dept_Fin_Confirm_Status|default_if_none:''}}</div>
+                        <div>{{PP.Dept_Fin_Confirm_Date|default_if_none:''}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{PP.Admin}}
+                    </td>
+                    <td>{{PP.SPV}}</td>
+                    <td>{{PP.Dept_Head}}
+                    </td>
+                    <td>{{PP.Mkt_Head}}
+                    </td>
+                    <td>{{PP.Div_Head}}
+                    </td>
+                    <td>{{PP.PresDirektur}}
+                    </td>
+                    <td>{{PP.Fin}}</td>
+                    <td>{{PP.Dept_Fin}}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Purchasing Admin</td>
+                    <td>Purchasing SPV</td>
+                    <td>Purchasing Dept Head </td>
+                    <td>Marketing Dept Head</td>
+                    <td>Administration Div Head</td>
+                    <td>Presiden Director</td>
+                    <td>Finance Admin</td>
+                    <td>Finance Dept Head</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="height: 10px;"><br></div>
+        <table style="width: 50%;">
+            <tbody>
+                {% if PP.Attachment1 %}
+                <tr>
+                    <td style="width:150px;">Attachment1</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Attachment1}}">{{PP.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Attachment2 %}
+                <tr>
+                    <td style="width:150px;">Attachment2</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Attachment2}}">{{PP.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Attachment3 %}
+                <tr>
+                    <td style="width:150px;">Attachment3</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Attachment3}}">{{PP.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Attachment4 %}
+                <tr>
+                    <td style="width:150px;">Attachment4</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Attachment4}}">{{PP.Attachment4|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Input1 %}
+                <tr>
+                    <td style="width:150px;">Input1</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Input1}}">{{PP.Input1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Input2 %}
+                <tr>
+                    <td style="width:150px;">Input2</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Input2}}">{{PP.Input2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <br>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+
+    });
+
+
+
+</script>
+{% endblock %}

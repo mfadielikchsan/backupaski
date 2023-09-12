@@ -1,0 +1,213 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <br>
+        <center>
+            <h5>Monitoring {{SP_Number}}</h5>
+        </center>
+        <h6>Item Selling Price Request</h6>
+        <div class="row" style="padding-left: 15px;">
+            <table style="width: 40%; font-size: small;">
+                <tr>
+                    <td>Cust Code</td>
+                    <td>:</td>
+                    <td>{{SP.Cust_Code}}</td>
+                </tr>
+                <tr>
+                    <td>Cust Name</td>
+                    <td>:</td>
+                    <td>{{SP.Cust_Name}}</td>
+                </tr>
+                <tr>
+                    <td>Dist Channel</td>
+                    <td>:</td>
+                    <td>{{SP.Dist_Channel}}</td>
+                </tr>
+                <tr>
+                    <td>Submit Date</td>
+                    <td>:</td>
+                    <td>{{SP.Submit_Date}}</td>
+                </tr>
+                <tr>
+                    <td>No</td>
+                    <td>:</td>
+                    <td>{{SP.SP_Number}}</td>
+                </tr>
+                <tr>
+                    <td>Product Status</td>
+                    <td>:</td>
+                    <td>{{SP.Product_Status}}</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <table style="border-collapse: collapse; font-size: 12px; text-align: center; width: 100%;">
+        <thead>
+            <tr style=" height: 50px; word-break: normal; border: 1px solid">
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid ">Type</th>
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">Material No</th>
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">Material Description</th>
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">Customer Material</th>
+                <th colspan="5" style="border: 1px solid">Old Price</th>
+                <th colspan="5" style="border: 1px solid">New Price</th>
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">Ratio</th>
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">Note</th>
+            </tr>
+            <tr style="border: 1px solid">
+                <th style="padding: 5px; border: 1px solid">Price</th>
+                <th style="padding: 5px; border: 1px solid">Depreciation</th>
+                <th style="padding: 5px; border: 1px solid">Total</th>
+                <th style="padding: 5px; border: 1px solid">UoM</th>
+                <th style="padding: 5px; border: 1px solid">Valid From</th>
+                <th style="padding: 5px; border: 1px solid">Price</th>
+                <th style="padding: 5px; border: 1px solid">Depreciation</th>
+                <th style="padding: 5px; border: 1px solid">Total</th>
+                <th style="padding: 5px; border: 1px solid">UoM</th>
+                <th style="padding: 5px; border: 1px solid">Valid From</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in itemlist%}
+            <tr style="height: 30px; font-size:12px; border-collapse: collapse;">
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Type}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Material_No}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Material_Description}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Customer_Material}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Price}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Depreciation}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Total}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_UoM}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Old_Valid_From}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Price}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Depreciation}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Total}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_UoM}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.New_Valid_From}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Ratio_Variance}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;">{{item.Note}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+        </table>
+        <br>
+
+        <h6>Approval</h6>
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;" >
+            <tbody >
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Created By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Checked By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Checked By</td>
+                    <td colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">SAP Input By</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Confrimed By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{SP.User_Submit}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{SP.SPV_Approval_Status|default_if_none:''}}
+                        {{SP.SPV_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{SP.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{SP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DIV">
+                        {{SP.Div_Head_Approval_Status|default_if_none:''}}
+                        {{SP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="PRDIR">
+                        {{SP.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{SP.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="ACC">
+                        {{SP.Acc_Input_Status|default_if_none:''}}
+                        {{SP.Acc_Input_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPTACC">
+                        {{SP.Dept_Acc_Confirm_Status|default_if_none:''}}
+                        {{SP.Dept_Acc_Confirm_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.UserName}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.SPV}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.Dept_Head|default_if_none:'N/A'}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{SP.Div_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{SP.PresDirektur}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.Acc}}</td>
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{SP.Dept_Acc}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing Admin</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing SPV</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing Dept Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Bussiness Dev Div Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Press Director</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Finance SPV</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Finance Dept Head</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <h6>Quotation (Penawaran) Attachment</h6>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% with 'Attachment1, Attachment2, Attachment3, Input1, Input2' as list%}
+            {% for form in SPform %}
+            {% if form.label not in list %}
+            {{form|attr:"hidden"}}
+            {% endif %}
+            {% endfor %}
+            {% endwith %}
+            <table>
+                {% if SP.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{SP.Attachment1}}">{{SP.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if SP.Attachment2  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{SP.Attachment2}}">{{SP.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if SP.Attachment3  %}
+                <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{SP.Attachment3}}">{{SP.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if SP.Attachment4  %}
+                <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{SP.Attachment4}}">{{SP.Attachment4|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if SP.Input1  %}
+                <tr>
+                <td style="width: 140px;">Attachment Input </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{SP.Input1}}">{{SP.Input1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if SP.Input2  %}
+                <tr>
+                <td style="width: 140px;">Attachment Input </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{SP.Input2}}">{{SP.Input2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+            </table>
+        </form>
+        <br>
+            <a class="btn btn-info" style="height: 35px; float: right; margin-right: 20px;" href="/SP/Export/{{SP.SP_Number}}"> Download {{SP.SP_Number}} as .xls</a>
+        <br>
+    </div>
+</div>
+
+{% endblock %}

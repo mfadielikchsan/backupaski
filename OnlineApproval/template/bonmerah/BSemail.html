@@ -1,0 +1,166 @@
+<html>
+
+<head>
+    <meta name="pdfkit-page-size" content="A5" />
+    <meta name="pdfkit-orientation" content="Landscape" />
+</head>
+
+<body style="font-family:'Palatino Linotype'">
+    <div id="watermark" style="min-height: 80vh;">
+        <hr>
+        <style>
+            .table-header {
+                table-layout: auto;
+                border: 1px solid #dee2e6;
+                width: 100%;
+                font-size: small;
+            }
+
+            .table-header td {
+                white-space: nowrap;
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+
+            .table-approve {
+                border: 1px solid #dee2e6;
+                border-collapse: collapse;
+                padding: 5px;
+                font-size: small;
+            }
+
+            .table-approve tr th,
+            .table-approve tr td {
+                border: 1px solid #dee2e6;
+            }
+
+            #watermark {
+                position: relative;
+                overflow: hidden;
+            }
+
+            #watermark h4 {
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                display: block;
+                width: 150%;
+                height: 150%;
+                z-index: -1;
+                color: #ffffcc;
+                opacity: 1;
+                line-height: 3em;
+                letter-spacing: 2px;
+                font-size: 30px;
+                pointer-events: none;
+                -webkit-transform: rotate(-45deg);
+                -moz-transform: rotate(-45deg);
+            }
+        </style>
+
+        <table class="table-approve" style="width:100%;text-align: center;">
+            <tr>
+                <td><img width="60px" src="http://127.0.0.1:8000/static/image/ASKI.png" /></td>
+                <td>
+                    <h2>TEMPORARY BON</h2>
+                </td>
+                <td style="text-align: left;width:200px;">
+                    <div>No Doc &nbsp&nbsp&nbsp&nbsp: FR-FACT.01-002</div>
+                    <div>Revision &nbsp: 0</div>
+                    <div>Eff. Start &nbsp: 01 Mar 2021</div>
+                </td>
+            </tr>
+        </table>
+        <p style="text-align: center;">Harus dipertanggung jawabkan paling lambat 2 (dua) hari</p>
+        <table class="table-header">
+            <tr>
+                <td width="1%">BS Number</td>
+                <td width="1%">:</td>
+                <td width="98%"> """+ BS.BS_Number +"""</td>
+            </tr>
+        </table>
+
+
+        <table class="table-approve" style="width: 100%;margin-top:2px;">
+            <tr>
+                <th>Date Created</th>
+                <th>Temporary Bon Note</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td style="text-align:center;padding-top:50px;padding-bottom:50px;">
+
+                    <div>"""+ BS.Date_Created.strftime("%d-%m-%Y")+"""</div>
+                </td>
+                <td style="text-align: left;">
+                    <div>"""+BS.Note.replace("\n","</div>
+                    <div>")+"""</div>
+                </td>
+                <td style="text-align:center;"> Rp. """+ BS.Jumlah+""",-</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p style="text-align: left;">Terbilang : """+ BS.Terbilang+"""</p>
+                </td>
+            </tr>
+
+        </table>
+
+
+
+
+        <div style="font-size: small;">Approval</div>
+        <table class="table-approve" style="white-space: nowrap;text-align: center;margin-top:2px;">
+            <tr>
+                <td style="width:25%;">Received by</td>
+                <td style="width:25%;">Approved by</td>
+                <td style="width:25%;">Approved by</td>
+                <td style="width:25%;">Created by</td>
+            </tr>
+            <tr style="height:90px;">
+                <td>
+                    <div>Received</div>
+                    <div>"""+BS.Received_Date.strftime("%d-%m-%Y %H:%M:%S").replace(" ","</div>
+                    <div>")+"""</div>
+                </td>
+                <td id="Finance">
+                    <div>"""+BS.Finance_Approval+"""</div>
+                    <div>"""+BS.Finance_Approval_Date.strftime("%d-%m-%Y %H:%M:%S").replace(" ","</div>
+                    <div>")+"""</div>
+                </td>
+                <td id="DeptHead">
+                    <div>"""+BS.DeptHead_Approval+"""</div>
+                    <div>"""+BS.DeptHead_Approval_Date.strftime("%d-%m-%Y %H:%M:%S").replace(" ","</div>
+                    <div>")+"""</div>
+                </td>
+                <td id="User">
+                    <div>Created</div>
+                    <div>"""+BS.Date_Created.strftime("%d-%m-%Y %H:%M:%S").replace(" ","</div>
+                    <div>")+"""</div>
+                </td>
+            </tr>
+            <tr>
+                <td>"""+ BS.Receiver_Name+"""</td>
+                <td>"""+ BS.Finance+"""</td>
+                <td>"""+ BS.DeptHead+"""</td>
+                <td>"""+ BS.User_Name+"""</td>
+            </tr>
+            <tr>
+                <td style="width:25%;">Receiver</td>
+                <td style="width:25%;">Finance</td>
+                <td style="width:25%;">Dept/Div Head</td>
+                <td style="width:25%;">User</td>
+            </tr>
+        </table>
+
+
+        <hr>
+        <i>This email is automatically generated by Online Approval System PT Astra Komponen Indonesia<i>
+
+                <h4>"""+watermark+"""</h4>
+
+    </div>
+
+</body>
+
+</html>

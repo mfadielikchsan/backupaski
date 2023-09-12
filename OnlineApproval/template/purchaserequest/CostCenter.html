@@ -1,0 +1,136 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+
+        <br>
+        <div class="row">
+            <div class="col sm-6">
+                <center>
+                    <h6>Current Cost Center List</h6>
+                </center>
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="display compact" style="font-size: small;" id="table">
+                            <thead style="text-align:center;font-size:small;background-color: lightcyan;">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Cost Center ID</th>
+                                    <th>Plant</th>
+                                    <th>Area</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="text-align:center;font-size:small;">
+                                {% for CostCenter in ListCostCenter %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{CostCenter.Cost_Center}}</td>
+                                    <td>{{CostCenter.Plant}}</td>
+                                    <td>{{CostCenter.Area}}</td>
+                                    <td>{{CostCenter.Description}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                        <a class="btn btn-info" href="/PR/CostCenterExport/"> Download as .xls</a>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </div>
+            <div class="col-sm-6">
+                <center>
+                    <h6>Add New Cost Center</h6>
+                </center>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% for CostCenter in CostCenterForm %}
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    {{CostCenter.label}}
+                                </div>
+                                <div class="col-sm-9">
+                                    {{CostCenter|add_class:"form-control"}}
+                                </div>
+                            </div>
+                            <div style="height: 5px;"><br></div>
+                            {% endfor %}
+                            <div class="row"><button style="margin-left: auto;margin-right: 40px;width: 100px;"
+                                    type="submit" class="btn btn-success" name="add">Add</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <br>
+                <center>
+                    <h6>Delete Cost Center</h6>
+                </center>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="row">
+                                {% csrf_token %}
+                                <div class="col-sm-9">
+                                    <select class="form-control2" name="DeleteCostCenter" id="DeleteCostCenter">
+                                        <option value disabled selected></option>
+                                        {% for CostCenter in ListCostCenter %}
+                                        <option value="{{CostCenter.Cost_Center}}">
+                                            {{CostCenter.Cost_Center}}-{{CostCenter.Plant}}-{{CostCenter.Area}}-{{CostCenter.Description}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <center><button style="width: 70%;" type="submit" class="btn btn-danger"
+                                            name="delete">Delete</button></center>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.form-control2').select2();
+        $('#table').DataTable();
+    });
+
+
+</script>
+
+<style>
+    .select2-selection__rendered {
+        line-height: 31px !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 40px !important;
+        padding-left: 10px;
+        padding-top: 2px;
+
+    }
+
+    .select2-selection__arrow {
+        height: 34px !important;
+    }
+</style>
+
+{% endblock %}

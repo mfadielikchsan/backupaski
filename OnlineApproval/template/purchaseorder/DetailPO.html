@@ -1,0 +1,271 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <br>
+        <!-- <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %} -->
+        <div class="row" style="align-self: center;">
+            <div class="col sm-4">
+                <div>PDF Preview</div>
+                <embed type="application/pdf" id="preview" src="/Media/UnsignedPO/PO%20{{POData.PO_Number}}rev{{POData.Revision_Status}}.pdf#toolbar=0"
+                    style="background-color: whitesmoke;padding: 2px;" width="100%" height="685px"></embed>
+
+            </div>
+            <div class="col sm-8">
+                <div>PO Description</div>
+                <div class="card">
+                    <div class="card-body" style="height: 680px;">
+                        <table style="width: 100%; border: 1px;">
+                            <tr>
+                                <td width="10%">PO Number</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.PO_Number}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">PO Date</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.PO_Date}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Revision</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Revision_Status}}</td>
+
+                            </tr>
+                            {% if POData.Revision_Status != 0 %}
+                            <tr>
+                                <td width="10%">Revision Message</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Revise_Message}}</td>
+
+                            </tr>
+                            {%endif%}
+                            <tr>
+                                <td width="10%">Vendor Number</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Vendor_Number}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Vendor Name</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Vendor_Name}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Purchase Admin</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.PO_Admin}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">PR Reference</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.PR_Reference}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Note</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Note|default_if_none:"-"}}</td>
+
+                            </tr>
+
+
+
+
+                        </table>
+                        <br>
+
+
+                        <table class="table-bordered" style="text-align: center;font-size: medium;width: 100%;">
+                            <tr>
+
+                                <td>Supervisor</td>
+                                <td>Dept. Head</td>
+                                {% if POData.PO_Direktur != None %}
+                                <td>Direktur</td>
+                                {%endif%}
+                                {% if POData.PO_PresDirektur != None %}
+                                <td>Pres. Direktur</td>
+                                {%endif%}
+                            </tr>
+                            <tr>
+                                <td style="height: 100px;">
+                                    <div>{{POData.PO_SPV_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                                    <div>{{POData.PO_SPV_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                <td>
+                                    <div>{{POData.PO_Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}
+                                    </div>
+                                    <div>{{POData.PO_Dept_Head_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                {% if POData.PO_Direktur != None %}
+                                <td>
+                                    <div>{{POData.PO_Direktur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                                    <div>{{POData.PO_Direktur_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                {%endif%}
+                                {% if POData.PO_PresDirektur != None %}
+                                <td>
+                                    <div>{{POData.PO_PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}
+                                    </div>
+                                    <div>{{POData.PO_PresDirektur_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                {%endif%}
+
+                            </tr>
+                            <tr>
+
+                                <td>{{POData.PO_SPV}}</td>
+                                <td>{{POData.PO_Dept_Head}}</td>
+                                {% if POData.PO_Direktur != None %}
+                                <td>{{POData.PO_Direktur}}</td>
+                                {%endif%}
+                                {% if POData.PO_PresDirektur != None %}
+                                <td class="pres">{{POData.PO_PresDirektur}}</td>
+                                {%endif%}
+                            </tr>
+                        </table>
+                        <br>
+                        <h6>Attachment</h6>
+                        <table width="100%">
+                            {% if POData.PO_Attachment1 != '' %}
+                            <tr>
+                                <td>1.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment1}}">{{POData.PO_Attachment1}}</a></td>
+                            </tr>
+                            {%endif%}
+                            {% if POData.PO_Attachment2 != '' %}
+                            <tr>
+                                <td>2.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment2}}">{{POData.PO_Attachment2}}</a></td>
+                            </tr>
+                            {%endif%}
+                            {% if POData.PO_Attachment3 != '' %}
+                            <tr>
+                                <td>3.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment3}}">{{POData.PO_Attachment3}}</a></td>
+                            </tr>
+                            {%endif%}
+                            {% if POData.PO_Attachment4 != '' %}
+                            <tr>
+                                <td>4.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment4}}">{{POData.PO_Attachment4}}</a></td>
+                            </tr>
+                            {%endif%}
+                        </table>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- </form> -->
+        {% if POData.PO_Status|slice:"0:8" != 'Canceled'%}
+        <div style="margin-left: auto;margin-right: 0px;float: right;">
+            <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Cancel PO</button>
+        </div>
+        {%endif%}
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cancel Purchase Order</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure want to cancel PO {{POData.PO_Number}} ?
+                    </div>
+                    <div class="modal-footer">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="text" name="PONumber" value="{{POData.PO_Number}}" hidden>
+                            <input type="text" name="Revision" value="{{POData.Revision_Status}}" hidden>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger"  >Cancel PO</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+
+    $(document).ready(function () {
+
+
+
+    })
+
+
+
+    function CheckVN(input) {
+        console.log(input.value);
+    }
+
+    function Preview(input) {
+        //$('#preview').attr('src',  input.files[0]);
+        const preview = document.getElementById("preview");
+        const file = input.files[0];
+        const reader = new FileReader();
+        var filename = file.name;
+
+        reader.addEventListener("load", function () {
+            // convert file to base64 string
+            preview.src = reader.result;
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+        console.log(input.files[0].name);
+        var data = input.files[0].name.split(" ");
+        if (data[1].length == 10) {
+            document.getElementById("id_PO_Number").value = data[1];
+            // document.getElementById("id_Vendor_Name").value = input.files[0].name.replace(data[0]+' '+data[1]+' ',"").replace('.pdf',"");
+        } else {
+            alert("invalid PDF file!!")
+            document.getElementById("id_PO_Number").value = "";
+            // document.getElementById("id_Vendor_Name").value = "";
+        }
+
+
+        console.log(reader);
+
+    }
+</script>
+
+{% endblock %}

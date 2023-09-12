@@ -1,0 +1,328 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h6>{{Judul}}</h6>
+        </center>
+        <br>
+
+
+        <table style="width: 100%;">
+            <tr>
+                <td width="10%">Bussiness Unit</td>
+
+                <td width="20%">: {{FP.Bussiness_Unit}}</td>
+                <td width="10%">Note</td>
+
+                <td width="20%">: {{FP.Note}}</td>
+                {% if FP.Bank is not None %}
+                <td width="10%">Bank</td>
+                <td width="20%">: {{FP.Bank}}</td>
+                {% endif %}
+
+            </tr>
+            <tr>
+                <td width="10%">Div / Dept</td>
+
+                <td>: {{FP.Dept}}</td>
+                <td width="10%">Paid by</td>
+
+                <td>: {{FP.PaidBy}}</td>
+                {% if FP.Bank is not None %}
+                <td>Nomor Rekening</td>
+
+                {% if user.username in "admin , ADMINFINANCE" %}
+                <td>: {{FP.Nomor_Rekening}}</td>
+                {% else %}
+
+                <td>: {{FP.Nomor_Rekening|slice:":-5" }}XXXXX</td>
+                {% endif %}
+                {% endif %}
+            </tr>
+            <tr>
+                <td width="10%">User</td>
+
+                <td>: {{FP.User_Name}}
+                </td>
+                <td width="10%">PayReq Number</td>
+
+                <td>: {{FP.FP_Number}}</td>
+                {% if FP.Bank is not None %}
+                <td>Nama Pemilik</td>
+                <td>: {{FP.Nama_Rekening}}</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td width="10%" style="vertical-align: top;">Cost Center</td>
+
+                <td>
+
+
+                    : {{FP.CostCenter}}
+                    {% if user.username in "admin , ADMINFINANCE" and FP.FP_Status == 'FinanceCheck' %}
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <select class="form-control2" style="width: 100%;height: auto;" name="CostCenter"
+                                    id="id_CostCenter" required>
+                                    <option disabled selected value> --------- </option>
+                                    {% for cost in CostCenter %}
+
+                                    <option style="font-size: small;" value="{{cost.Cost_Center}}">
+                                        {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <button name="ChangeCost" type="submit" class="btn-success"
+                                    style="float: right;margin: 2px;">Change Cost Center</button>
+                            </div>
+                        </div>
+                    </form>
+                    {%endif%}
+                </td>
+
+                <td>Bon Reference</td>
+
+                <td>: <a href="/BS/ListBS/{{FP.Reference}}">{{FP.Reference}}</a></td>
+            </tr>
+        </table>
+
+
+
+        <hr style="border: 1px solid black;">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100px;"><b>Paid to</b></td>
+                <td>{{FP.PaidTo}}</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;"><b>Description</b></td>
+                <td>{{FP.Description|linebreaks}}</td>
+            </tr>
+            <tr>
+                <td><b>Amount</b></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>Rp.</td>
+                            <td>{{FP.Amount}}</td>
+                            <td>,-</td>
+                            <td></td>
+                            {% if user.username in "admin , ADMINFINANCE" and FP.FP_Status == 'FinanceCheck' %}
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <td><input type="text" name="Amount" id="id_Amount" onkeyup="calculate(this)"></td>
+                                <td><button type="submit" class="btn-success" >Change</button></td>
+                            </form>
+                            {%endif%}
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Says</b></td>
+                <td>
+                    <table>
+
+
+                <td> {{FP.Says}}</td>
+                <td></td>
+                {% if user.username in "admin , ADMINFINANCE" and FP.FP_Status == 'FinanceCheck' %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <td><input type="text" name="Says" id=""></td>
+                    <td><button type="submit" class="btn-success">Change</button></td>
+                </form>
+                {%endif%}
+            </table>
+        </td>
+            </tr>
+        </table>
+        {% if FP.Entertainment %}
+        <hr style="border: 1px solid black;">
+        <h6>Entertainment</h6>
+        <div>
+            <a class="btn btn-outline-success" href="/Media/Entertaint/{{FP.Entertainment}}.pdf">{{FP.Entertainment}}</a>
+        </div>
+        {% endif %}
+        <hr style="border: 1px solid black;">
+        <h6>Attachment</h6>
+        {% if FP.Attachment1 %}
+        <div>
+            1.
+            <a class="btn btn-outline-success" href="/Media/{{FP.Attachment1}}">{{FP.Attachment1|cut:"Uploads/"}}</a>
+        </div>
+        {% endif %}
+        {% if FP.Attachment2 %}
+        <div>
+            2.
+            <a class="btn btn-outline-success" href="/Media/{{FP.Attachment2}}">{{FP.Attachment2|cut:"Uploads/"}}</a>
+        </div>
+        {% endif %}
+        {% if FP.Attachment3 %}
+        <div>
+            3.
+            <a class="btn btn-outline-success" href="/Media/{{FP.Attachment3}}">{{FP.Attachment3|cut:"Uploads/"}}</a>
+        </div>
+        {% endif %}
+        {% if FP.Attachment4 %}
+        <div>
+            4.
+            <a class="btn btn-outline-success" href="/Media/{{FP.Attachment4}}">{{FP.Attachment4|cut:"Uploads/"}}</a>
+        </div>
+        {% endif %}
+        {% if FP.Attachment5 %}
+        <div>
+            5.
+            <a class="btn btn-outline-success" href="/Media/{{FP.Attachment5}}">{{FP.Attachment5|cut:"Uploads/"}}</a>
+        </div>
+        {% endif %}
+        <hr style="border: 1px solid black;">
+        <h6>Approval</h6>
+        <table class="table table-bordered" style="text-align: center;width: 100%;">
+            <tr>
+                <td style="width: 15%;">Received by</td>
+                <td style="width: 15%;">Payment Approved by</td>
+                <td style="width: 15%;">Request Approved by</td>
+                <td style="width: 15%;">Request Approved by</td>
+                <td style="width: 15%;">Requested by</td>
+            </tr>
+            <tr style="height: 100px;">
+                <td>
+                    <div>Received</div>
+                    <div>{{FP.Received_Date|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Dir_Finance_Approval|default_if_none:""}}</div>
+                    <div>{{FP.Dir_Finance_Approval_Date|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Finance_Approval|default_if_none:""}}</div>
+                    <div>{{FP.Finance_Approval_Date|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{FP.DeptHead_Approval|default_if_none:""}}</div>
+                    <div>{{FP.DeptHead_Approval_Date|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>Created</div>
+                    <div>{{FP.Date_Created}}</div>
+                </td>
+            </tr>
+            <tr>
+                {% if FP.Receiver_Name is None %}
+                <td>
+                    {%if user.username in "admin , ADMINFINANCE" and FP.FP_Status == 'Approved' %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+
+                            <div class="col-sm-8">
+                                <input type="" name="ReceiveBy" class="form-control">
+                            </div>
+                            <div class="col-sm-3">
+                                <button class="btn btn-success" type="submit" name="Save">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                </td>
+                {% else %}
+                <td>{{FP.Receiver_Name|default_if_none:""}}</td>
+                {% endif %}
+                <td>{{FP.Dir_Finance}}</td>
+                <td>{{FP.Finance}}</td>
+                <td>{{FP.DeptHead}}</td>
+                <td>{{FP.User_Name}}</td>
+            </tr>
+            <tr>
+                <td>Receiver</td>
+                <td>Direktur</td>
+                <td>Finance</td>
+                <td>Dept/Div Head</td>
+                <td>User</td>
+            </tr>
+        </table>
+        <!-- Modal -->
+        <div class="modal fade" id="RevisePR" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Send Reject Payement Request</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" id="reviseform">
+                        {% csrf_token %}
+                        <div class="modal-body">
+
+                            <h6>Reject Note</h6>
+                            <input type="text" class="form-control" name="rejectmessage" id="revisemessage">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button style="width: 150px;" type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Cancel</button>
+                            <button style="width: 150px;" type="submit" class="btn btn-success" name="reject"
+                                id="reject">Send Reject</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+        </div>
+        {% if FP.FP_Status == 'FinanceCheck'%}
+        <div class="row">
+            <button class="btn btn-light" style="width: 100px;margin-right: 10px;margin-left: auto;"><a
+                    href="mailto:{{FP.User_Email}}?subject=Ask User:{{FP.FP_Number}}&body=Ask User about Payment Request with ID {{FP.FP_Number}} %0DAsk User Message: ">Ask
+                    User</a></button>
+            <button type="submit" name="reject" class="btn btn-danger"
+                style="width: 100px;margin-left: 0px;margin-right: 10px;" data-toggle="modal"
+                data-target="#RevisePR">Reject</button>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="finish" class="btn btn-info"
+                    style="width: 100px;margin-left: 0px;margin-right: 15px;">Finish</button>
+            </form>
+        </div>
+        {%endif%}
+        <br>
+        <br>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+function calculate(input){
+
+while (parseInt(input.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))>1000000)
+{
+    input.value = input.value.slice(0, -1)
+}
+
+
+document.getElementById("id_Amount").value = input.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                    
+}
+
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,613 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <br>
+
+        <div class="row" style="align-self: center;">
+            <div class="col-sm-6">
+                <h5 style="text-align: center;">Before Revision</h5>
+                <div style="height: 18px;"><br></div>
+                <div>PO Description</div>
+                <div class="card">
+                    <div class="card-body">
+                        <table style="width: 100%; border: 1px;">
+                            <tr>
+                                <td width="10%">PO Number</td>
+                                <td width="1%">:</td>
+                                <td width="20%"><span id="PObefore">{{POData.PO_Number}}</span></td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">PO Date</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.PO_Date}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Revision</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Revision_Status}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Vendor Number</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Vendor_Number}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Vendor Name</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.Vendor_Name}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">Purchase Admin</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.PO_Admin}}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="10%">PR Reference</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{POData.PR_Reference}}</td>
+
+                            </tr>
+
+
+
+
+                        </table>
+                        <br>
+
+
+                        <table class="table-bordered" style="text-align: center;font-size: medium;width: 100%;">
+                            <tr>
+
+                                <td>Supervisor</td>
+                                <td>Dept. Head</td>
+                                {% if POData.PO_Direktur != None %}
+                                <td>Direktur</td>
+                                {%endif%}
+                                {% if POData.PO_PresDirektur != None %}
+                                <td>Pres. Direktur</td>
+                                {%endif%}
+                            </tr>
+                            <tr>
+                                <td style="height: 100px;">
+                                    <div>{{POData.PO_SPV_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                                    <div>{{POData.PO_SPV_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                <td>
+                                    <div>{{POData.PO_Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}
+                                    </div>
+                                    <div>{{POData.PO_Dept_Head_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                {% if POData.PO_Direktur != None %}
+                                <td>
+                                    <div>{{POData.PO_Direktur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                                    <div>{{POData.PO_Direktur_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                {%endif%}
+                                {% if POData.PO_PresDirektur != None %}
+                                <td>
+                                    <div>{{POData.PO_PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}
+                                    </div>
+                                    <div>{{POData.PO_PresDirektur_Approval_Date|default_if_none:""}}</div>
+
+                                </td>
+                                {%endif%}
+
+                            </tr>
+                            <tr>
+
+                                <td>{{POData.PO_SPV}}</td>
+                                <td>{{POData.PO_Dept_Head}}</td>
+                                {% if POData.PO_Direktur != None %}
+                                <td>{{POData.PO_Direktur}}</td>
+                                {%endif%}
+                                {% if POData.PO_PresDirektur != None %}
+                                <td class="pres">{{POData.PO_PresDirektur}}</td>
+                                {%endif%}
+                            </tr>
+                        </table>
+                        <br>
+                        <h6>Attachment</h6>
+                        <table width="100%">
+                            {% if POData.PO_Attachment1 != '' %}
+                            <tr>
+                                <td>1.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment1}}">{{POData.PO_Attachment1}}</a></td>
+                            </tr>
+                            {%endif%}
+                            {% if POData.PO_Attachment2 != '' %}
+                            <tr>
+                                <td>2.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment2}}">{{POData.PO_Attachment2}}</a></td>
+                            </tr>
+                            {%endif%}
+                            {% if POData.PO_Attachment3 != '' %}
+                            <tr>
+                                <td>3.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment3}}">{{POData.PO_Attachment3}}</a></td>
+                            </tr>
+                            {%endif%}
+                            {% if POData.PO_Attachment4 != '' %}
+                            <tr>
+                                <td>4.</td>
+                                <td><a class="btn btn-outline-success"
+                                        href="/Media/{{POData.PO_Attachment4}}">{{POData.PO_Attachment4}}</a></td>
+                            </tr>
+                            {%endif%}
+                        </table>
+
+
+
+                    </div>
+                </div>
+
+                <div>PDF Preview</div>
+                <embed type="application/pdf" id="preview" src="/Media/{{POData.PO_Before_Approval}}#toolbar=0"
+                    style="background-color: whitesmoke;padding: 2px;" width="100%" height="685px"></embed>
+
+            </div>
+            <div class="col-sm-6">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+
+                        <h5 style="text-align: center;margin-left: auto;margin-right: auto;padding-left: 200px;">After
+                            Revision</h5>
+
+                        <button id="submit_button" class="btn btn-success"
+                            style="width:200px;height: 50px;margin-left: auto;margin-right: 14px; ">Submit</button>
+
+
+                    </div>
+
+                    <div>PO Description</div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <table style="width: 100%; border: 1px;">
+                                <tr>
+                                    <td width="10%">Upload PDF PO</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">
+                                        {{POForm.PO_Before_Approval|add_class:"form-control"|attr:"onChange:Preview(this)"}}
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td width="10%">PO Number</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">{{POForm.PO_Number|add_class:"form-control"|attr:"readonly"}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td width="10%">PO Date</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">{{POForm.PO_Date|add_class:"form-control"|attr:"readonly"}}</td>
+
+                                </tr>
+
+                                <tr>
+                                    <td width="10%">Vendor Number</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">
+                                        {{POForm.Vendor_Number|add_class:"form-control"|attr:"onkeyup:CheckVN(this)"|attr:"readonly"}}
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td width="10%">Vendor Name</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">{{POForm.Vendor_Name|add_class:"form-control"|attr:"readonly"}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td width="10%">Purchase Admin</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">{{POForm.PO_Admin|add_class:"form-control"|attr:"readonly"}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td width="10%">PR Reference</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">{{POForm.PR_Reference|add_class:"form-control"}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td width="10%">Revise Message</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">{{POForm.Revise_Message|add_class:"form-control"|attr:"required"}}
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td width="10%">Approval</td>
+                                    <td width="1%">:</td>
+                                    <td width="20%">
+                                        <select class="form-control" name="Approval_Level" id="id_Approval_Level"
+                                            hidden>
+                                            <option value="Dir">Direktur</option>
+                                            <option value="PresDir">Presiden Direktur</option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+
+
+                            </table>
+                            <br>
+                            {{POForm.Revision_Status|add_class:"form-control"|attr:"hidden"}}
+
+                            {{POForm.PO_SPV_Email|attr:"hidden"}}
+                            {{POForm.PO_Dept_Head_Email|attr:"hidden"}}
+                            {{POForm.PO_Direktur_Email|attr:"hidden"}}
+                            {{POForm.PO_PresDirektur_Email|attr:"hidden"}}
+                            {{POForm.PO_Admin_Email|attr:"hidden"}}
+                            <table class="table-bordered" style="text-align: center;">
+                                <tr>
+
+                                    <td>Supervisor</td>
+                                    <td>Dept. Head</td>
+                                    <td class="dir">Direktur</td>
+                                    <td class="pres">Pres. Direktur</td>
+                                </tr>
+                                <tr>
+                                    <td style="height: 100px;"></td>
+                                    <td></td>
+                                    <td class="dir"></td>
+                                    <td class="pres"></td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>{{POForm.PO_SPV|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                                    </td>
+                                    <td>{{POForm.PO_Dept_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                                    </td>
+                                    <td class="dir">{{POForm.PO_Direktur|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                                    </td>
+                                    <td class="pres">
+                                        {{POForm.PO_PresDirektur|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <h6>Attachment</h6>
+                            <table width="100%">
+                                <tr>
+                                    <td>1.</td>
+                                    <td>{{POForm.PO_Attachment1|add_class:"form-control"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>2.</td>
+                                    <td>{{POForm.PO_Attachment2|add_class:"form-control"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>3.</td>
+                                    <td>{{POForm.PO_Attachment3|add_class:"form-control"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>4.</td>
+                                    <td>{{POForm.PO_Attachment4|add_class:"form-control"}}</td>
+                                </tr>
+                            </table>
+
+
+
+                        </div>
+                    </div>
+                    <br>
+                </form>
+                <div>PDF Preview</div>
+                <embed type="application/pdf" id="previewafter" src=""
+                    style="background-color: whitesmoke;padding: 2px;" width="100%" height="850"></embed>
+            </div>
+
+        </div>
+
+
+
+
+
+    </div>
+</div>
+
+<script src="{% static 'vendor/pdf/pdf.js' %}"></script>
+
+
+<script>
+    var approve = {{ Data| safe}};
+    console.log(approve);
+
+    $(document).ready(function () {
+        document.getElementById("id_PO_SPV").value = approve[0].fields.SPV;
+        document.getElementById("id_PO_Dept_Head").value = approve[0].fields.Dept_Head;
+        document.getElementById("id_PO_Direktur").value = approve[0].fields.Direktur;
+        document.getElementById("id_PO_SPV_Email").value = approve[0].fields.SPV_Email;
+        document.getElementById("id_PO_Dept_Head_Email").value = approve[0].fields.Dept_Head_Email;
+        document.getElementById("id_PO_Direktur_Email").value = approve[0].fields.Direktur_Email;
+        document.getElementById("id_PO_Admin_Email").value = approve[0].fields.Admin_Email;
+        const element = document.getElementsByClassName("pres");
+        for (let i = 0; i < element.length; i++) {
+            element[i].style.display = "none";
+        }
+        const element1 = document.getElementsByClassName("dir");
+        for (let i = 0; i < element1.length; i++) {
+            element1[i].style.display = "none";
+        }
+
+
+    })
+
+    function Level(input) {
+        if (input == "Dir") {
+            document.getElementById("id_PO_PresDirektur").value = "";
+            document.getElementById("id_PO_PresDirektur_Email").value = "";
+            document.getElementById("id_PO_Direktur").value = approve[0].fields.Direktur;
+            document.getElementById("id_PO_Direktur_Email").value = approve[0].fields.Direktur_Email;
+            const element = document.getElementsByClassName("dir");
+            for (let i = 0; i < element.length; i++) {
+                element[i].style.display = "block";
+            }
+            const element1 = document.getElementsByClassName("pres");
+            for (let i = 0; i < element1.length; i++) {
+                element1[i].style.display = "none";
+            }
+        }else if (input == "Pres"){
+            document.getElementById("id_PO_PresDirektur").value = approve[0].fields.PresDirektur;
+            document.getElementById("id_PO_PresDirektur_Email").value = approve[0].fields.PresDirektur_Email;
+            document.getElementById("id_PO_Direktur").value = "";
+            document.getElementById("id_PO_Direktur_Email").value = "";
+            const element = document.getElementsByClassName("dir");
+            for (let i = 0; i < element.length; i++) {
+                element[i].style.display = "none";
+            }
+            const element1 = document.getElementsByClassName("pres");
+            for (let i = 0; i < element1.length; i++) {
+                element1[i].style.display = "block";
+            }
+        
+        } else {
+            document.getElementById("id_PO_PresDirektur").value = approve[0].fields.PresDirektur;
+            document.getElementById("id_PO_PresDirektur_Email").value = approve[0].fields.PresDirektur_Email;
+            document.getElementById("id_PO_Direktur").value = approve[0].fields.Direktur;
+            document.getElementById("id_PO_Direktur_Email").value = approve[0].fields.Direktur_Email;
+            const element = document.getElementsByClassName("dir");
+            for (let i = 0; i < element.length; i++) {
+                element[i].style.display = "block";
+            }
+            const element1 = document.getElementsByClassName("pres");
+            for (let i = 0; i < element1.length; i++) {
+                element1[i].style.display = "block";
+            }
+        }
+    }
+
+
+    function CheckVN(input) {
+        console.log(input.value);
+    }
+    
+    function Preview(input) {
+
+        document.getElementById("submit_button").disabled = true;
+        //$('#preview').attr('src',  input.files[0]);
+        const preview = document.getElementById("previewafter");
+        const file = input.files[0];
+        const reader = new FileReader();
+        var filename = file.name;
+
+        reader.addEventListener("load", function () {
+            // convert file to base64 string
+            preview.src = reader.result + "#toolbar=0";
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+
+
+
+        console.log(input.files[0].name);
+        var data = input.files[0].name.split(" ");
+        if (input.files[0].name.length > 10) {
+
+
+
+
+            // console.log(input.files[0]);
+            // Loaded via <script> tag, create shortcut to access PDF.js exports.
+            var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+            // The workerSrc property shall be specified.
+            pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/vendor/pdf/pdf.worker.js';
+
+            // var files = input.files[0];
+            var fileReader = new FileReader();
+            fileReader.onload = function () {
+                var typedarray = new Uint8Array(this.result);
+                //console.log(typedarray);
+                pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+                    // console.log(pdf);
+                    var pdfDocument = pdf;
+                    var pagesPromises = [];
+
+                    for (var i = 0; i < pdf._pdfInfo.numPages; i++) {
+                        // Required to prevent that i is always the total of pages
+                        (function (pageNumber) {
+                            pagesPromises.push(getPageText(pageNumber, pdfDocument));
+                        })(i + 1);
+                    }
+
+                    let textcontain = "";
+                    let fulltext = "";
+
+                    Promise.all(pagesPromises).then(function (pagesText) {
+                        // Remove loading
+                        //  $("#loading-info").remove();
+
+                        // Render text
+                        for (var i = 0; i < pagesText.length; i++) {
+
+                            fulltext += pagesText[i];
+
+
+
+
+                        }
+                        let textcontain = fulltext.replace(/;/g, '');
+                        console.log(textcontain);
+
+                        //console.log(fulltext);
+
+
+
+                        //PO number
+                        let po_number = textcontain.substring(textcontain.indexOf("PURCHASE ORDERNODATE : ") + 23, textcontain.indexOf("PURCHASE ORDERNODATE : ") + 33);
+                        document.getElementById("id_PO_Number").value = po_number;
+                        //PO date
+                        let po_date = textcontain.substring(textcontain.indexOf("PURCHASE ORDERNODATE : ") + 35, textcontain.indexOf("PURCHASE ORDERNODATE : ") + 46);
+                        document.getElementById("id_PO_Date").value = po_date;
+
+
+                        if (textcontain.includes("Fax 021-87919117/118TO ")) {
+                            //vendor number
+                            let vendor_number = textcontain.substring(textcontain.indexOf("Fax 021-87919117/118TO ") + 23, textcontain.indexOf("Fax 021-87919117/118TO ") + 31);
+                            document.getElementById("id_Vendor_Number").value = vendor_number;
+                            //vendor name
+                            //   let vendor_name = fulltext.substring(fulltext.indexOf("Fax; ;021-87919117/118;;TO; ;") + 30, fulltext.indexOf("Fax; ;021-87919117/118;;TO; ;") + 100);
+                            let vendor_name = fulltext.substring(fulltext.indexOf(vendor_number), fulltext.indexOf(vendor_number) + 110);
+
+                            vendor_name = vendor_name.split(";;")[1].replace(/;/g, '');
+                            document.getElementById("id_Vendor_Name").value = vendor_name;
+                        }
+                        else {
+                            document.getElementById("id_Vendor_Number").value = "ONENNTRDAK";
+                            //vendor name
+                            let vendor_name = fulltext.substring(fulltext.indexOf("ONENNTRDAK"), fulltext.indexOf("ONENNTRDAK") + 100);
+                            vendor_name = vendor_name.split(";;")[1].replace(/;/g, '');
+                            document.getElementById("id_Vendor_Name").value = vendor_name;
+                        }
+
+                        console.log(po_number.substring(0, 3));
+                        let approval = textcontain.substring(textcontain.indexOf("APPROVED : VENDOR CONFIRMATION :") + 32, textcontain.indexOf("APPROVED : VENDOR CONFIRMATION :") + 82);
+                        po_number = po_number.replace(' ','');
+                        if (po_number.substring(0, 3) == '425' || po_number.substring(0, 3) == '428' || po_number.substring(0, 3) == '430') {
+                            //console.log('BYPASS');
+                            if (approval.includes("PRIHATANTO")) {
+                                document.getElementById("id_Approval_Level").value = "Pres"
+                                Level("Pres");
+                            }
+                            else {
+                                alert("Approval invalid!!")
+                                document.getElementById("id_PO_Number").value = "";
+                                document.getElementById("id_PO_Date").value = "";
+                                document.getElementById("id_Vendor_Number").value = "";
+                                document.getElementById("id_Vendor_Name").value = "";
+                                document.getElementById("id_PO_Before_Approval").value = "";
+                            }
+
+
+                        }
+                        else {
+                            //approval
+                            if (approval.includes("HENRY")) {
+                                document.getElementById("id_Approval_Level").value = "Dir"
+                                Level("Dir");
+                            }
+                            else if (approval.includes("PRIHATANTO")) {
+                                document.getElementById("id_Approval_Level").value = "PresDir"
+                                Level("PresDir");
+                            }
+                            else {
+                                alert("Approval invalid!!")
+                                document.getElementById("id_PO_Number").value = "";
+                                document.getElementById("id_PO_Date").value = "";
+                                document.getElementById("id_Vendor_Number").value = "";
+                                document.getElementById("id_Vendor_Name").value = "";
+                                document.getElementById("id_PO_Before_Approval").value = "";
+                            }
+
+                        }
+
+
+                        if (document.getElementById("id_PO_Number").value != document.getElementById("PObefore").innerText) {
+                            alert("Only Revise with Same PO Number!!")
+                            //document.getElementById("id_PO_Number").value = "";
+                            document.getElementById("id_PO_Date").value = "";
+                            document.getElementById("id_Vendor_Number").value = "";
+                            document.getElementById("id_Vendor_Name").value = "";
+                            document.getElementById("id_PO_Before_Approval").value = "";
+                        }
+
+                    });
+
+
+
+
+                });
+            };
+            fileReader.readAsArrayBuffer(file);
+
+
+
+
+            // document.getElementById("id_Vendor_Name").value = input.files[0].name.replace(data[0]+' '+data[1]+' ',"").replace('.pdf',"");
+        } else {
+            alert("invalid PDF file!!")
+            document.getElementById("id_PO_Number").value = "";
+            document.getElementById("id_PO_Date").value = "";
+            document.getElementById("id_Vendor_Number").value = "";
+            document.getElementById("id_Vendor_Name").value = "";
+            document.getElementById("id_PO_Before_Approval").value = "";
+        }
+
+
+        //   console.log(reader);
+        document.getElementById("submit_button").disabled = false;
+
+    }
+
+    function getPageText(pageNum, PDFDocumentInstance) {
+        // Return a Promise that is solved once the text of the page is retrieven
+        return new Promise(function (resolve, reject) {
+            PDFDocumentInstance.getPage(pageNum).then(function (pdfPage) {
+                // The main trick to obtain the text of the PDF page, use the getTextContent method
+                pdfPage.getTextContent().then(function (textContent) {
+                    var textItems = textContent.items;
+                    var finalString = "";
+
+                    // Concatenate the string of the item to the final string
+                    for (var i = 0; i < textItems.length; i++) {
+                        var item = textItems[i];
+
+                        finalString += item.str + ";";
+                    }
+
+                    // Solve promise with the text retrieven from the page
+                    resolve(finalString);
+                });
+            });
+        });
+    }
+</script>
+
+{% endblock %}

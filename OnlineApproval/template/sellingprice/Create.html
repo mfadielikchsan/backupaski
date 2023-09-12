@@ -1,0 +1,513 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+
+        <br>
+
+        <!--SP ITEM TABEL-->
+        {% if Mode == 'Item' %}
+        <table name="table " class="table table-bordered" style="text-align: center;font-size:11.7px;">
+            <tr>
+                <th rowspan="2" style="vertical-align: middle;">Type</th>
+                <th rowspan="2" style="vertical-align: middle;">Material</th>
+                <th rowspan="2" style="vertical-align: middle;">Material Description</th>
+                <th rowspan="2" style="vertical-align: middle;">Customer Material</th>
+                <th colspan="5">Old Price</th>
+                <th colspan="5">New Price</th>
+                <th rowspan="2" style="vertical-align: middle;">Ratio</th>
+                <th rowspan="2" style="vertical-align: middle;">Note</th>
+                <th rowspan="2" style="vertical-align: middle;">Delete</th>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <th>Depreciation</th>
+                <th>Total</th>
+                <th>UoM</th>
+                <th>Valid From</th>
+                <th>Price</th>
+                <th>Depreciation</th>
+                <th>Total</th>
+                <th>UoM</th>
+                <th>Valid From</th>
+            </tr>
+
+            {% for Item in ListItem %}
+            <tr>
+                <td>{{Item.Type}}</td>
+                <td>{{Item.Material_No}}</td>
+                <td>{{Item.Material_Description}}</td>
+                <td>{{Item.Customer_Material}}</td>
+                <td>{{Item.Old_Price}}</td>
+                <td>{{Item.Old_Depreciation}}</td>
+                <td>{{Item.Old_Total}}</td>
+                <td>{{Item.Old_UoM}}</td>
+                <td>{{Item.Old_Valid_From}}</td>
+                <td>{{Item.New_Price}}</td>
+                <td>{{Item.New_Depreciation}}</td>
+                <td>{{Item.New_Total}}</td>
+                <td>{{Item.New_UoM}}</td>
+                <td>{{Item.New_Valid_From}}</td>
+                <td>{{Item.Ratio_Variance}}</td>
+                <td>{{Item.Note}}</td>
+                <td>
+                    <form action="" id="delet{{Item.id}}" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="Delete" value="{{Item.id}}" hidden>
+                        <button type="submit" class="btn btn-warning">x</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+        <!-- ADD ITEM SP FORM -->
+        <div class="modal fade" id="mainModal" tabindex="-1" aria-labelledby="mainModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action=""></form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" form="item" value="update">Add Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" name="exampleModalLabel">Add New Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="item" action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div>{{SPItemForm.SP_Number|add_class:"form-control"|attr:"hidden"}}</div>
+                            <div>{{SPItemForm.No|add_class:"form-control"|attr:"hidden"}}</div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr>
+                                            <th colspan="3" style="text-align: center;background-color: whitesmoke;">
+                                                Item Detail</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Type</td>
+                                            <td>{{SPItemForm.Type|add_class:"form-control"}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Material No</td>
+                                            <td>{{SPItemForm.Material_No|add_class:"form-control"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Material Desc</td>
+                                            <td>{{SPItemForm.Material_Description|add_class:"form-control"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer Material</td>
+                                            <td>{{SPItemForm.Customer_Material|add_class:"form-control"}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Note</td>
+                                            <td>{{SPItemForm.Note|add_class:"form-control"}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <table class="table">
+                                        <tr style="text-align: center;background-color: whitesmoke;">
+                                            <th>Item</th>
+                                            <th>Old Price</th>
+                                            <th>New Price</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Price</td>
+                                            <td>{{SPItemForm.Old_Price|add_class:"form-control"|attr:"onkeypress:return hanyaAngka(event)" |attr:"onkeyup:Calculate1(this)"|append_attr:"placeholder:0,000" }}
+                                            </td>
+                                            <td>{{SPItemForm.New_Price|add_class:"form-control"|attr:"onkeypress:return hanyaAngka(event)"|attr:"onkeyup:Calculate2(this)"|append_attr:"placeholder:0,000" }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Depreciation</td>
+                                            <td>{{SPItemForm.Old_Depreciation|add_class:"form-control"|attr:"onkeyup:Calculate1A(this)"|attr:"onkeypress:return hanyaAngka(event)"|attr:"value:0" |attr:"onclick:this.value=''"}}
+                                            </td>
+                                            <td>{{SPItemForm.New_Depreciation|add_class:"form-control"|attr:"onkeyup:Calculate2A(this)"|attr:"onkeypress:return hanyaAngka(event)"|attr:"value:0" |attr:"onclick:this.value=''"}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td>{{SPItemForm.Old_Total|add_class:"form-control"|append_attr:"placeholder:0,000"|attr:"readonly"}}
+                                            </td>
+                                            <td>{{SPItemForm.New_Total|add_class:"form-control"|append_attr:"placeholder:0,000"|attr:"readonly"}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>UoM</td>
+                                            <td>{{SPItemForm.Old_UoM|add_class:"form-control"}}</td>
+                                            <td>{{SPItemForm.New_UoM|add_class:"form-control"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Valid From</td>
+                                            <td>{{SPItemForm.Old_Valid_From|add_class:"form-control datepicker"|append_attr:"placeholder:dd.mm.yyyy"|attr:"value:-"|attr:"onclick:this.value=''"}}</td>
+                                            <td>{{SPItemForm.New_Valid_From|add_class:"form-control datepicker"|append_attr:"placeholder:dd.mm.yyyy"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ratio Variance</td>
+                                            <td colspan="2">
+                                                {{SPItemForm.Ratio_Variance|add_class:"form-control"|attr:"readonly"}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" form="item" value="update">Add Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+
+            $(document).ready(function () {
+                $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+
+                $('.datepicker').datepicker({ format: 'dd.mm.yyyy', autoclose: true, toggleActive: true, todayHighlight: true, });
+                var sel = document.getElementById('select');
+            });
+
+            function hanyaAngka(event) {
+                var angka = (event.which) ? event.which : event.keyCode
+                if (angka != 46 && angka > 31 && (angka < 48 || angka > 57))
+                    return false;
+                return true;
+            }
+
+            function Calculate1(Price) {
+                document.getElementById("id_Old_Price").value = Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_Old_Price").value.toString() != "0") 
+                document.getElementById("id_Old_Total").value = (parseInt(Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_Old_Depreciation").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_Old_Total").value = "0";
+                calculate_ratio();
+            }
+
+            function Calculate1A(Depreciation) {
+                document.getElementById("id_Old_Depreciation").value = Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_Old_Price").value.toString() != "") 
+                document.getElementById("id_Old_Total").value = (parseInt(document.getElementById("id_Old_Price").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_Old_Total").value = "";
+                calculate_ratio();
+            }
+
+            function Calculate2(Price) {
+                document.getElementById("id_New_Price").value = Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_New_Price").value.toString() != "") document.getElementById("id_New_Total").value = (parseInt(Price.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(document.getElementById("id_New_Depreciation").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_New_Total").value = "";
+                calculate_ratio();
+            }
+
+            function Calculate2A(Depreciation) {
+                document.getElementById("id_New_Depreciation").value = Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                if (document.getElementById("id_New_Price").value.toString() != "") 
+                document.getElementById("id_New_Total").value = (parseInt(document.getElementById("id_New_Price").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) + parseInt(Depreciation.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                else document.getElementById("id_New_Total").value = "";
+                calculate_ratio();
+            }
+
+            function calculate_ratio()
+            {
+            //    alert(document.getElementById("id_Old_Total").value);
+                if ( document.getElementById("id_Old_Total").value != "0" && document.getElementById("id_New_Total").value != ""){
+                    //rumus ratio
+                    let pengurangan = (parseFloat(document.getElementById("id_New_Total").value.toString().replace(",", "")) - parseFloat(document.getElementById("id_Old_Total").value.toString().replace(",", "")));
+         //           alert(pengurangan)
+                    let pembagian = pengurangan / parseFloat(document.getElementById("id_Old_Total").value.toString().replace(",", ""));
+           //         alert(pembagian)
+                    let ratio = pembagian *100
+             //       alert(ratio)
+                    
+                    document.getElementById("id_Ratio_Variance").value = (ratio.toFixed(2)).replace(".", ",") + '%';
+                 } else 
+                document.getElementById("id_Ratio_Variance").value = '-';
+            }
+        </script>
+
+        <!-- Button trigger modal -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Add New Item
+                </button>
+            </div>
+            <div class="col-sm-4">
+                {% if status == 'Delete' %}
+                <div class="alert alert-danger" role="alert">
+                    SPItem sudah di delete dari form SP {{status.1}} !!
+                </div>
+                {% elif status == 'Add' %}
+                <div class="alert alert-success" role="alert">
+                    SPItem berhasil ditambahkan!
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-sm-4">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="Next" value="" hidden>
+                    <button type="submit" class="btn btn-success"
+                        style="width: 150px;margin-left: auto;margin-right: 0px;display: block;">
+                        Next
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!--HEADER (next slide)-->
+        {% elif Mode == 'Header' %}
+
+
+        <form action="" id="header" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+
+                <table style="width: 100%;margin: 16px;">
+                    <tr>
+                        <td style="width:150px;">Doc Number</td>
+                        <td>:</td>
+                        <td>{{SPForm.SP_Number|add_class:"form-control"}}</td>
+                        <td style="width: 50px;"></td>
+                        <td style="width:150px;">Attachment1</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment1|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Name</td>
+                        <td>:</td>
+                        <td>{{SPForm.Cust_Name|add_class:"form-control"}}</td>
+                        <td></td>
+                        <td>Attachment2</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment2|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Code</td>
+                        <td>:</td>
+                        <td>{{SPForm.Cust_Code|add_class:"form-control"}}</td>
+                        <td></td>
+                        <td>Attachment3</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment3|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Distribution Channel</td>
+                        <td>:</td>
+                        <td>{{SPForm.Dist_Channel|add_class:"form-control"}}</td>
+                        <td></td>
+                        <td>Attachment4</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment4|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Product Status</td>
+                        <td>:</td>
+                        <td>{{SPForm.Product_Status|add_class:"form-control"}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <table name="table " class="table table-bordered" style="text-align: center;font-size: small;">
+                <tr>
+                    <th rowspan="2" style="vertical-align: middle;">Type</th>
+                    <th rowspan="2" style="vertical-align: middle;">Material No</th>
+                    <th rowspan="2" style="vertical-align: middle;">Material Description</th>
+                    <th rowspan="2" style="vertical-align: middle;">Customer Material</th>
+                    <th colspan="5">Old Price</th>
+                    <th colspan="5">New Price</th>
+                    <th rowspan="2" style="vertical-align: middle;">Ratio</th>
+                    <th rowspan="2" style="vertical-align: middle;">Note</th>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <th>Depreciation</th>
+                    <th>Total</th>
+                    <th>UoM</th>
+                    <th>Valid From</th>
+                    <th>Price</th>
+                    <th>Depreciation</th>
+                    <th>Total</th>
+                    <th>UoM</th>
+                    <th>Valid From</th>
+                </tr>
+
+                {% for Item in ListItem %}
+                <tr>
+                    <td>{{Item.Type}}</td>
+                    <td>{{Item.Material_No}}</td>
+                    <td>{{Item.Material_Description}}</td>
+                    <td>{{Item.Customer_Material}}</td>
+                    <td>{{Item.Old_Price}}</td>
+                    <td>{{Item.Old_Depreciation}}</td>
+                    <td>{{Item.Old_Total}}</td>
+                    <td>{{Item.Old_UoM}}</td>
+                    <td>{{Item.Old_Valid_From}}</td>
+                    <td>{{Item.New_Price}}</td>
+                    <td>{{Item.New_Depreciation}}</td>
+                    <td>{{Item.New_Total}}</td>
+                    <td>{{Item.New_UoM}}</td>
+                    <td>{{Item.New_Valid_From}}</td>
+                    <td>{{Item.Ratio_Variance}}</td>
+                    <td>{{Item.Note}}</td>
+                </tr>
+                {% endfor %}
+
+                <input type="text" name="Finish" value="" hidden>
+            </table>
+            <table class="table table-bordered" style="text-align: center;font-size: small;">
+                <thead>
+                    <tr>
+                        <th style="width: 16%;">Created By</th>
+                        <th style="width: 16%;">Checked By</th>
+                        <th style="width: 16%;">Checked By</th>
+                        <th colspan="2">Approved By</th>
+                        <th style="width: 16%;">SAP Input By</th>
+                        <th style="width: 16%;">Confirmed By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="height: 120px;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>{{SPForm.UserName|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                        <td>{{SPForm.SPV|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                        <td>{{SPForm.Dept_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{SPForm.Div_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{SPForm.PresDirektur|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{SPForm.Acc|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                        <td>{{SPForm.Dept_Acc|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                    </tr>
+                    {{SPForm.SPV_Email|attr:"hidden"}}
+                    {{SPForm.User_Email|attr:"hidden"}}
+                    {{SPForm.User_Submit|attr:"hidden"}}
+                    {{SPForm.Dept_Head_Email|attr:"hidden"}}
+                    {{SPForm.Div_Head_Email|attr:"hidden"}}
+                    {{SPForm.PresDirektur_Email|attr:"hidden"}}
+                    {{SPForm.Acc_Email|attr:"hidden"}}
+                    {{SPForm.Dept_Acc_Email|attr:"hidden"}}
+                    {{SPForm.Status|attr:"hidden"}}
+                    <tr>
+                        <td>Marketing Admin</td>
+                        <td>Marketing SPV</td>
+                        <td>Marketing Dept Head </td>
+                        <td>Bussiness Dev Div Head</td>
+                        <td>President Director</td>
+                        <td>Finance SPV</td>
+                        <td>Finance Dept Head</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <br>
+
+        <div style="height: 10px;"><br></div>
+        <div class="row">
+            <div class="col-sm-6">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="Back" value="" hidden>
+                    <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">
+                        Back to Edit Item
+                    </button>
+                </form>
+            </div>
+
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-success"
+                    style="width: 150px;margin-left: auto;margin-right: 0px;display: block;" form="header">
+                    Finish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var approve = {{ Data| safe}};
+        console.log(approve);
+        $(document).ready(function () {
+            document.getElementById("id_UserName").value = approve[0].fields.User_Name;
+            document.getElementById("id_User_Email").value = approve[0].fields.User_Email;
+            document.getElementById("id_SPV").value = approve[0].fields.SPV;
+            document.getElementById("id_Dept_Head").value = approve[0].fields.Dept_Head;
+            document.getElementById("id_Div_Head").value = approve[0].fields.Div_Head;
+            document.getElementById("id_PresDirektur").value = approve[0].fields.PresDirektur;
+            document.getElementById("id_Acc").value = approve[0].fields.Acc;
+            document.getElementById("id_Dept_Acc").value = approve[0].fields.Dept_Acc;
+            document.getElementById("id_SPV_Email").value = approve[0].fields.SPV_Email;
+            document.getElementById("id_Dept_Head_Email").value = approve[0].fields.Dept_Head_Email;
+            document.getElementById("id_Div_Head_Email").value = approve[0].fields.Div_Head_Email;
+            document.getElementById("id_PresDirektur_Email").value = approve[0].fields.PresDirektur_Email;
+            document.getElementById("id_Acc_Email").value = approve[0].fields.Acc_Email;
+            document.getElementById("id_Dept_Acc_Email").value = approve[0].fields.Dept_Acc_Email;
+
+        });
+    </script>
+    <!-- FINISH -->
+    {% else %}
+    <center>
+        <h6>Selling Price Approval With ID
+            <span><a href="/SP/ListSP/{{SPForm.SP_Number}}">{{SPForm.SP_Number}}</a>
+            </span>
+        </h6>
+    </center>
+
+    <center>
+        <h1>Finish created!</h1>
+    </center>
+    {%endif%}
+</div>
+</div>
+
+
+
+
+{% endblock %}

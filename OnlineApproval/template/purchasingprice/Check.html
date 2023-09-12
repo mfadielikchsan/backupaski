@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>Checking Purchasing Price {{PP_Number}}</h5>
+        </center>
+        <br>
+        <h6>Purchasing Price Data</h6>
+
+        <table style="width: 50%;">
+            <tbody>
+                <tr>
+                    <td style="width: 5%;white-space: nowrap;padding-right: 16px;">Doc Number</td>
+                    <td>:</td>
+                    <td>{{PP.PP_Number}}</td>
+                </tr>
+                <tr>
+                    <td>Part Type</td>
+                    <td>:</td>
+                    <td>{{PP.Type}}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>:</td>
+                    <td>{{PP.Status}}</td>
+                </tr>
+                {% if PP.Revise_Note is not None %}
+                <tr>
+                    <td>Revise Message</td>
+                    <td>:</td>
+                    <td>{{PP.Revise_Note}}</td>
+                </tr>
+                {%endif%}
+            </tbody>
+        </table>
+        <br>
+
+        <table name="table " class="table table-bordered" style="text-align: center;font-size: small;">
+            <tr>
+                <th>Vendor Code</th>
+                <th>Vendor Name</th>
+                <th>Material No</th>
+                <th>Material Description</th>
+                <th>Qty</th>
+                <th>UoM</th>
+                <th>Old Price</th>
+                <th>Old Delivery </th>
+                <th>New Price</th>
+                <th>New Delivery </th>
+                <th>Ratio Variance </th>
+            </tr>
+            {% for Item in PPItem%}
+            <tr>
+                <td>{{Item.Vend_Code}}</td>
+                <td>{{Item.Vend_Name}}</td>
+                <td>{{Item.Material}}</td>
+                <td>{{Item.Material_Desc}}</td>
+                <td>{{Item.Qty}}</td>
+                <td>{{Item.UoM}}</td>
+                <td>{{Item.Currency}} {{Item.Old_Price}}</td>
+                <td>{{Item.Old_Delivery}}</td>
+                <td>{{Item.Currency}} {{Item.New_Price}}</td>
+                <td>{{Item.New_Delivery}}</td>
+                <td>{{Item.Ratio}}</td>
+
+            </tr>
+            {%endfor%}
+
+
+        </table>
+        <h6>Note :</h6>
+        <div id="Note">{{PP.Note|safe}}</div>
+
+        {% if PP.Comment_Message %}
+        <br>
+        <h6>Comment Message</h6>
+        <div id="message">{{PP.Comment_Message|safe}}</div>
+        {% endif %}
+        <br>
+        <h6>Approval</h6>
+
+        <table class="table table-bordered" style="text-align: center;font-size: small;">
+            <thead>
+                <tr>
+                    <th style="width: 12,5%;">Created By</th>
+                    <th style="width: 12,5%;">Checked By</th>
+                    <th style="width: 12,5%;">Checked By</th>
+                    <th style="width: 12,5%;">Approved By</th>
+                    <th style="width: 12,5%;">Approved By</th>
+                    <th style="width: 12,5%;">Approved By</th>
+                    <th style="width: 12,5%;">Input By</th>
+                    <th style="width: 12,5%;">Confirm By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 120px;">
+                    <td>
+                        <div>Created</div>
+                        <div>{{PP.Submit}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.SPV_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.SPV_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Dept_Head_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Mkt_Head_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.Mkt_Head_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Div_Head_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.PresDirektur_Approval_Status|default_if_none:''}}</div>
+                        <div>{{PP.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Fin_Input_Status|default_if_none:''}}</div>
+                        <div>{{PP.Fin_Input_Date|default_if_none:''}}</div>
+                    </td>
+                    <td>
+                        <div>{{PP.Dept_Fin_Confirm_Status|default_if_none:''}}</div>
+                        <div>{{PP.Dept_Fin_Confirm_Date|default_if_none:''}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{PP.Admin}}
+                    </td>
+                    <td>{{PP.SPV}}</td>
+                    <td>{{PP.Dept_Head}}
+                    </td>
+                    <td>{{PP.Mkt_Head}}
+                    </td>
+                    <td>{{PP.Div_Head}}
+                    </td>
+                    <td>{{PP.PresDirektur}}
+                    </td>
+                    <td>{{PP.Fin}}</td>
+                    <td>{{PP.Dept_Fin}}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Purchasing Admin</td>
+                    <td>Purchasing SPV</td>
+                    <td>Purchasing Dept Head </td>
+                    <td>Marketing Dept Head</td>
+                    <td>Administration Div Head</td>
+                    <td>Presiden Director</td>
+                    <td>Finance Admin</td>
+                    <td>Finance Dept Head</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="height: 10px;"><br></div>
+        <table style="width: 50%;">
+            <tbody>
+                {% if PP.Attachment1 %}
+                <tr>
+                    <td style="width:150px;">Attachment1</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success"
+                            href="/Media/{{PP.Attachment1}}">{{PP.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Attachment2 %}
+                <tr>
+                    <td style="width:150px;">Attachment2</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success"
+                            href="/Media/{{PP.Attachment2}}">{{PP.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Attachment3 %}
+                <tr>
+                    <td style="width:150px;">Attachment3</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success"
+                            href="/Media/{{PP.Attachment3}}">{{PP.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+                {% if PP.Attachment4 %}
+                <tr>
+                    <td style="width:150px;">Attachment4</td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success"
+                            href="/Media/{{PP.Attachment4}}">{{PP.Attachment4|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <br>
+        <h6>SAP Input Attachment</h6>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div hidden>
+                {% with 'Input1, Input2, PP_Number' as list%}
+                {% for form in PPform %}
+                {% if form.label not in list %}
+                {{form|attr:"hidden"}}
+                {% endif %}
+                {% endfor %}
+                {% endwith %}
+            </div>
+            <table>
+                <input type="text" name="PP_Number" id="id_PP_number" value="{{PP.PP_Number}}" hidden>
+                {% if PP.Input1 %}
+                <tr>
+                    <td style="width: 140px;">Attachment Input </td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Input1}}">{{PP.Input1|cut:"Uploads/"}}</a>
+                    </td>
+                </tr>
+                {% elif PP.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment Input </td>
+                    <td>:</td>
+                    <td>{{PPform.Input1 | add_class:"form-control" | attr:"type:file"}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" class="btn btn-success" type="submit"
+                            name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+                {% if PP.Input2 %}
+                <tr>
+                    <td style="width: 140px;">Attachment Input </td>
+                    <td>:</td>
+                    <td><a class="btn btn-outline-success" href="/Media/{{PP.Input2}}">{{PP.Input2|cut:"Uploads/"}}</a>
+                    </td>
+                </tr>
+                {% elif PP.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment Input </td>
+                    <td>:</td>
+                    <td>{{PPform.Input2 | add_class:"form-control"}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" class="btn btn-success" type="submit"
+                            name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+            </table>
+        </form>
+        <div class="row" style="margin: 16px;">
+            <button class="btn btn-light" style="width: 100px;margin-right: 10px;margin-left: auto;"><a
+                    href="mailto:{{PP.SPV_Email}}?subject=Ask User: {{PP.PP_Number}}&body=Ask User about Selling Price Request with ID {{PP.PP_Number}} %0DAsk User Message: ">
+                    Ask User</a></button>
+            <button type="submit" name="revise" class="btn btn-warning"
+                style="width: 100px;margin-left: 0px;margin-right: 10px;" data-toggle="modal"
+                data-target="#RevisePP">Revise</button>
+            <form method="post">
+                {% csrf_token %}
+                {% if PP.Input1 %}
+                <button type="submit" name="finish" class="btn btn-primary">Finish</button>
+                {% elif PP.Status != "Finished" %}
+                <button type="submit" name="finish" class="btn btn-primary" disabled>Finish</button>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- MODAL REVISE USER -->
+        <div class="modal fade" id="RevisePP" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Send Revise Request to User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" id="reviseform">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <h6>Revision Note</h6>
+                            <textarea class="form-control" name="revisemessage" id="revisemessage"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button style="width: 150px;" type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Cancel</button>
+                            <button style="width: 150px;" type="submit" class="btn btn-success" name="revision"
+                                id="revision">Send Revise</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+
+    });
+
+
+
+</script>
+{% endblock %}

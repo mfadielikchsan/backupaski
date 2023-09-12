@@ -1,0 +1,416 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{Judul}}</title>
+
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/datepicker/bootstrap-datepicker3.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/datatable/jquery.dataTables.css' %}">
+
+    <!-- <script src="{% static 'vendor/datatable/dataTables.bootstrap4.min.js' %}"></script> -->
+    <link rel="shortcut icon" href="{% static '/image/iconhead.png' %}">
+
+</head>
+
+<body style="background-color: whitesmoke;">
+    {%block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm" style="background-color:white;min-height: 8vh;">
+        <!-- rgba(49, 236, 90,0.3) -->
+        <a class="navbar-brand" href="/">
+            <img src="{% static '/image/ASKI.png' %}" width="70" height="30" class="d-inline-block align-top" alt="">
+            <!-- <b style="color:rgb(214, 0, 0);">ASKI</b>  --> </a>
+
+
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <!-- <script>
+                // Prevent closing from click inside dropdown
+                $(document).on('click', '.dropdown-menu', function (e) {
+                    e.stopPropagation();
+                });
+
+                // make it as accordion for smaller screens
+
+                if ($(window).width() < 992) {
+                    $('.dropdown-menu a').click(function (e) {
+                        e.preventDefault();
+                        if ($(this).next('.submenu').length) {
+                            $(this).next('.submenu').toggle();
+                        }
+                        $('.dropdown').on('hide.bs.dropdown', function () {
+                            $(this).find('.submenu').hide();
+                        })
+                    });
+                }
+            </script>
+            <style>
+                @media (min-width: 992px) {
+                    .dropdown-menu .dropdown-toggle:after {
+                        border-top: .3em solid transparent;
+                        border-right: 0;
+                        border-bottom: .3em solid transparent;
+                        border-left: .3em solid;
+                    }
+
+                    .dropdown-menu .dropdown-menu {
+                        margin-left: 0;
+                        margin-right: 0;
+                    }
+
+                    .dropdown-menu li {
+                        position: relative;
+                    }
+
+                    .nav-item .submenu {
+                        display: none;
+                        position: absolute;
+                        left: 100%;
+                        top: -7px;
+                    }
+
+                    .nav-item .submenu-left {
+                        right: 100%;
+                        left: auto;
+                    }
+
+                    .dropdown-menu>li:hover {
+                        background-color: #f1f1f1
+                    }
+
+                    .dropdown-menu>li:hover>.submenu {
+                        display: block;
+                    }
+                }
+            </style>
+
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown">All Menu</a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#">Purchase Request  &#8227;</a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/PR/Create">Create New Purchase Request</a>
+                                <a class="dropdown-item" href="/PR/ListPP">Monitoring Purchase Request</a>
+                                <a class="dropdown-item" href="/Media/SosialisasiOnlineApproval.pdf">Panduan Pembuatan
+                                    Purchase
+                                    Request</a>
+                                <a class="dropdown-item" href="/PR/Asset">Add Asset No</a>
+                                <a class="dropdown-item" href="/PR/SAPNumber">Add SAP PR Number</a>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" >
+                                PR Reguler MRP &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/PR/CreatePRMRP">Create PR Reguler MRP</a>
+                                <a class="dropdown-item" href="/PR/ListPRMRP">Monitoring PR Reguler MRP</a>
+                                <a class="dropdown-item"
+                                    href="/Media/Sosialisasi Purchase Request Reguler 2021.pdf">Panduan
+                                    Pembuatan Purchase Request Reguler MRP</a>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="#" >
+                                Bon Sementara  &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/BS/CreateBS">Create Bon Sementara</a>
+                                <a class="dropdown-item" href="/BS/ListBS">Monitoring Bon Sementara</a>
+                                <a class="dropdown-item" href="/BS/CreateFP/-">Create Payment Request w/o Bon</a>
+                                <a class="dropdown-item" href="/BS/ListFP">Monitoring Payment Request</a>
+                                <a class="dropdown-item" href="/BS/ListFA">PR Check and Closing</a>
+                                <a class="dropdown-item"
+                                    href="/Media/Sosialisasi Bon Merah dan Payment Request 2021.pdf">Panduan Pembuatan
+                                    Bon &
+                                    Payment Request</a>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" >
+                                Purchase Order  &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/PO/Create/">Create PO Approval</a>
+                                <a class="dropdown-item" href="/PO/ListPO/">Monitoring PO Approval</a>
+                                <a class="dropdown-item" href="/Media/Sosialisasi Purchase Order 2022.pdf">Panduan
+                                    Pembuatan PO
+                                    Approval</a>
+                            </ul>
+                        </li>
+
+
+                        <li>
+                            <a class="dropdown-item" href="#" >
+                                Selling Price  &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/SP/Create">Create SP by Form</a>
+                                <a class="dropdown-item" href="/SP/CreateSP">Create SP by Upload</a>
+                                <a class="dropdown-item" href="/SP/ListSP">Monitoring Selling Price</a>
+                                <a class="dropdown-item" href="/SP/ListInput">List Selling Price Input SAP</a>
+                                <a class="dropdown-item" href="/Media/Sosialisasi_Selling_Price_2023.pdf">Panduan
+                                    Pembuatan SP
+                                    Approval</a>
+                            </ul>
+                        </li>
+                        <li >
+                            <a class="dropdown-item" href="#" >
+                                Purchasing Price  &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/PP/Create">Create Purchasing Price</a>
+                                <a class="dropdown-item" href="/PP/ListPP">Monitoring Purchasing Price</a>
+                                <a class="dropdown-item" href="/Media/Sosialisasi_Selling_Price_2023.pdf">Panduan
+                                    Pembuatan
+                                    Purchasing Price Approval</a>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="#" >
+                                Capital Expenditure  &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/CP/Create">Create Capex</a>
+                                <a class="dropdown-item" href="/CP/ListDept">Monitoring Capex</a>
+                                <a class="dropdown-item" href="/CP/Filter">Filtering Capex</a>
+                                <a class="dropdown-item" href="/CP/ListAll">List Capex All</a>
+                                <a class="dropdown-item" href="/Media/Sosialisasi_Capital_Expenditure_2023.pdf">Panduan
+                                    Pembuatan CAPEX Approval</a>
+                            </ul>
+                        </li>
+                        <li >
+                            <a class="dropdown-item" href="#" >
+                                Entertainment  &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/BE/CreateBE">Create Biaya Entertainment</a>
+                                <a class="dropdown-item" href="/BE/ListBE">Monitoring Biaya Entertainment</a>
+                                <a class="dropdown-item" href="/BE/ListCheck">List Checking Entertainment</a>
+                                <a class="dropdown-item" href="/Media/Sosialisasi_Entertainment_2023.pdf">Panduan
+                                    Pembuatan
+                                    Entertainment Approval</a>
+                            </ul>
+                        </li>
+                        <li >
+                            <a class="dropdown-item" href="#" >
+                                Manage Component  &#8227;
+                            </a>
+                            <ul class="submenu dropdown-menu">
+                                <a class="dropdown-item" href="/PR/ListBudget">Manage Budget</a>
+                                <a class="dropdown-item" href="/PR/NewCostCenter">Manage Cost Center</a>
+                                <a class="dropdown-item" href="/PR/NewPRItem">Manage Item</a>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+                </li>
+            </ul> -->
+            <ul class="navbar-nav" style="font-size: small;">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="text-align: center;">
+                        Purchase Request
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/PR/Create">Create New Purchase Request</a>
+                        <a class="dropdown-item" href="/PR/ListPP">Monitoring Purchase Request</a>
+                        <a class="dropdown-item" href="/Media/SosialisasiOnlineApproval.pdf">Panduan Pembuatan Purchase
+                            Request</a>
+                        <a class="dropdown-item" href="/PR/Asset">Add Asset No</a>
+                        <a class="dropdown-item" href="/PR/SAPNumber">Add SAP PR Number</a>
+                    </div>
+                </li>
+
+
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        PR Reguler MRP
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/PR/CreatePRMRP">Create PR Reguler MRP</a>
+                        <a class="dropdown-item" href="/PR/ListPRMRP">Monitoring PR Reguler MRP</a>
+                        <a class="dropdown-item" href="/Media/Sosialisasi Purchase Request Reguler 2021.pdf">Panduan
+                            Pembuatan Purchase Request Reguler MRP</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Bon Sementara
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/BS/CreateBS">Create Bon Sementara</a>
+                        <a class="dropdown-item" href="/BS/ListBS">Monitoring Bon Sementara</a>
+                        <a class="dropdown-item" href="/BS/CreateFP/-">Create Payment Request w/o Bon</a>
+                        <a class="dropdown-item" href="/BS/ListFP">Monitoring Payment Request</a>
+                        <a class="dropdown-item" href="/BS/ListFA">PR Check and Closing</a>
+                        <a class="dropdown-item"
+                            href="/Media/Sosialisasi Bon Merah dan Payment Request 2021.pdf">Panduan Pembuatan Bon &
+                            Payment Request</a>
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Purchase Order
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/PO/Create/">Create PO Approval</a>
+                        <a class="dropdown-item" href="/PO/ListPO/">Monitoring PO Approval</a>
+                        <a class="dropdown-item" href="/Media/Sosialisasi Purchase Order 2022.pdf">Panduan Pembuatan PO
+                            Approval</a>
+                    </div>
+                </li>
+
+
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Selling Price
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/SP/Create">Create SP by Form</a>
+                        <a class="dropdown-item" href="/SP/CreateSP">Create SP by Upload</a>
+                        <a class="dropdown-item" href="/SP/ListSP">Monitoring Selling Price</a>
+                        <a class="dropdown-item" href="/SP/ListInput">List Selling Price Input SAP</a>
+                        <a class="dropdown-item" href="/Media/Sosialisasi_Selling_Price_2023.pdf">Panduan Pembuatan SP
+                            Approval</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Purchasing Price
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/PP/Create">Create Purchasing Price</a>
+                        <a class="dropdown-item" href="/PP/ListPP">Monitoring Purchasing Price</a>
+                        <a class="dropdown-item" href="/PP/ListCheck">Purchasing Price Input SAP</a>
+                        <a class="dropdown-item" href="/Media/Sosialisasi_Online_Approval_Purchasing_Price.pdf">Panduan Pembuatan
+                            Purchasing Price Approval</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Capital Expenditure
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/CP/Create">Create Capex</a>
+                        <a class="dropdown-item" href="/CP/ListDept">Monitoring Capex</a>
+                        <a class="dropdown-item" href="/CP/Filter">Filtering Capex</a>
+                        <a class="dropdown-item" href="/CP/ListAll">List Capex All</a>
+                        <a class="dropdown-item" href="/Media/Sosialisasi_Capital_Expenditure_2023.pdf">Panduan
+                            Pembuatan CAPEX Approval</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Entertainment
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/BE/CreateBE">Create Biaya Entertainment</a>
+                        <a class="dropdown-item" href="/BE/ListBE">Monitoring Biaya Entertainment</a>
+                        <a class="dropdown-item" href="/BE/ListCheck">Monitoring Pengecekan Entertainment (FA)</a>
+                        <a class="dropdown-item" href="/Media/Sosialisasi_Entertainment_2023.pdf">Panduan Pembuatan
+                            Entertainment Approval</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Manage Component
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/PR/ListBudget">Manage Budget</a>
+                        <a class="dropdown-item" href="/PR/NewCostCenter">Manage Cost Center</a>
+                        <a class="dropdown-item" href="/PR/NewPRItem">Manage Item</a>
+                    </div>
+                </li>
+            </ul>
+
+
+        </div>
+        {% if user.is_authenticated %}
+        <div class="dropdown" style="margin-right: 10px;margin-left: auto;">
+            <a class="dropdown dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                hi, {{ user.get_username|upper }}
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'password_change'%}?next={{request.path}}">Change Password</a>
+                <a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}">Log Out</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="{% url 'login'%}?next={{request.path}}" style="margin-right: 10px;margin-left: auto;">Login</a>
+        {% endif %}
+        <!-- {% if user.is_authenticated %}
+                <li >User: {{ user.get_username }}</li>
+                <li ><a  href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+            {% else %}
+                <li ><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+            {% endif %} -->
+
+    </nav>
+    {% endblock %}
+
+
+
+
+
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery/jquery.cookie.js' %}"></script>
+    <script src="{% static 'vendor/jquery/popper.min.js' %}"></script>
+    <!-- <script src="{% static 'vendor/bootstrap/js/jquery-3.4.1.slim.min.js' %}"></script> -->
+    <!-- <script src="{% static 'vendor/jquery/jquery.cookie.js' %}"></script>  
+    <script src="{% static 'vendor/bootstrap/js/popper.min.js' %}"></script> -->
+    <script src="{% static 'vendor/datatable/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+    <script src="{% static 'vendor/datepicker/bootstrap-datepicker.min.js' %}"></script>
+
+
+
+    <br>
+    <div class="container-fluid" style="position: relative;min-height: 78vh;">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <br>
+
+</body>
+<footer class="footer "
+    style="background-color:white;min-height: 10vh; padding: 15px;  position: relative;bottom: 0;width: 100%; box-shadow: 0 -2px 2px rgba(0,0,0,0.1);">
+    <center>
+        <p class="text-muted" style="font-size: small;"><i> &copy; 2020 Online Approval System - PT Astra Komponen
+                Indonesia</i></p>
+    </center>
+</footer>
+
+</html>

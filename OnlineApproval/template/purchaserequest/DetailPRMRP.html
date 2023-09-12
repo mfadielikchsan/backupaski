@@ -1,0 +1,209 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+
+
+
+<div class="card" style="min-height: 78vh;">
+
+<div class="card-body">
+    <center>
+        <h5>Purchase Request from MRP</h5>
+    </center>
+    <br>
+    <h6>PR Header</h6>
+    <div style="height: 5px;"><br></div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Company
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Company}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Bussiness Area
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Bussiness_Area}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Date Created
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Date_Created}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        PP Number
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.PP_Number}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        User Name
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.User_Name}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        User Email
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.User_Email}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+               
+            </div>
+        </div>
+ 
+        <br>
+        <h6>Approval</h6>
+        <table class="table-bordered" >
+            <tbody>
+                <tr>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;;">Create by</td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;;">Approved by</td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;;">Approved by</td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;;">Approved by</td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;;">Approved by</td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;;">Approved by</td>
+                </tr>
+                <tr style="height: 120px;">
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: middle;">
+                        <div>Created</div>
+                        <div>{{HeadItem.Submit}}</div>
+                    </td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: middle;">
+                        <div>{{PR.SPV_Approval|default_if_none:""}}</div>
+                        <div>{{PR.SPV_Approval_Date|default_if_none:""}}</div>
+                    </td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: middle;">
+                        <div>{{PR.Dept_Head_Approval|default_if_none:""}}</div>
+                        <div>{{PR.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                    </td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: middle;">
+                        <div>{{PR.Div_Head_Approval|default_if_none:""}}</div>
+                        <div>{{PR.Div_Head_Approval_Date|default_if_none:""}}</div>
+                    </td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: middle;">
+                        <div>{{PR.Direktur_Approval|default_if_none:""}}</div>
+                        <div>{{PR.Direktur_Approval_Date|default_if_none:""}}</div>
+                    </td>
+                    <td style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: middle;">
+                        <div>{{PR.Purchase_Approval|default_if_none:""}}</div>
+                        <div>{{PR.Purchase_Approval_Date|default_if_none:""}}</div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td id="USER"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.User_Name|upper}}</td>
+                    <td id="SPV"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.SPV_Name}}
+                        </td>
+                    <td id="DEPTHEAD"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Dept_Head_Name}}
+                        </td>
+                    <td id="FINANCE"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Div_Head_Name}}
+                        </td>
+                    <td id="DIREKTUR"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Direktur_Name}}</td>
+                    <td id="PURCHASE"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Purchase_Name}}</td>
+                </tr>
+                <tr style="height:15px;">
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        User</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Supervisor</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Dept Head</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Div Head</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Direktur</td>
+                    <td id="PURCHASE"
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Purchase</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h6>Attachment</h6>
+        <table>
+            {% if HeadItem.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment1 </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{HeadItem.Attachment1}}">{{HeadItem.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+            {% endif %}
+            {% if HeadItem.Attachment2  %}
+            <tr>
+                <td style="width: 140px;">Attachment2 </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{HeadItem.Attachment2}}">{{HeadItem.Attachment2|cut:"Uploads/"}}</a></td>
+            </tr>
+        {% endif %}
+        </table>
+        <br>
+        <h6>PR Item</h6>
+        <div style="height: 5px;"><br></div>
+
+        <table id="table" class="table table-bordered" style="text-align: center;">
+
+            <tbody>
+                {% for Item in ListItem %}
+                <tr>
+                    {% for I in Item  %}
+                    <td>{{I}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <script>
+
+            $(document).ready(function () {
+                $('#table').DataTable();
+            });
+        </script>
+
+
+
+</div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,409 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+
+
+
+<div class="card" style="min-height: 78vh;">
+{% if Status == 'create' %}
+    <div class="card-body">
+        <center>
+            <h5>Create Purchase Request from MRP</h5>
+        </center>
+
+        <br>
+        <h6>PR Header</h6>
+        <div style="height: 5px;"><br></div>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for MRPHeader in MRPHeaderForm %}
+            {% if MRPHeader.label in 'Company, User Email, Bussiness Area, PP Type, MRP Month' %}
+            <div class="row" style="width:50%;padding-left: 10px;">
+                <div class="col-sm-3">
+                    {{MRPHeader.label}}
+                </div>
+                <div class="col-sm-9">
+                    {{MRPHeader|add_class:"form-control"}}
+                </div>
+            </div>
+            <div style="height: 5px;"><br></div>
+            {% elif MRPHeader.label in 'User Name' %}
+            <div class="row" style="width:50%;padding-left: 10px;">
+                <div class="col-sm-3">
+                    {{MRPHeader.label}}
+                </div>
+                <div class="col-sm-9">
+                    {{MRPHeader|add_class:"form-control"}}
+                </div>
+            </div>
+            <div style="height: 5px;"><br></div>
+            {% elif MRPHeader.label in 'PP Number,Date Created' %}
+            <div class="row" style="width:50%;padding-left: 10px;">
+                <div class="col-sm-3">
+                    {{MRPHeader.label}}
+                </div>
+                <div class="col-sm-9">
+                    {{MRPHeader|add_class:"form-control"|attr:"readonly"}}
+                </div>
+            </div>
+            <div style="height: 5px;"><br></div>
+            {% endif %}
+            {% endfor %}
+
+            <div class="row" style="width:50%;padding-left: 10px;">
+                <div class="col-sm-3">
+                    Approval Select
+                </div>
+                <div class="col-sm-9">
+                    <select class="form-control" name="User_Select" id="id_User_Select" 
+                        onchange="ChangeUser(this)">
+                        {% for App in Approval %}
+                        <option value="{{forloop.counter}}">{{App|cut:user.get_username|slice:"1:"}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div style="height: 5px;"><br></div>
+
+
+            <br>
+            <h6>Approval</h6>
+            <table class="table-bordered" style="margin-left: 10px;">
+                <tbody>
+                    <tr style="height:150px;">
+                        <td id="USER"
+                            style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                            {{PRheader.User_Name|upper}}</td>
+                        <td id="SPV"
+                            style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                            {{MRPHeaderForm.SPV_Name|attr:"readonly"}}
+                            {{MRPHeaderForm.SPV_Email|attr:"hidden"}}</td>
+                        <td id="DEPTHEAD"
+                            style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                            {{MRPHeaderForm.Dept_Head_Name|attr:"readonly"}}
+                            {{MRPHeaderForm.Dept_Head_Email|attr:"hidden"}}</td>
+                        <td id="FINANCE"
+                            style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                            {{MRPHeaderForm.Div_Head_Name|attr:"readonly"}}
+                            {{MRPHeaderForm.Div_Head_Email|attr:"hidden"}}</td>
+                        <td id="DIREKTUR"
+                            style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                            {{MRPHeaderForm.Direktur_Name|attr:"readonly"}}
+                            {{MRPHeaderForm.Direktur_Email|attr:"hidden"}}</td>
+                        <td id="PURCHASE"
+                            style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                            {{MRPHeaderForm.Purchase_Name|attr:"readonly"}}
+                            {{MRPHeaderForm.Purchase_Email|attr:"hidden"}}</td>
+                    </tr>
+                    <tr style="height:15px;">
+                        <td
+                            style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                            User</td>
+                        <td
+                            style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                            Supervisor</td>
+                        <td
+                            style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                            Dept Head</td>
+                        <td
+                            style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                            Div Head</td>
+                        <td
+                            style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                            Direktur</td>
+                        <td id="PURCHASE"
+                            style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                            Purchase</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        <br>
+        <h6>PR Item</h6>
+            <div style="height: 5px;"><br></div>
+            <div class="row" style="width:50%;padding-left: 25px;padding-right: 15px;">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02" name="MRP_Item" required>
+                        <label class="custom-file-label" for="inputGroupFile02"
+                            aria-describedby="inputGroupFileAddon02">Choose file</label>
+                    </div>
+                </div>
+            </div>
+
+            <h6>Attachment</h6>
+            <div class="row" style="width:50%;padding-left: 25px;padding-right: 15px;">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile03" name="Attachment1" >
+                        <label class="custom-file-label" for="inputGroupFile03"
+                            aria-describedby="inputGroupFileAddon03">Choose file</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="width:50%;padding-left: 25px;padding-right: 15px;">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile04" name="Attachment2" >
+                        <label class="custom-file-label" for="inputGroupFile04"
+                            aria-describedby="inputGroupFileAddon04">Choose file</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <button class="btn btn-success" type="submit" style="float: right;">Submit</button>
+        </form>
+
+        <script>
+
+            var approve = {{ Data| safe}};
+            document.getElementById("id_SPV_Email").value = approve[0].fields.Supervisor_email;
+            document.getElementById("id_SPV_Name").value = approve[0].fields.Supervisor;
+            document.getElementById("id_Dept_Head_Email").value = approve[0].fields.DeptHead_email;
+            document.getElementById("id_Dept_Head_Name").value = approve[0].fields.DeptHead;
+            document.getElementById("id_Div_Head_Email").value = approve[0].fields.DivHead_email;
+            document.getElementById("id_Div_Head_Name").value = approve[0].fields.DivHead;
+            document.getElementById("id_Direktur_Email").value = approve[0].fields.Direktur_email;
+            document.getElementById("id_Direktur_Name").value = approve[0].fields.Direktur;
+            document.getElementById("id_Purchase_Email").value = approve[0].fields.Purchase_email;
+            document.getElementById("id_Purchase_Name").value = approve[0].fields.Purchase;
+            $('#inputGroupFile02').on('change', function (e) {
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            })
+            $('#inputGroupFile03').on('change', function (e) {
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            })
+            $('#inputGroupFile04').on('change', function (e) {
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            })
+
+            $(document).ready(function () {
+                $('#table').DataTable();
+            });
+
+            function ChangeUser(item) {
+                var selectedText = item.options[item.selectedIndex].innerHTML;
+                var selectedValue = item.value;
+
+
+                //document.getElementById("id_User_Email").value = approve[selectedValue - 1].fields.Supervisor_email;
+                //document.getElementById("User_Name").value = approve[selectedValue - 1].fields.Supervisor;
+                document.getElementById("id_SPV_Email").value = approve[selectedValue - 1].fields.Supervisor_email;
+            document.getElementById("id_SPV_Name").value = approve[selectedValue - 1].fields.Supervisor;
+            document.getElementById("id_Dept_Head_Email").value = approve[selectedValue - 1].fields.DeptHead_email;
+            document.getElementById("id_Dept_Head_Name").value = approve[selectedValue - 1].fields.DeptHead;
+            document.getElementById("id_Div_Head_Email").value = approve[selectedValue - 1].fields.DivHead_email;
+            document.getElementById("id_Div_Head_Name").value = approve[selectedValue - 1].fields.DivHead;
+            document.getElementById("id_Direktur_Email").value = approve[selectedValue - 1].fields.Direktur_email;
+            document.getElementById("id_Direktur_Name").value = approve[selectedValue - 1].fields.Direktur;
+            document.getElementById("id_Purchase_Email").value = approve[selectedValue - 1].fields.Purchase_email;
+            document.getElementById("id_Purchase_Name").value = approve[selectedValue - 1].fields.Purchase;
+
+            }
+        </script>
+        
+
+
+
+    </div>
+
+{% elif Status == 'confirm' %}
+<div class="card-body">
+    <center>
+        <h5>Create Purchase Request from MRP</h5>
+    </center>
+    <br>
+    <h6>PR Header</h6>
+    <div style="height: 5px;"><br></div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Company
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Company}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Bussiness Area
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Bussiness_Area}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        Date Created
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.Date_Created}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        PP Number
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.PP_Number}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        PP Type
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.PP_Type}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        MRP Month
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.MRP_Month}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        User Name
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.User_Name}}
+                    </div>
+                </div>
+                <div class="row" style="padding-left: 10px;">
+                    <div class="col-sm-3">
+                        User Email
+                    </div>
+                    <div class="col-sm-9">
+                        : {{HeadItem.User_Email}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="PP_Number" value="{{HeadItem.PP_Number}}" hidden>
+                <button type="submit" class="btn btn-success" name="finish" style="float: right;width: 150px;">Finish</button>
+            </form>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="text" name="PP_Number" value="{{HeadItem.PP_Number}}" hidden>
+            <button type="submit" class="btn btn-danger" name="back" style="float: right;width: 150px;margin-right: 20px;">Back</button>
+        </form>
+            </div>
+        </div>
+ 
+        <br>
+        <h6>Approval</h6>
+        <table class="table-bordered" style="margin-left: 10px;">
+            <tbody>
+                <tr style="height:150px;">
+                    <td id="USER"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.User_Name|upper}}</td>
+                    <td id="SPV"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.SPV_Name}}
+                        </td>
+                    <td id="DEPTHEAD"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Dept_Head_Name}}
+                        </td>
+                    <td id="FINANCE"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Div_Head_Name}}
+                        </td>
+                    <td id="DIREKTUR"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Direktur_Name}}</td>
+                    <td id="PURCHASE"
+                        style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                        {{HeadItem.Purchase_Name}}</td>
+                </tr>
+                <tr style="height:15px;">
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        User</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Supervisor</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Dept Head</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Div Head</td>
+                    <td
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Direktur</td>
+                    <td id="PURCHASE"
+                        style="border-width: 1px;border-color: black;width: 13%;text-align: center;vertical-align: bottom;">
+                        Purchase</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h6>Attachment</h6>
+        <table>
+            {% if HeadItem.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment1 </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{HeadItem.Attachment1}}">{{HeadItem.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+            {% endif %}
+            {% if HeadItem.Attachment2  %}
+            <tr>
+                <td style="width: 140px;">Attachment2 </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{HeadItem.Attachment2}}">{{HeadItem.Attachment2|cut:"Uploads/"}}</a></td>
+            </tr>
+        {% endif %}
+        </table>
+        <br>
+        <h6>PR Item</h6>
+        <div style="height: 5px;"><br></div>
+
+        <table id="table" class="table table-bordered" style="text-align: center;">
+
+            <tbody>
+                {% for Item in ListItem %}
+                <tr>
+                    {% for I in Item  %}
+                    <td>{{I}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <script>
+
+            $(document).ready(function () {
+                $('#table').DataTable();
+            });
+        </script>
+
+
+
+</div>
+{% endif %}
+</div>
+
+
+{% endblock %}

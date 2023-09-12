@@ -1,0 +1,146 @@
+{%extends 'base.html'%}
+{%load static%}
+{% load widget_tweaks %}
+{%block content%}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>{{Judul}}</h5>
+            <h5>Tahun Pajak : {{BE.Tahun_Pajak}}</h5>
+        </center>
+        <table style="width: 100%; font-size: small;">
+            <tr>
+                <td style="width: 10%;">Doc Number</td>
+                <td>:</td>
+                <td>{{BE.BE_Number}}</td>
+            </tr>
+        </table>
+        <br>
+        <h6>Entertainment Items</h6>
+        <table name="table" style="border-collapse: collapse; font-size: 12px; text-align: center; width: 100%;">
+            <tr style=" height: 50px; word-break: normal; border: 1px solid">
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">No</th>
+                <th colspan="4" style="vertical-align: middle; border: 1px solid">Pemberian Entertainment dan Sejenisnya</th>
+                <th colspan="5" style="vertical-align: middle; border: 1px solid">Relasi Usaha yang diberikan Entertainment dan Sejenisnya</th>
+                <th rowspan="2" style="vertical-align: middle; border: 1px solid">No. Document SAP <br>(diisi oleh Fin. Dept)</th>
+            </tr>
+            <tr style="border: 1px solid">
+                <th style="padding: 5px; border: 1px solid">Tanggal</th>
+                <th style="padding: 5px; border: 1px solid">Tempat</th>
+                <th style="padding: 5px; border: 1px solid">Alamat</th>
+                <th style="padding: 5px; border: 1px solid">Jenis</th>
+                <th style="padding: 5px; border: 1px solid">Jumlah (Rp)</th>
+                <th style="padding: 5px; border: 1px solid">Nama</th>
+                <th style="padding: 5px; border: 1px solid">Posisi</th>
+                <th style="padding: 5px; border: 1px solid">Nama Perusahaan</th>
+                <th style="padding: 5px; border: 1px solid">Jenis Usaha</th>
+            </tr>
+            {% for Item in ListItem %}
+            <tr>
+                <td rowspan="2" style="padding: 5px; border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{forloop.counter}}</td>
+                <td rowspan="2" style="padding: 5px; border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{Item.Date}}</td>
+                <td rowspan="2" style="padding: 5px; text-align: left; border: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line; width: 250px;">{{Item.Place}}</td>
+                <td rowspan="2" style="padding: 5px; text-align: left; border: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line; width: 250px;">{{Item.Address}}</td>
+                <td rowspan="2" style="padding: 5px; text-align: left; border: 1px solid black; border-collapse: collapse; vertical-align: top; width: 250px;">{{Item.Type}}</td>
+                <td rowspan="2" style="padding: 5px;border: 1px solid black; border-collapse: collapse; vertical-align: top;">Rp. {{Item.Jumlah}}</td>
+                <td style="padding: 5px; text-align: left; border-top: 1px solid black; border-right: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>External</b></diV>{{Item.Name_External}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-top: 1px solid black; border-right: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>External</b></diV>{{Item.Posisi_External}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-top: 1px solid black; border-right: 1px solid black; border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>External</b></diV>{{Item.Company_Name_External}}
+                </td>
+                <td rowspan="2" style="border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{Item.Company_Type}}</td>
+                <td rowspan="2" style="border: 1px solid black; border-collapse: collapse; vertical-align: top;">{{Item.SAP_Number}}</td>
+            </tr>
+            <tr>
+                <td style="padding: 5px; text-align: left; border-bottom: 1px solid black; border-right: 1px solid black;  border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>Internal</b></diV>{{Item.Name_Internal}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-bottom: 1px solid black; border-right: 1px solid black;  border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>Internal</b></diV>{{Item.Posisi_Internal}}
+                </td>
+                <td style="padding: 5px; text-align: left; border-bottom: 1px solid black; border-right: 1px solid black;  border-collapse: collapse; vertical-align: top; white-space: pre-line;"><diV><b>Internal</b></diV>{{Item.Company_Name_Internal}}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <br>
+        <h6>Attachment</h6>
+        <table>
+            {% if BE.Attachment1  %}
+            <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{BE.Attachment1}}">{{BE.Attachment1|cut:"Uploads/"}}</a></td>
+            </tr>
+            {% endif %}
+            {% if BE.Attachment2  %}
+            <tr>
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{BE.Attachment2}}">{{BE.Attachment2|cut:"Uploads/"}}</a></td>
+            </tr>
+            {% endif %}
+            {% if BE.Attachment3  %}
+            <tr>
+            <td style="width: 140px;">Attachment </td>
+            <td>: <a class="btn btn-outline-success"
+                    href="/Media/{{BE.Attachment3}}">{{BE.Attachment3|cut:"Uploads/"}}</a></td>
+            </tr>
+            {% endif %}
+            {% if BE.Attachment4  %}
+            <tr>
+            <td style="width: 140px;">Attachment </td>
+            <td>: <a class="btn btn-outline-success"
+                    href="/Media/{{BE.Attachment4}}">{{BE.Attachment4|cut:"Uploads/"}}</a></td>
+            </tr>
+            {% endif %}
+            {% if BE.Attachment5  %}
+            <tr>
+            <td style="width: 140px;">Attachment </td>
+            <td>: <a class="btn btn-outline-success"
+                    href="/Media/{{BE.Attachment5}}">{{BE.Attachment5|cut:"Uploads/"}}</a></td>
+            </tr>
+            {% endif %}
+            {% if BE.Attachment6  %}
+            <tr>
+            <td style="width: 140px;">Attachment </td>
+            <td>: <a class="btn btn-outline-success"
+                    href="/Media/{{BE.Attachment6}}">{{BE.Attachment6|cut:"Uploads/"}}</a></td>
+            </tr>
+            {% endif %}
+        </table>
+        <br>
+
+        <h6>Approval</h6>
+        <table style="width: 80%; border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Created By</th>
+                    <th colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{BE.SPV_Submit}}</td>
+                    <td style="padding:20px;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{BE.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{BE.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic; border-right: 1px solid black;color: green;" id="PRDIR">
+                        {{BE.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{BE.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{BE.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{BE.Dept_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom; border-right: 1px solid black;">{{BE.PresDirektur}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Dept Head </td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">President Director</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{%endblock%}

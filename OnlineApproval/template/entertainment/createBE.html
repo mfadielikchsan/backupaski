@@ -1,0 +1,194 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<form method="post" action="" enctype="multipart/form-data">
+{% csrf_token %}
+{{BE.BE_Number|add_class:"form-control"|attr:"hidden"}}
+<div class="card" style="min-height: 78vh;" enctype="multipart/form-data">
+    <div class="card-body">
+        <center>
+            <table>
+                <tr>
+                    <h5>{{Judul}}</h5>
+                </tr>
+                <tr>
+                    <td><h5>Tahun Pajak : </h5></td>
+                    <td style="width: 80px;">{{BE.Tahun_Pajak|add_class:"form-control"|attr:"readonly"}}</td>
+                </tr>
+            </table>
+        </center>
+        <br>
+        <!--BE ITEM TABEL-->
+        <h6>Entertainment Items</h6>
+        <div style="overflow-x:auto;">
+            <table name="table " class="table table-bordered" style="text-align: center;font-size:small;">
+                <tr>
+                    <th rowspan="2" style="vertical-align: middle;">No</th>
+                    <th colspan="4" style="vertical-align: middle;">Pemberian Entertainment dan Sejenisnya</th>
+                    <th colspan="5" style="vertical-align: middle;">Relasi Usaha yang diberikan Entertainment dan Sejenisnya</th>
+                    <th rowspan="2" style="vertical-align: middle;">No. Document SAP <br>(diisi oleh Fin. Dept)</th>
+                </tr>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Tempat</th>
+                    <th>Alamat</th>
+                    <th>Jenis</th>
+                    <th style="min-width: 100px;">Jumlah (Rp)</th>
+                    <th>Nama</th>
+                    <th>Posisi</th>
+                    <th>Nama Perusahaan</th>
+                    <th>Jenis Usaha</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="min-width: 100px;">{{BE.Date|add_class:"form-control datepicker"}}</td>
+                    <td >{{BE.Place|add_class:"form-control"}}</td>
+                    <td >{{BE.Address|add_class:"form-control"}}</td>
+                    <td >{{BE.Type|add_class:"form-control"}}</td>
+                    <td >{{BE.Jumlah|add_class:"form-control"}}</td>
+                    <td >
+                        <div style="text-align: left; font-weight: bold;">External</div>
+                        {{BE.Name_External|add_class:"form-control"}}
+                        <div style="text-align: left; font-weight: bold;" >Internal</div>
+                        {{BE.Name_Internal|add_class:"form-control"}}
+                    </td>
+                    <td >
+                        <div style="text-align: left; font-weight: bold;">External</div>
+                        {{BE.Posisi_External|add_class:"form-control"}}
+                        <div style="text-align: left; font-weight: bold;" >Internal</div>
+                        {{BE.Posisi_Internal|add_class:"form-control"}}
+                    </td>
+                    <td >
+                        <div style="text-align: left; font-weight: bold;">External</div>
+                        {{BE.Company_Name_External|add_class:"form-control"}}
+                        <div style="text-align: left; font-weight: bold;" >Internal</div>
+                        {{BE.Company_Name_Internal|add_class:"form-control"}}
+                    </td>
+                    <td >{{BE.Company_Type|add_class:"form-control"}}</td>
+                    <td >{{BE.SAP_Number|add_class:"form-control"}}</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <!-- ATTACHMENT -->
+        <h6>Attachment</h6>
+        <table style="width: 95%;margin: 16px;">
+            <tr>
+                <td style="width:150px;">Attachment 1</td>
+                <td>:</td>
+                <td>{{BE.Attachment1|add_class:"form-control"}}</td>
+                <td style="width: 50px;"></td>
+                <td style="width:150px;">Attachment 4</td>
+                <td>:</td>
+                <td>{{BE.Attachment4|add_class:"form-control"}}</td>
+            </tr>
+            <tr>
+                <td>Attachment 2</td>
+                <td>:</td>
+                <td>{{BE.Attachment2|add_class:"form-control"}}</td>
+                <td></td>
+                <td>Attachment 5</td>
+                <td>:</td>
+                <td>{{BE.Attachment5|add_class:"form-control"}}</td>
+            </tr>
+            <tr>
+                <td>Attachment 3</td>
+                <td>:</td>
+                <td>{{BE.Attachment3|add_class:"form-control"}}</td>
+                <td></td>
+                <td>Attachment 6</td>
+                <td>:</td>
+                <td>{{BE.Attachment6|add_class:"form-control"}}</td>
+            </tr>
+        </table>
+        <div><br></div>
+        <!-- APPROVAL -->
+        <h6>Approval</h6>
+        <table class="table table-bordered" style="text-align: center;font-size: small;">
+            <thead>
+                <tr>
+                    <th style="width: 35%; ">Created By</th>
+                    <th colspan="2">Approved By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 100px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>{{BE.SPV|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                    <td>{{BE.Dept_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                    </td>
+                    <td>{{BE.PresDirektur|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                    </td>
+                </tr>
+                {{BE.SPV_Email|attr:"hidden"}}
+                {{BE.SPV_Submit|attr:"hidden"}}
+                {{BE.Dept_Head_Email|attr:"hidden"}}
+                {{BE.PresDirektur_Email|attr:"hidden"}}
+                {{BE.Status|attr:"hidden"}}
+                <tr>
+                    <td>Supervisior</td>
+                    <td>Dept Head </td>
+                    <td>President Director</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="text" name="Finish" value="" hidden>
+        <button type="submit" class="btn btn-success"
+            style="width: 150px;margin-left: auto;margin-right: 0px;display: block;">
+            Finish
+        </button>
+</div>
+</div>
+</form>
+<style>
+    #id_Place, #id_Address, #id_Type, #id_Company_Type, #id_SAP_Number{
+        height: 545px !important;
+    }
+</style>
+<script>
+    var rupiah = document.getElementById("id_Jumlah");
+    rupiah.addEventListener("keyup", function(e) {
+        rupiah.value = formatRupiah(this.value);
+    });
+
+    function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, "").toString(),
+            split = number_string.split(","),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            separator = sisa ? "." : "";
+            rupiah += separator + ribuan.join(".");
+        }
+
+        rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+        return prefix == undefined ? rupiah : rupiah ? rupiah : "";
+    }
+
+    $(document).ready(function () {
+        $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+
+        $('.datepicker').datepicker({ format: 'dd-mm-yyyy', autoclose: true, toggleActive: true, todayHighlight: true, });
+        var sel = document.getElementById('select');
+    });
+
+    var approve = {{ Data| safe}};
+    console.log(approve);
+    $(document).ready(function () {
+        document.getElementById("id_Dept_Head").value = approve[0].fields.Dept_Head;
+        document.getElementById("id_SPV").value = approve[0].fields.SPV;
+        document.getElementById("id_PresDirektur").value = approve[0].fields.PresDirektur;
+        document.getElementById("id_Dept_Head_Email").value = approve[0].fields.Dept_Head_Email;
+        document.getElementById("id_SPV_Email").value = approve[0].fields.SPV_Email;
+        document.getElementById("id_PresDirektur_Email").value = approve[0].fields.PresDirektur_Email;
+    });
+</script>
+{% endblock %}

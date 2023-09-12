@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <br>
+        <h6 style="margin-left: 1px">SP Upload</h6>
+        <form action="" method="post" enctype="multipart/form-data" >
+            {% csrf_token%}
+            {{SPForm.SP_Number|add_class:"form-control"|attr:"readonly"|attr:"hidden"}}
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 10%">Upload New SP</td>
+                    <td style="width: 1%">:</td>
+                    <td style="width: 40%">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile02" name="SP_Item"
+                                    required>
+                                <label class="custom-file-label" for="inputGroupFile02"
+                                    aria-describedby="inputGroupFileAddon02">Choose file</label>
+                            </div>
+                        </div>
+                    </td>
+                    <td><button class="btn btn-warning" style="width: 150px;margin-left: 10px;display: block" type="submit" name="upload">Upload</button></td>
+                    <td><button class="btn btn-dark" style="margin-left: auto;margin-right: 0px;display: block;"><a href="/Media/Price/Pendaftaran_Harga.xlsx" style="color: white;">Download SP template</a></button></td>
+                </tr>
+            </table>
+        </form>
+        <hr>
+        <form action="" id="header" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <h6 style="margin-left: 16px; margin-top: 16px">SP Form</h6>
+                <table style="width: 100%;margin-left: 16px; margin-bottom: 16px">
+                    <tr>
+                        <td style="width:150px;">Doc Number</td>
+                        <td>:</td>
+                        <td>{{SPForm.SP_Number|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td style="width: 50px;"></td>
+                        <td style="width:150px;">Attachment1</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment1|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Name</td>
+                        <td>:</td>
+                        <td>{{SPForm.Cust_Name|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td></td>
+                        <td>Attachment2</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment2|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Code</td>
+                        <td>:</td>
+                        <td>{{SPForm.Cust_Code|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td></td>
+                        <td>Attachment3</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment3|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Distribution Channel</td>
+                        <td>:</td>
+                        <td>{{SPForm.Dist_Channel|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td></td>
+                        <td>Attachment4</td>
+                        <td>:</td>
+                        <td>{{SPForm.Attachment4|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Product Status</td>
+                        <td>:</td>
+                        <td>{{SPForm.Product_Status|add_class:"form-control"|attr:"readonly"}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <table name="table " class="table table-bordered" style="text-align: center;font-size: small;">
+                <tr>
+                    <th rowspan="2" style="vertical-align: middle;">Type</th>
+                    <th rowspan="2" style="vertical-align: middle;">Material No</th>
+                    <th rowspan="2" style="vertical-align: middle;">Material Description</th>
+                    <th rowspan="2" style="vertical-align: middle;">Customer Material</th>
+                    <th colspan="5">Old Price</th>
+                    <th colspan="5">New Price</th>
+                    <th rowspan="2" style="vertical-align: middle;">Ratio</th>
+                    <th rowspan="2" style="vertical-align: middle;">Note</th>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <th>Depreciation</th>
+                    <th>Total</th>
+                    <th>UoM</th>
+                    <th>Valid From</th>
+                    <th>Price</th>
+                    <th>Depreciation</th>
+                    <th>Total</th>
+                    <th>UoM</th>
+                    <th>Valid From</th>
+                </tr>
+
+                {% for Item in ListItem %}
+                <tr>
+                    {% for I in Item %}
+                    {% if forloop.counter > 4 %}
+                    <td style="text-align: center;">{{I}}</td>
+                    {% else %}
+                    <td style="text-align: left;">{{I}}</td>
+                    {%endif%}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+            <table class="table table-bordered" style="text-align: center;font-size: small;">
+                <thead>
+                    <tr>
+                        <th style="width: 16%;">Created By</th>
+                        <th style="width: 16%;">Checked By</th>
+                        <th style="width: 16%;">Checked By</th>
+                        <th colspan="2">Approved By</th>
+                        <th style="width: 16%;">SAP Input By</th>
+                        <th style="width: 16%;">Confirmed By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="height: 120px;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>{{SPForm.UserName|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                        <td>{{SPForm.SPV|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                        <td>{{SPForm.Dept_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{SPForm.Div_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{SPForm.PresDirektur|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{SPForm.Acc|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                        <td>{{SPForm.Dept_Acc|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                    </tr>
+                    {{SPForm.SPV_Email|attr:"hidden"}}
+                    {{SPForm.User_Email|attr:"hidden"}}
+                    {{SPForm.User_Submit|attr:"hidden"}}
+                    {{SPForm.Dept_Head_Email|attr:"hidden"}}
+                    {{SPForm.Div_Head_Email|attr:"hidden"}}
+                    {{SPForm.PresDirektur_Email|attr:"hidden"}}
+                    {{SPForm.Acc_Email|attr:"hidden"}}
+                    {{SPForm.Dept_Acc_Email|attr:"hidden"}}
+                    {{SPForm.Status|attr:"hidden"}}
+                    <tr>
+                        <td>Marketing Admin</td>
+                        <td>Marketing SPV</td>
+                        <td>Marketing Dept Head </td>
+                        <td>Bussiness Dev Div Head</td>
+                        <td>President Director</td>
+                        <td>Finance SPV</td>
+                        <td>Finance Dept Head</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="height: 10px;"><br></div>
+            <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-success" name="Finish" id="Finish"
+                        style="width: 150px;margin-left: auto;margin-right: 0px;display: block;">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+        <br>
+    </div>
+</div>
+
+<script>
+    $('#inputGroupFile02').on('change', function (e) {
+        var fileName = e.target.files[0].name;
+        $(this).next('.custom-file-label').html(fileName);
+    })
+
+    var approve = {{ Data| safe}};
+    console.log(approve);
+    $(document).ready(function () {
+        document.getElementById("id_UserName").value = approve[0].fields.User_Name;
+        document.getElementById("id_User_Email").value = approve[0].fields.User_Email;
+        document.getElementById("id_SPV").value = approve[0].fields.SPV;
+        document.getElementById("id_Dept_Head").value = approve[0].fields.Dept_Head;
+        document.getElementById("id_Div_Head").value = approve[0].fields.Div_Head;
+        document.getElementById("id_PresDirektur").value = approve[0].fields.PresDirektur;
+        document.getElementById("id_Acc").value = approve[0].fields.Acc;
+        document.getElementById("id_Dept_Acc").value = approve[0].fields.Dept_Acc;
+        document.getElementById("id_SPV_Email").value = approve[0].fields.SPV_Email;
+        document.getElementById("id_Dept_Head_Email").value = approve[0].fields.Dept_Head_Email;
+        document.getElementById("id_Div_Head_Email").value = approve[0].fields.Div_Head_Email;
+        document.getElementById("id_PresDirektur_Email").value = approve[0].fields.PresDirektur_Email;
+        document.getElementById("id_Acc_Email").value = approve[0].fields.Acc_Email;
+        document.getElementById("id_Dept_Acc_Email").value = approve[0].fields.Dept_Acc_Email;
+    });
+</script>
+{% endblock %}

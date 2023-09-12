@@ -1,0 +1,107 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <br>
+        <table  id ="table" class="table table-bordered" style="text-align: center;">
+            <thead style="text-align:center;font-size:small; background-color: beige;">
+            <tr>
+                <th>No</th>
+                <th>BE Number</th>
+                <th>Date Created</th>
+                <th>Tahun Pajak</th>
+                <th>SPV Name</th>
+                <th>Dept Head Approval</th>
+                <th>Presdir Approval</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody style ="text-align:center;font-size:small;">
+                {% for BE in listBE%}
+                <tr style="font-size:small;">
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                        <div><a href="{{BE.BE_Number}}/">{{BE.BE_Number}}</a></div>
+                        
+                    </td>
+                    <td>{{BE.Submit_Date}}</td>
+                    <td>{{BE.Tahun_Pajak}}</td>
+                    <td>{{BE.SPV|default_if_none:""}}</td>
+                    <td>
+                        <div>{{BE.Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{BE.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                        <div>{{BE.Dept_Head|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        <div>{{BE.PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{BE.PresDirektur_Approval_Date|default_if_none:""}}</div>
+                        <div>{{BE.PresDirektur|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        <div>{{BE.Status}}</div>
+                        <div>{% if BE.Status == "Finished" %}
+                        <br>
+                        <div><a href="/Media/Entertaint/{{BE.BE_Number}}.pdf">Download .pdf</a></div>
+                        {% elif BE.Status == "NeedRevise"%}
+                        <div>{{BE.Message}}</div>
+                        <a href="/BE/Revise/{{BE.BE_Number}}" class="btn btn-warning">Revise</a>
+                        {% elif BE.Status == "Revised"%}
+                        <div>{{BE.Message}}</div>
+                        {% elif BE.Status == "Rejected"%}
+                        <div>{{BE.Message}}</div>
+                        {% endif %}</div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <style>
+    thead input {
+        width: 100%;
+    }
+
+    thead {
+        width: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+
+        $('#table thead tr').clone(true).appendTo('#table thead');
+        $('#table thead tr:eq(1) th').each(function (i) {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+            $('input', this).on('keyup change', function () {
+                if (table.column(i).search() !== this.value) {
+                    table
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+
+
+        });
+
+        var table = $('#table').DataTable({
+            orderCellsTop: true,
+            fixedHeader: true
+        });
+
+
+    });
+</script>
+    </div>
+</div>
+{% endblock %}

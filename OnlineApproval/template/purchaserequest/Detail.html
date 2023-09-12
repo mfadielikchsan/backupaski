@@ -1,0 +1,322 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<!-- <center><h1>{{Judul}}</h1></center> -->
+<div class="card">
+    <div class="card-body">
+        <br>
+        <center>
+            <h5>Monitoring {{PP_Number}}</h5>
+        </center>
+
+        <h6>Item Purchase Request</h6>
+
+
+
+        <div class="row" style="padding-left: 14px;">
+            <div class="col-sm-10">
+                <table>
+                    <tr>
+                        <td style="width: 140px;">Company</td>
+                        <td>: {{PRheader.Company}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bussiness Area</td>
+                        <td>: {{PRheader.Bussiness_Area}}</td>
+                    </tr>
+                    <tr>
+                        <td>Date Created</td>
+                        <td>: {{PRheader.Date_Created|date:'d M Y'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Jenis PP </td>
+                        <td>: {{PRheader.Jenis_PP}}</td>
+                    </tr>
+                    <tr>
+                        <td>PP Number</td>
+                        <td>: {{PRheader.PP_Number}}</td>
+                    </tr>
+                    <tr>
+                        <td>User Name</td>
+                        <td>: {{PRheader.User_Name}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+
+        <div style="max-height: 5px;"><br></div>
+
+
+        <table class="style" style="border: 1px solid black; font-size: small;text-align: center;" id="table">
+            <thead style="border: 1px solid black;">
+                <tr style="border: 1px solid black; height: 50px; word-break: normal;">
+                    <th rowspan="2" style="border: 1px solid black;">NO</th>
+                    <th rowspan="2" style="border: 1px solid black;">A* (Exp)</th>
+                    <th rowspan="2" style="border: 1px solid black;">I* (Jenis)</th>
+                    <th rowspan="2" style="border: 1px solid black;">Kode Barang</th>
+                    <th rowspan="2" style="border: 1px solid black;">Nama Barang / Deskripsi Service</th>
+                    <th colspan="2" style="border: 1px solid black;">Dipesan</th>
+                    <th colspan="2" style="border: 1px solid black;">Perkiraan Harga</th>
+                    <th rowspan="2" style="border: 1px solid black;">Tanggal Kedatangan</th>
+                    <th colspan="2" style="border: 1px solid black; word-break: keep-all;">Account Assignment</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Min Stock</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Act Stock</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Avg Usage</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Budget</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg);  vertical-align: middle;white-space: nowrap; ">
+                        Un-Budget</th>
+                    <th rowspan="2" style="border: 1px solid black; width: 100px;">Catatan</th>
+                </tr>
+                <tr style="height:50px">
+                    <th style="border: 1px solid black;">Jumlah</th>
+                    <th style="border: 1px solid black;">UoM</th>
+                    <th style="border: 1px solid black;">Satuan</th>
+                    <th style="border: 1px solid black;">Total</th>
+                    <th style="border: 1px solid black;">Cost Center</th>
+                    <th style="border: 1px solid black;">Asset No./GL Account</th>
+                </tr>
+            </thead>
+            <tbody style="border: 1px solid black;">
+                {% for item in itemlist%}
+                <tr style="height: 30px;">
+                    <td style="border: 1px solid black;">{{forloop.counter}}</td>
+                    <td style="border: 1px solid black;">{{item.Expense|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Jenis_Barang|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Kode_Barang|default_if_none:''}}</td>
+                    <td style="border: 1px solid black; text-align: left;padding-left: 5px;">{{item.Nama_Barang}}</td>
+                    <td style="border: 1px solid black;">{{item.Jumlah_Order}}</td>
+                    <td style="border: 1px solid black;">{{item.Unit_Order}}</td>
+                    <td style="border: 1px solid black;">{{item.Harga_Satuan|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Harga_Total|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.PIC}}</td>
+                    <td style="border: 1px solid black;">{{item.Cost_Center}}</td>
+                    <td style="border: 1px solid black;">{{item.Asset_No_GL_Account|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Minimal_Stock|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Actual_Stock|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Average_Usage|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{%if item.Budget == 'Budget' %}x{% endif %}</td>
+                    <td style="border: 1px solid black;">{%if item.Budget == 'UnBudget' %}x{% endif %}</td>
+                    <td style="border: 1px solid black;">{{item.Note}}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        <br>
+        <h6>Approval</h6>
+
+        <div style="max-height: 5px;"><br></div>
+
+
+
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Pemesan</td>
+                    {%if Approval.DivHead is None%}
+                    <td colspan="3"
+                        style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Disetujui/Mengetahui</td>
+                    {%elif Approval.DeptHead is None%}
+                    <td colspan="3"
+                        style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Disetujui/Mengetahui</td>
+                    {% else %}
+                    <td colspan="4"
+                        style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Disetujui/Mengetahui</td>
+                    {% endif %}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Purchasing</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td
+                        style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">
+                        Created {{PRheader.Submit|date:'r'}}</td>
+                    {%if Approval.DeptHead is not None%}
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="DEPH">{{ PRheader.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{ PRheader.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    {% endif %}
+                    {%if Approval.DivHead is not None%}
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="DIVH">{{ PRheader.Div_Head_Approval_Status |default_if_none:''}}
+                        {{ PRheader.Div_Head_Approval_Date|date:'r' |default_if_none:''}}</td>
+                    {% endif %}
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="FIN">{{ PRheader.Finance_Approval_Status |default_if_none:''}}
+                        {{ PRheader.Finance_Approval_Date|date:'r' |default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                        id="DIR">{{ PRheader.Direktur_Approval_Status |default_if_none:''}}
+                        {{ PRheader.Direktur_Approval_Date|date:'r' |default_if_none:''}}</td>
+                    <td
+                        style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">
+                        {{ PRheader.Purchase_Approval_Status |default_if_none:''}}
+                        {{ PRheader.Purchase_Approval_Date|date:'r' |default_if_none:''}}</td>
+                    </td>
+                </tr>
+                <tr style="height:20px;">
+                    <td
+                        style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        {{PRheader.User_Name|upper}}</td>
+                    {%if Approval.DeptHead is not None%}
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.DeptHead}}</td>
+                    {% endif %}
+                    {%if Approval.DivHead is not None%}
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.DivHead |default_if_none:''}}
+                    </td>
+                    {% endif %}
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.Finance}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{Approval.Direktur}}</td>
+                    <td
+                        style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        {{approval.Purchase}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">User
+                    </td>
+                    {%if Approval.DeptHead is not None%}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Dept
+                        Head</td>
+                    {% endif %}
+                    {%if Approval.DivHead is not None%}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Div
+                        Head</td>
+                    {% endif %}
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Fin&Acc</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Pres Dir</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                        Purchasing</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <br>
+        <h6>Budget (Khusus PR Asset / ZRAT)</h6>
+        <table>
+            <tr>
+                <td style="width: 100px;">Budget No</td>
+                {%for budg in Budget%}
+                {%if budg.Budget_No == PRheader.Budget_No%}
+                <td style="width: 500px;">: {{PRheader.Budget_No|default_if_none:'-'}} {{budg.Description}}</td>
+                {%endif%}
+                {% endfor %}
+
+            </tr>
+            <tr>
+                <td style="width: 100px;">Budget Total</td>
+                <td style="width: 500px;">: {{PRheader.Budget_Rp|default_if_none:'-'}} </td>
+                
+            </tr>
+            <tr>
+                <td style="width: 100px;">PP diproses</td>
+                <td style="width: 500px;">: {{PRheader.PP_diProses|default_if_none:'-'}}</td>
+               
+            </tr>
+            <tr>
+                <td style="width: 100px;">Sisa</td>
+                <td style="width: 500px;">: {{PRheader.Sisa_Budget|default_if_none:'-'}}</td>
+                
+            </tr>
+            <tr>
+                <td style="width: 100px;">PP diajukan</td>
+                <td style="width: 500px;">: {{PRheader.PP_diAjukan|default_if_none:'-'}}</td>
+                
+            </tr>
+            <tr>
+                <td style="width: 100px;">Sisa</td>
+                <td style="width: 500px;">: {{PRheader.Sisa_Final|default_if_none:'-'}}</td>
+               
+            </tr>
+        </table>
+
+
+        <br>
+
+        <h6>Quotation (Penawaran) Attachment</h6>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% with 'Attachment1, Attachment2, Attachment3' as list%}
+            {% for form in PRheaderform %}
+            {% if form.label not in list %}
+            {{form|attr:"hidden"}}
+            {% endif %}
+            {% endfor %}
+            {% endwith %}
+            <table>
+                {% if PRheader.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{PRheader.Attachment1}}">{{PRheader.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif PRheader.PR_Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{PRheaderform.Attachment1}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit">upload</button></td>
+                </tr>
+                {% endif %}
+                {% if PRheader.Attachment2  %}
+                <tr>
+                    <td style="width: 140px;">Attachment </td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{PRheader.Attachment2}}">{{PRheader.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif PRheader.PR_Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{PRheaderform.Attachment2}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit">upload</button></td>
+                </tr>
+                {% endif %}
+                {% if PRheader.Attachment3  %}
+                <td style="width: 140px;">Attachment </td>
+                <td>: <a class="btn btn-outline-success"
+                        href="/Media/{{PRheader.Attachment3}}">{{PRheader.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif PRheader.PR_Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Add New </td>
+                    <td>: {{PRheaderform.Attachment3}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit">upload</button></td>
+                </tr>
+                {% endif %}
+
+
+
+            </table>
+
+
+
+        </form>
+        {% if PRheader.PR_Status == "NeedRevise" %}
+        <a href="/PR/Revise/{{PP_Number}}"><button class="btn btn-warning" style="width: 100px;float: right;"
+                type="submit">Revise PR</button></a>
+        {% endif %}
+
+        <br>
+        <br>
+    </div>
+</div>
+
+
+{% endblock %}

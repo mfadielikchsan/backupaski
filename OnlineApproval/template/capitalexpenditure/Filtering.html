@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card">
+        <div class="card-header" style="background-color:white">
+            <b>Filtering</b> /
+            <b><a href="/CP/Summary">Summary</a></b>
+        </div>
+        <div class="card-body">
+            <div style="overflow-x:auto;">
+                <table name="table" id="table" class="table table-bordered" style="text-align: center;font-size: small;">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="vertical-align: middle">No</th>
+                            <th rowspan="2" style="vertical-align: middle">CP Number</th>
+                            <th rowspan="2" style="vertical-align: middle">CAPEX ITEM</th>
+                            <th rowspan="2" style="vertical-align: middle; min-width: 100px;">Grup</th>
+                            <th rowspan="2" style="vertical-align: middle">Dept</th>
+                            <th rowspan="2" style="vertical-align: middle">PIC</th>
+                            <th rowspan="2" style="vertical-align: middle">Project</th>
+                            <th rowspan="2" style="vertical-align: middle">Asset Class</th>
+                            <th rowspan="2" style="vertical-align: middle; min-width: 100px;">Priority</th>
+                            <th rowspan="2" style="vertical-align: middle">Reason</th>
+                            <th rowspan="2" style="vertical-align: middle">Remarks</th>
+                            <th colspan="6" style="vertical-align: middle">Capex Capitalization (in million Rp)</th>
+                            <th colspan="3" style="vertical-align: middle">Payment Check</th>
+                        </tr>
+                        <tr>
+                            <th>{{ CP.Year }}</th>
+                            <th>After</th>
+                            <th>{{ CP.Next_Year1 }}</th>
+                            <th>After</th>
+                            <th>{{ CP.Next_Year2 }}</th>
+                            <th>After</th>
+                            <th>{{ CP.Year }}</th>
+                            <th>{{ CP.Next_Year1 }}</th>
+                            <th>{{ CP.Next_Year2 }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in ListItem %}
+                    <tr style="border-collapse: collapse; font-size: small;">
+                        <td >{{ forloop.counter }}</td>
+                        <td >{{ item.CP_Number }}</td>
+                        <td style="text-align: left; white-space: nowrap; " >{{ item.CP_Name }}</td>
+                        <td style="min-width: 150px;">
+                        <select name="Group|{{item.id}}" class="form-control">
+                            {% if item.Grup == 'Capex' %}
+                            <option value="Capex" selected>Capex</option>
+                            <option value="Expense">Expense</option>
+                            {%else %}
+                            <option value="Capex" >Capex</option>
+                            <option value="Expense" selected>Expense</option>
+                            {%endif%}
+                        </select>
+                        </td>
+                        <td style="white-space: nowrap;">{{ item.Dept }}</td>
+                        <td style="white-space: nowrap;">{{ item.PIC }}</td>
+                        <td style="white-space: nowrap;">{{ item.Project }}</td>
+                        <td style="white-space: nowrap;">{{ item.Asset_Class }}</td>
+                        <td style="min-width: 80px;text-align: center;">{{ item.Priority }}</td>
+                        <td style="white-space: nowrap;">{{ item.Reason }}</td>
+                        <td style="white-space: nowrap;">{{ item.Remarks }}</td>
+                        <td >{{ item.Summary_Current_Year |default_if_none:'0'}} </td>
+                        <!-- <td>{{ CPItem.After_Current_Year }}</td> -->
+                        <td style="background-color: azure; min-width:90px"><input name="After_Current_Year|{{item.id}}" type="text" value={{item.After_Current_Year}} class="form-control"></td>
+                        <td >{{ item.Summary_Next_Year1|default_if_none:'0'}} </td>
+                        <td style="background-color: azure; min-width:90px"><input name="After_Next_Year1|{{item.id}}" type="text" value={{item.After_Next_Year1}} class="form-control"></td>
+                        <td >{{ item.Summary_Next_Year2|default_if_none:'0' }} </td>
+                        <td style="background-color: azure; min-width:90px"><input name="After_Next_Year2|{{item.id}}" type="text" value={{item.After_Next_Year2}} class="form-control"></td>
+                        <td >{{ item.Payment_Check1 }} </td>
+                        <td >{{ item.Payment_Check2 }} </td>
+                        <td >{{ item.Payment_Check3 }} </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" name="Finish" id="Finish"
+                style="width: 150px;margin-left: auto;margin-right: 16px;display: block;">
+                Save
+        </button>
+        <br>
+    </div>
+</form>
+{% endblock %}

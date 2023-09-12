@@ -1,0 +1,97 @@
+from PurchaseRequest.models import CostCenter
+from django.db import models
+
+# Create your models here.
+class BonSementara (models.Model):
+    BS_Number = models.CharField(max_length=50)
+    PaidBy = models.CharField(max_length=15,choices=(('CASH','CASH'),('BANK','BANK')),default='CASH')
+    Bank = models.CharField(max_length=100, null=True, blank= True)
+    Nomor_Rekening = models.CharField(max_length=100, null=True, blank= True)
+    Nama_Rekening = models.CharField(max_length=100, null=True, blank= True)
+    Note = models.TextField()
+    Jumlah = models.CharField(max_length=9)
+    Terbilang = models.CharField(max_length=200)
+    Date_Created = models.DateTimeField(auto_now_add=True)
+    User_Name = models.CharField(max_length=100, null=True, help_text="Nama User")
+    User_Email = models.EmailField(null=True, help_text="Email User")
+    DeptHead = models.CharField(max_length=100, null=True, blank= True)
+    DeptHead_Approval = models.CharField(max_length=10, null=True, blank= True)
+    DeptHead_Approval_Date = models.DateTimeField(null=True,blank=True)
+    DeptHead_Email =  models.EmailField(null=True, blank= True)  
+    Finance = models.CharField(max_length=100, null=True, blank= True)
+    Finance_Approval = models.CharField(max_length=10, null=True, blank= True)
+    Finance_Approval_Date = models.DateTimeField(null=True,blank=True)
+    Finance_Email =  models.EmailField(null=True, blank= True)  
+    Receiver_Name = models.CharField(max_length=100, null=True, blank= True)
+    Received_Date = models.DateTimeField(null=True,blank=True)
+    BS_Status =  models.CharField(max_length=200,null=True,blank=True)
+    Reject_Message = models.CharField(max_length=200, null=True, blank= True)
+    def __str__(self):
+        return "%s %s" % (self.BS_Number, self.User_Name)
+
+
+class Penyelesaian(models.Model):
+    FP_Number = models.CharField(max_length=50)
+    Bussiness_Unit = models.CharField(max_length=10)
+    Dept = models.CharField(max_length=20)
+    CostCenter = models.CharField(max_length=20)
+    Reference = models.CharField(max_length=50,null=True, blank= True)
+    Note = models.CharField(max_length=15,choices=(('BUDGETED','BUDGETED'),('NON BUDGETED','NON BUDGETED')),default='NON BUDGETED')
+    PaidBy = models.CharField(max_length=15,choices=(('CASH','CASH'),('BANK','BANK')),default='CASH')
+    Bank = models.CharField(max_length=100, null=True, blank= True)
+    Nomor_Rekening = models.CharField(max_length=100, null=True, blank= True)
+    Nama_Rekening = models.CharField(max_length=100, null=True, blank= True)
+    PaidTo = models.CharField(max_length=200)
+    Description = models.TextField()
+    Amount = models.CharField(max_length=20)
+    Says = models.CharField(max_length=200)
+    Date_Created = models.DateTimeField(auto_now_add=True)
+    User_Name = models.CharField(max_length=100, null=True, help_text="Nama User")
+    User_Email = models.EmailField(null=True, help_text="Email User")
+    DeptHead = models.CharField(max_length=100, null=True, blank= True)
+    DeptHead_Approval = models.CharField(max_length=10, null=True, blank= True)
+    DeptHead_Approval_Date = models.DateTimeField(null=True,blank=True)
+    DeptHead_Email =  models.EmailField(null=True, blank= True) 
+    Finance = models.CharField(max_length=100, null=True, blank= True)
+    Finance_Approval = models.CharField(max_length=10, null=True, blank= True)
+    Finance_Approval_Date = models.DateTimeField(null=True,blank=True)
+    Finance_Email =  models.EmailField(null=True, blank= True)  
+    Dir_Finance = models.CharField(max_length=100, null=True, blank= True)
+    Dir_Finance_Approval = models.CharField(max_length=10, null=True, blank= True)
+    Dir_Finance_Approval_Date = models.DateTimeField(null=True,blank=True)
+    Dir_Finance_Email =  models.EmailField(null=True, blank= True)  
+    Receiver_Name = models.CharField(max_length=100, null=True, blank= True)
+    Received_Date = models.DateTimeField(null=True,blank=True)
+    Entertainment = models.CharField(max_length=200, null=True, blank=True)
+    Attachment1 = models.FileField(upload_to='Uploads/', null=True, blank=True)
+    Attachment2 = models.FileField(upload_to='Uploads/', null=True, blank=True)
+    Attachment3 = models.FileField(upload_to='Uploads/', null=True, blank=True)
+    Attachment4 = models.FileField(upload_to='Uploads/', null=True, blank=True)
+    Attachment5 = models.FileField(upload_to='Uploads/', null=True, blank=True)
+    FP_Status =  models.CharField(max_length=200,null=True,blank=True)
+    Reject_Message = models.CharField(max_length=200, null=True, blank= True)
+    def __str__(self):
+        return "%s %s" % (self.FP_Number, self.User_Name)
+
+class Send(models.Model):
+    Number = models.CharField(max_length=50)
+    mailto = models.TextField()
+    mailfrom = models.EmailField()
+    mailheader = models.CharField(max_length=200)
+    htmlmessage = models.TextField()
+
+    def __str__(self):
+        return "%s %s" % (self.mailto, self.mailheader)
+
+class Received(models.Model):
+    Number = models.CharField(max_length=50, null=True)
+    mailto = models.TextField()
+    mailfrom = models.EmailField()
+    subject = models.CharField(max_length=200, null=True)
+    receiveddetail = models.TextField(null=True)
+    datetimereceived = models.CharField(max_length=100, null=True)
+    messageid = models.CharField(max_length=200, null=True)
+    message = models.TextField(null=True)
+
+    def __str__(self):
+        return "%s %s" % (self.mailfrom, self.mailheader)

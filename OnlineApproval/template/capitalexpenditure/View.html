@@ -1,0 +1,311 @@
+{%extends 'base.html'%}
+{%load static%}
+{% load widget_tweaks %}
+{%block content%}
+<div class="card mt-3 mb-4">
+    <div class="card-header" style="background-color:white">
+        <b>{{Judul}}</b>
+    </div>
+    <div class="card-body">
+        <div>
+            <table style="width: 40%;">
+                <tr>
+                    <td>Business Unit</td>
+                    <td>:</td>
+                    <td>{{ CP.Business_Unit }}</td>
+                </tr>
+                <tr>
+                    <td>Division</td>
+                    <td>:</td>
+                    <td>{{ CP.Division }}</td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td>:</td>
+                    <td>{{ CP.Department }}</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <h6>Capex</h6>
+        <div style="overflow-x:auto;">
+            <table class="table table-bordered" style="font-size: small;text-align: center;">
+                <thead style="vertical-align: middle; text-align: center">
+                    <tr>
+                        <th rowspan="3" style="vertical-align: middle">No</th>
+                        <th rowspan="3" style="vertical-align: middle">Capex Item</th>
+                        <th rowspan="3" style="vertical-align: middle">Project</th>
+                        <th rowspan="3" style="vertical-align: middle">Asset Class</th>
+                        <th rowspan="3" style="vertical-align: middle">Priority</th>
+                        <th rowspan="3" style="vertical-align: middle">Reason</th>
+                        <th rowspan="3" style="vertical-align: middle">Remarks</th>
+                        <th colspan="6" style="vertical-align: middle">Capex Capitalization (in million Rp)</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">{{ CP.Year }}</th>
+                        <th colspan="2">{{ CP.Next_Year1 }}</th>
+                        <th colspan="2">{{ CP.Next_Year2 }}</th>
+                    </tr>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in listcapex %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td style="text-align: left; min-width: 200px;">{{ item.CP_Name }}</td>
+                        <td>{{ item.Project }}</td>
+                        <td style="min-width: 100px;">{{ item.Asset_Class }}</td>
+                        <td style="min-width: 100px;text-align: center;">{{ item.Priority }}</td>
+                        <td>{{ item.Reason }}</td>
+                        <td>{{ item.Remarks }}</td>
+                        <td>{{ item.Summary_Current_Year }}</td>
+                        <td>{{ item.After_Current_Year }}</td>
+                        <td>{{ item.Summary_Next_Year1}}</td>
+                        <td>{{ item.After_Next_Year1}}</td>
+                        <td>{{ item.Summary_Next_Year2 }}</td>
+                        <td>{{ item.After_Next_Year2 }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <h6>Expense</h6>
+        <div style="overflow-x:auto;">
+            <table class="table table-bordered" style="font-size: small;">
+                <thead style="vertical-align: middle; text-align: center">
+                    <tr>
+                        <th rowspan="3" style="vertical-align: middle">No</th>
+                        <th rowspan="3" style="vertical-align: middle">Capex Item</th>
+                        <th rowspan="3" style="vertical-align: middle">Project</th>
+                        <th rowspan="3" style="vertical-align: middle">Asset Class</th>
+                        <th rowspan="3" style="vertical-align: middle">Priority</th>
+                        <th rowspan="3" style="vertical-align: middle">Reason</th>
+                        <th rowspan="3" style="vertical-align: middle">Remarks</th>
+                        <th colspan="6" style="vertical-align: middle">Capex Capitalization (in million Rp)</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">{{ CP.Year }}</th>
+                        <th colspan="2">{{ CP.Next_Year1 }}</th>
+                        <th colspan="2">{{ CP.Next_Year2 }}</th>
+                    </tr>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in listexpense %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td style="text-align: left; min-width: 200px;">{{ item.CP_Name }}</td>
+                        <td>{{ item.Project }}</td>
+                        <td style="min-width: 100px;">{{ item.Asset_Class }}</td>
+                        <td style="min-width: 100px;text-align: center;">{{ item.Priority }}</td>
+                        <td>{{ item.Reason }}</td>
+                        <td>{{ item.Remarks }}</td>
+                        <td>{{ item.Summary_Current_Year }}</td>
+                        <td>{{ item.After_Current_Year }}</td>
+                        <td>{{ item.Summary_Next_Year1}}</td>
+                        <td>{{ item.After_Next_Year1}}</td>
+                        <td>{{ item.Summary_Next_Year2 }}</td>
+                        <td>{{ item.After_Next_Year2 }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="row">
+            <table style="margin-left: 16px;">
+                <td>
+                    <h6>Summary Before Filtering</h6>
+                    <table style="width: 100%; margin-bottom: 16px">
+                        <tr>
+                            <td style="width:90px;">Summary of </td>
+                            <td style="width:50px;">{{ CP.Year }}</td>
+                            <td style="width: 10px;">:</td>
+                            <td>{{CP.Sum_Year}}</td>
+                            <td style="width: 50px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Summary of</td>
+                            <td>{{ CP.Next_Year1 }}</td>
+                            <td>:</td>
+                            <td>{{CP.Sum_NextYear1 }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Summary of</td>
+                            <td>{{ CP.Next_Year2 }}</td>
+                            <td>:</td>
+                            <td>{{CP.Sum_NextYear2 }}</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <div>
+                        <h6>Summary of Capex</h6>
+                        <table style="width: 100%; margin-bottom: 16px">
+                            <tr>
+                                <td style="width:90px;">Summary of </td>
+                                <td style="width:50px;">{{ CP.Year }}</td>
+                                <td style="width: 10px;">:</td>
+                                <td>{{CP.Sum_Capex_Year|default_if_none:"0"}}</td>
+                                <td style="width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td>Summary of</td>
+                                <td>{{ CP.Next_Year1 }}</td>
+                                <td>:</td>
+                                <td>{{CP.Sum_Capex_NextYear1|default_if_none:"0" }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Summary of</td>
+                                <td>{{ CP.Next_Year2 }}</td>
+                                <td>:</td>
+                                <td>{{CP.Sum_Capex_NextYear2|default_if_none:"0" }}</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <h6>Summary of Expense</h6>
+                        <table style="width: 100%; margin-bottom: 16px">
+                            <tr>
+                                <td style="width:90px;">Summary of </td>
+                                <td style="width:50px;">{{ CP.Year }}</td>
+                                <td style="width: 10px;">:</td>
+                                <td>{{ CP.Sum_Expense_Year|default_if_none:"0" }}</td>
+                                <td style="width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td>Summary of</td>
+                                <td>{{ CP.Next_Year1 }}</td>
+                                <td>:</td>
+                                <td>{{ CP.Sum_Expense_NextYear1|default_if_none:"0" }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Summary of</td>
+                                <td>{{ CP.Next_Year2 }}</td>
+                                <td>:</td>
+                                <td>{{ CP.Sum_Expense_NextYear2|default_if_none:"0" }}</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </table>
+        </div>
+        <br>
+        <h6>Approval</h6>
+        {% if CP.Dept_Head == null %}
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse; width: 100%;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 270px;text-align: center;vertical-align: bottom;">Prepared By</td>
+                    <td colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{CP.SPV_Submit}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DIV">
+                        {{CP.Div_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="PRDIR">
+                        {{CP.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{CP.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{CP.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Div_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.PresDirektur}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Division Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">President Director</td>
+                </tr>
+            </tbody>
+        </table>
+        {% elif CP.Div_Head == null %}
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse; width: 100%;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 270px;text-align: center;vertical-align: bottom;">Prepared By</td>
+                    <td colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{CP.SPV_Submit}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{CP.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="PRDIR">
+                        {{CP.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{CP.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{CP.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Dept_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.PresDirektur}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Department Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">President Director</td>
+                </tr>
+            </tbody>
+        </table>
+        {% else %}
+        <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse; width: 100%;">
+            <tbody>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 270px;text-align: center;vertical-align: bottom;">Prepared By</td>
+                    <td colspan="3" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                </tr>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{CP.SPV_Submit}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{CP.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DIV">
+                        {{CP.Div_Head_Approval_Status|default_if_none:''}}
+                        {{CP.Div_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="PRDIR">
+                        {{CP.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{CP.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{CP.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Dept_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.Div_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{CP.PresDirektur}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Department Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Division Head</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">President Director</td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+        <br>
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,237 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+      
+<center><h5>{{Judul}} Monitoring</h5></center>
+<div class="row" >
+   
+        <h6 style="margin-left: 12px;margin-right: 8px;margin-top: 10px;">Show List Purchase Request by</h6>
+
+        <select name="listtype" id="id_listtype" class="form-control" style="width:fit-content;" onchange="ChangeList(this)">
+            <option value="Header"><b>PR Header</b></option>
+            <option value="Item"><b>PR Item</b></option>
+        </select>
+
+</div>
+ 
+<hr>
+<div id="prhead">
+
+<form method="POST">
+    {% csrf_token %}
+
+<table class="table table-bordered" id ="table" class="display">
+    <thead style ="text-align:center;font-size:small;background-color: lightcyan;" >
+    <tr>
+        <th>No</th>
+        <!-- <th>Company</th>
+        <th>Bussiness Area</th> -->
+        <th>PP Number</th>
+        <th>Jenis PP</th>
+        <th>Date Created</th>
+        <th>User Name</th>
+        <th>Dept Head Approval</th>
+        <th>Div Head Approval</th>
+        <th>Finance Approval</th>
+        <th>Pres Dir Approval</th>
+        <th>PR Number</th>
+        <th>Purchasing Approval</th>
+        <th>Status</th>
+        <th>PDF</th>
+        <th>Purchasing Status</th>
+    </tr>
+    </thead>
+
+
+    <tbody style ="text-align:center;font-size:small;">
+        {% for header in PRheader %}
+   
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <!-- <td>{{header.Company}}</td>
+            <td>{{header.Bussiness_Area}}</td> -->
+            <td><a href="/PR/ListPP/{{header.PP_Number}}">{{header.PP_Number}}</a></td>
+            <td>{{header.Jenis_PP}}</td>
+            <td>{{header.Date_Created}}</td>
+            <td>{{header.User_Name}}</td>
+            {% if header.Dept_Head_Email is not None %}
+            <td>{{header.Dept_Head_Approval_Status|default_if_none:''}} {{header.Dept_Head_Approval_Date|default_if_none:''}}</td>
+            {% else %}
+            <td>N/A</td>
+            {% endif %}
+            {% if header.Div_Head_Email is not None %}
+            <td>{{header.Div_Head_Approval_Status|default_if_none:''}} {{header.Div_Head_Approval_Date|default_if_none:''}}</td>
+            {% else %}
+            <td>N/A</td>
+            {% endif %}
+            <td>{{header.Finance_Approval_Status|default_if_none:''}} {{header.Finance_Approval_Date|default_if_none:''}}</td>
+            <td>{{header.Direktur_Approval_Status|default_if_none:''}} {{header.Direktur_Approval_Date|default_if_none:''}}</td>
+            <td><div>{{header.PR_Number|default_if_none:''}}</div><div>{{header.PR_Date|default_if_none:''}}</div></td>
+        
+            <td>{{header.Purchase_Approval_Status|default_if_none:''}} {{header.Purchase_Approval_Date|default_if_none:''}}</td>
+            <td>{{header.PR_Status|default_if_none:''}}</td>
+            <td>
+                {% if header.PR_Status == "Finished" %}
+
+                <a href="/Media/Document/{{header.PP_Number}}-{{header.PR_Number}}.pdf">Download</a>
+                {% endif %}
+            </td>
+            <td>{{header.Purchasing_Status|default_if_none:''}}
+                {%if user.username in "admin , PROCUREMENT"%}
+                <input type="text" id="PS {{header.PP_Number}}" name="PS {{header.PP_Number}}">
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+{%if user.username in "admin , PROCUREMENT"%}
+<button type="submit"  class="btn btn-success" style="width: 200px;float: right;" name="save">Save status update</button>
+<a class="btn btn-info" style="width: 200px;float: right;margin-right: 20px;" href="/PR/ItemPRExport/"> Download Item as .xls</a>
+<a class="btn btn-info" style="width: 200px;float: right;margin-right: 20px;" href="/PR/ListPRExport/"> Download ListPR as .xls</a>
+{% endif %}
+</form>
+<br>
+</div>
+<div id ="itemhead">
+
+<table class="display table table-bordered"  id ="tableitem" style=" font-size: small;text-align: center;">
+    <thead  style ="text-align:center;font-size:small;background-color:rgb(219, 250, 210);">
+        <tr >
+            <th  >NO</th>
+            <th>PP Number</th>
+            <th  >A* (Exp)</th>
+            <th  >I* (Jenis)</th>
+            <th  >Kode Barang</th>
+            <th  >Nama Barang / Deskripsi Service</th>
+            <th >Jumlah Order</th>
+            <th >UoM</th>
+            <th >Harga Satuan</th>
+            <th >Harga Total</th>
+            <th  >Tanggal Kedatangan</th>
+            <th >Cost Center</th>
+            <th >Asset No./GL Account</th>
+            <th  >Catatan</th>
+
+        </tr>
+    </thead>
+    <tbody >
+        {% for item in PRitem %}
+        <tr >
+            <td >{{forloop.counter}}</td>
+            <td><a href="/PR/ListPP/{{item.PP_Number}}">{{item.PP_Number}}</a></td>
+            <td >{{item.Expense|default_if_none:''}}</td>
+            <td >{{item.Jenis_Barang|default_if_none:''}}</td>
+            <td >{{item.Kode_Barang|default_if_none:''}}</td>
+            <td >{{item.Nama_Barang}}
+                {{item.Detail_Spec|default_if_none:''}}</td>
+            <td >{{item.Jumlah_Order}}</td>
+            <td >{{item.Unit_Order}}</td>
+            <td >{{item.Harga_Satuan|default_if_none:''}}
+                {{item.Currency|default_if_none:''}}</td>
+            <td >{{item.Harga_Total|default_if_none:''}}
+                {{item.Currency|default_if_none:''}}</td>
+            <td >{{item.PIC}}</td>
+            <td >{{item.Cost_Center|default_if_none:''}}</td>
+            <td >{{item.Asset_No_GL_Account|default_if_none:''}}</td>
+            <td >{{item.Note}}</td>
+
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+</div>
+
+<style>
+    thead input {
+        width: 100%;
+    }
+    thead {
+        width: auto;
+    }
+    table {
+        max-width: 100%;
+    }
+</style>
+
+<script>
+
+    $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+
+    $('#table thead tr').clone(true).appendTo( '#table thead' );
+    $('#table thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+
+
+    } );
+ 
+    var table = $('#table').DataTable( {
+        orderCellsTop: true,
+        fixedHeader: true
+    } );
+
+
+    $('#tableitem thead tr').clone(true).appendTo( '#tableitem thead' );
+    $('#tableitem thead tr:eq(1) th').each( function (i) {
+        var titleitem = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+titleitem+'" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( tableitem.column(i).search() !== this.value ) {
+                tableitem
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+
+
+    } );
+ 
+    var tableitem = $('#tableitem').DataTable( {
+        orderCellsTop: true,
+        fixedHeader: true
+    } );
+   
+   
+    $("#prhead").show();
+    $("#itemhead").hide();
+  
+    });
+
+    function ChangeList(select){
+        console.log(select.value);
+        if (select.value == "Header"){
+            $("#prhead").show();
+           $("#itemhead").hide();
+        }
+        else if (select.value == "Item"){
+            $("#prhead").hide();
+             $("#itemhead").show();
+        };
+
+    };
+
+</script>
+<br>
+<br>
+</div>
+</div>
+{% endblock %}
+

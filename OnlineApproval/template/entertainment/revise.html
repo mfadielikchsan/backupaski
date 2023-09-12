@@ -1,0 +1,236 @@
+{%extends 'base.html'%}
+{%load static%}
+{% load widget_tweaks %}
+{%block content%}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% with 'Attachment1, Attachment2, Attachment3, Attachment4, Attachment5, Attachment6, BE_Number' as list%}
+            {% for form in BEForm %}
+                {% if form.label not in list %}
+                {{form|attr:"hidden"}}
+                {% endif %}
+            {% endfor %}
+            {% endwith %} 
+        <center>
+            <h5>{{Judul}}</h5>
+            <h5>Tahun Pajak : {{BE.Tahun_Pajak}}</h5>
+        </center>
+        <table style="width: 100%; font-size: small;">
+            <tr>
+                <td style="width: 10%;">New Doc Number</td>
+                <td>:</td>
+                <td>{{BE.BE_Number}}</td>
+                {{BEForm.BE_Number|attr:"hidden"|add_class:"form-control"}}
+            </tr>
+        </table>
+        <br>
+        <h6>Entertainment Items</h6>
+        <div style="overflow-x:auto;">
+            <table name="table " class="table table-bordered" style="text-align: center;font-size:small;">
+                <tr>
+                    <th rowspan="2" style="vertical-align: middle;">No</th>
+                    <th colspan="4" style="vertical-align: middle;">Pemberian Entertainment dan Sejenisnya</th>
+                    <th colspan="5" style="vertical-align: middle;">Relasi Usaha yang diberikan Entertainment dan Sejenisnya</th>
+                    <th rowspan="2" style="vertical-align: middle;">No. Document SAP <br>(diisi oleh Fin. Dept)</th>
+                </tr>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Tempat</th>
+                    <th>Alamat</th>
+                    <th>Jenis</th>
+                    <th style="min-width: 100px;">Jumlah (Rp)</th>
+                    <th>Nama</th>
+                    <th>Posisi</th>
+                    <th>Nama Perusahaan</th>
+                    <th>Jenis Usaha</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="min-width: 100px;">{{BEForm.Date|add_class:"form-control datepicker"}}</td>
+                    <td>{{BEForm.Place|add_class:"form-control"}}</td>
+                    <td>{{BEForm.Address|add_class:"form-control"}}</td>
+                    <td>{{BEForm.Type|add_class:"form-control"}}</td>
+                    <td>{{BEForm.Jumlah|add_class:"form-control"}}</td>
+                    <td>
+                        <div style="text-align: left; font-weight: bold;">External</div>
+                        {{BEForm.Name_External|add_class:"form-control"}}
+                        <div style="text-align: left; font-weight: bold;" >Internal</div>
+                        {{BEForm.Name_Internal|add_class:"form-control"}}
+                    </td>
+                    <td>
+                        <div style="text-align: left; font-weight: bold;">External</div>
+                        {{BEForm.Posisi_External|add_class:"form-control"}}
+                        <div style="text-align: left; font-weight: bold;" >Internal</div>
+                        {{BEForm.Posisi_Internal|add_class:"form-control"}}
+                    </td>
+                    <td>
+                        <div style="text-align: left; font-weight: bold;">External</div>
+                        {{BEForm.Company_Name_External|add_class:"form-control"}}
+                        <div style="text-align: left; font-weight: bold;" >Internal</div>
+                        {{BEForm.Company_Name_Internal|add_class:"form-control"}}
+                    </td>
+                    <td>{{BEForm.Company_Type|add_class:"form-control"}}</td>
+                    <td>{{BEForm.SAP_Number|add_class:"form-control"}}</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <h6>Attachment</h6>
+            <table>
+                {% if BE.Attachment1  %}
+                <tr>
+                    <td style="width: 140px;">Attachment 1</td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment1}}">{{BE.Attachment1|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif BE.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment 1</td>
+                    <td>: {{BEForm.Attachment1}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+
+                {% if BE.Attachment2  %}
+                <tr>
+                    <td style="width: 140px;">Attachment 2</td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment2}}">{{BE.Attachment2|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif BE.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment 2 </td>
+                    <td>: {{BEForm.Attachment2}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+
+                {% if BE.Attachment3  %}
+                <tr>
+                    <td style="width: 140px;">Attachment 2</td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment3}}">{{BE.Attachment3|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif BE.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment 3 </td>
+                    <td>: {{BEForm.Attachment3}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+
+                {% if BE.Attachment4  %}
+                <tr>
+                    <td style="width: 140px;">Attachment 4</td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment4}}">{{BE.Attachment4|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif BE.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment 4 </td>
+                    <td>: {{BEForm.Attachment4}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+                {% if BE.Attachment5  %}
+                <tr>
+                    <td style="width: 140px;">Attachment 5</td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment5}}">{{BE.Attachment5|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif BE.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment 5 </td>
+                    <td>: {{BEForm.Attachment5}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+                {% if BE.Attachment6  %}
+                <tr>
+                    <td style="width: 140px;">Attachment 6</td>
+                    <td>: <a class="btn btn-outline-success"
+                            href="/Media/{{BE.Attachment6}}">{{BE.Attachment6|cut:"Uploads/"}}</a></td>
+                </tr>
+                {% elif BE.Status != "Finished" %}
+                <tr>
+                    <td style="width: 140px;">Attachment 6 </td>
+                    <td>: {{BEForm.Attachment6}}</td>
+                    <td><button style="margin-left: 10px;width: 100px;" type="submit" name="upload">Upload</button></td>
+                </tr>
+                {% endif %}
+            </table>
+        <br>
+
+        <h6>Approval</h6>
+        <table style="width: 80%; border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Created By</th>
+                    <th colspan="2" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height:40px;">
+                    <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="SPV">Created {{BE.SPV_Submit}}</td>
+                    <td style="padding:20px;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" id="DEPT">
+                        {{BE.Dept_Head_Approval_Status|default_if_none:''}}
+                        {{BE.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+                    <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic; border-right: 1px solid black;color: green;" id="PRDIR">
+                        {{BE.PresDirektur_Approval_Status|default_if_none:''}}
+                        {{BE.PresDirektur_Approval_Date |date:'r'|default_if_none:''}}</td>
+                </tr>
+                <tr style="height:20px;">
+                    <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">{{BE.SPV}}</td>
+                    <td style="text-align: center;vertical-align: bottom;">{{BE.Dept_Head}}</td>
+                    <td style="text-align: center;vertical-align: bottom; border-right: 1px solid black;">{{BE.PresDirektur}}</td>
+                </tr>
+                <tr style="height:10px;">
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Supervisor</td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Dept Head </td>
+                    <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">President Director</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <button style="float: right;" class="btn btn-warning" type="submit" name="Finish">Finish Revision</button>
+    </form>
+    </div>
+</div>
+
+<style>
+    #id_Place, #id_Address, #id_Type, #id_Company_Type, #id_SAP_Number{
+        height: 545px !important;
+    }
+</style>
+<script>
+    var rupiah = document.getElementById("id_Jumlah");
+    rupiah.addEventListener("keyup", function(e) {
+        rupiah.value = formatRupiah(this.value);
+    });
+
+    function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, "").toString(),
+            split = number_string.split(","),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            separator = sisa ? "." : "";
+            rupiah += separator + ribuan.join(".");
+        }
+
+        rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+        return prefix == undefined ? rupiah : rupiah ? rupiah : "";
+    }
+
+    $(document).ready(function () {
+        $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+
+        $('.datepicker').datepicker({ format: 'dd-mm-yyyy', autoclose: true, toggleActive: true, todayHighlight: true, });
+        var sel = document.getElementById('select');
+    });
+</script>
+{%endblock%}

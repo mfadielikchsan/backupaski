@@ -1,0 +1,135 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h6>{{Judul}}</h6>
+        </center>
+        <table id="table" class="table table-bordered" style="text-align: center;" class="display">
+            <thead style ="text-align:center;font-size:small;background-color: lightcyan;" >
+            <tr>
+                <th>No</th>
+                <th>PP Number</th>
+                <th>MRP Month</th>
+                <th>PP Type</th>
+                <th>Date Created</th>
+                <th>User Name</th>
+                <th>Supervisor</th>
+                <th>Dept Head</th>
+                <th>Div Head</th>
+                <th>Direktur</th>
+                <th>Purchase</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            {% for PR in ListPR %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>
+                    <div><a href="{{PR.PP_Number}}/">{{PR.PP_Number}}</a></div>
+                    
+                </td>
+                <td>{{PR.MRP_Month}}</td>
+                <td>{{PR.PP_Type}}</td>
+                <td>{{PR.Submit}}</td>
+                <td>{{PR.User_Name}}</td>
+                <td>
+                    <div>{{PR.SPV_Approval_Status|default_if_none:""}}</div>
+                    <div>{{PR.SPV_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PR.SPV_Name|default_if_none:"N/A"}}</div>
+                </td>
+                <td>
+                    <div>{{PR.Dept_Head_Approval_Status|default_if_none:""}}</div>
+                    <div>{{PR.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PR.Dept_Head_Name|default_if_none:"N/A"}}</div>
+                </td>
+                <td>
+                    <div>{{PR.Div_Head_Approval_Status|default_if_none:""}}</div>
+                    <div>{{PR.Div_Head_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PR.Div_Head_Name|default_if_none:"N/A"}}</div>
+                </td>
+                <td>
+                    <div>{{PR.Direktur_Approval_Status|default_if_none:""}}</div>
+                    <div>{{PR.Direktur_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PR.Direktur_Name|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{PR.Purchase_Approval_Status|default_if_none:""}}</div>
+                    <div>{{PR.Purchase_Approval_Date|default_if_none:""}}</div>
+                    <div>{{PR.Purchase_Name|default_if_none:""}}</div>
+                </td>
+     
+                <td><div>{{PR.PR_Status}}</div>
+                    <div>{% if PR.PR_Status == "Approved" %}
+                        <div><a href="/Media/Document/{{PR.PP_Number}}.pdf">Download pdf</a></div>
+                        <div><a href="/Media/{{PR.MRP_Item}}">Download xls</a></div>
+                        {% elif PR.PR_Status == "NeedRevise"%}
+                        <div>{{PR.Approval_Message}}</div>
+                        <a href="/PR/ReviseMRP/{{PR.PP_Number}}" class="btn btn-warning">Revise</a>
+                        {% elif PR.PR_Status == "Rejected"%}
+                        <div>{{PR.Approval_Message}}</div>
+                        {% endif %}</div>
+                </td>
+          
+            </tr>
+            {% endfor %}
+
+        </table>
+        <style>
+            thead input {
+                width: 100%;
+            }
+
+            thead {
+                width: auto;
+            }
+
+            table {
+                width: 100%;
+            }
+        </style>
+
+        <script>
+
+            $(document).ready(function () {
+                // Setup - add a text input to each footer cell
+
+                $('#table thead tr').clone(true).appendTo('#table thead');
+                $('#table thead tr:eq(1) th').each(function (i) {
+                    var title = $(this).text();
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+                    $('input', this).on('keyup change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+
+                });
+
+                var table = $('#table').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true
+                });
+
+
+            });
+
+
+
+
+
+
+
+        </script>
+
+    </div>
+</div>
+{% endblock %}

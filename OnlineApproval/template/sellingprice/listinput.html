@@ -1,0 +1,204 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <div class="row" >
+            <h6 style="margin-left: 12px;margin-right: 8px;margin-top: 10px;">Show List SP Input by</h6>
+            <select name="listtype" id="id_listtype" class="form-control" style="width:fit-content;" onchange="ChangeList(this)">
+                <option value="Header"><b>SP Input SAP</b></option>
+                <option value="Item"><b>SP Done Input SAP</b></option>
+            </select>
+        </div>
+        <hr>
+        <div id="sphead">
+
+        <form method="POST">
+            {% csrf_token %}
+        <table id="table" class="table table-bordered" style="text-align: center;" class="display">
+            <thead style ="text-align:center;font-size:small;background-color: rgb(252, 255, 224);" >
+            <tr>
+                <th style="vertical-align: middle;">No</th>
+                <th style="vertical-align: middle;">SP Number</th>
+                <th style="vertical-align: middle;">Product Status</th>
+                <th style="vertical-align: middle;">Date Created</th>
+                <th style="vertical-align: middle;">Supervisor Name</th>
+                <th style="vertical-align: middle;">Dept Head Approval</th>
+                <th style="vertical-align: middle;">Div Head Approval</th>
+                <th style="vertical-align: middle;">President Director Approval</th>
+                <th style="vertical-align: middle;">Status</th>
+            </tr>
+            </thead>
+            {% for SP in listinput %}
+            <tr style="font-size:small;">
+                <td>{{forloop.counter}}</td>
+                <td>
+                    <div><a href="{{SP.SP_Number}}/">{{SP.SP_Number}}</a></div>
+                </td>
+                <td>{{SP.Product_Status}}</td>
+                <td>{{SP.Submit_Date}}</td>
+                <td>{{SP.SPV}}</td>
+                <td>
+                    {%if SP.Dept_Head == None%}
+                    <div>-</div>
+                    {% else %}
+                    <div>{{SP.Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{SP.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                    <div>{{SP.Dept_Head|default_if_none:""}}</div>
+                    {% endif %}
+                </td>
+                <td>
+                    <div>{{SP.Div_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{SP.Div_Head_Approval_Date|default_if_none:""}}</div>
+                    <div>{{SP.Div_Head|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{SP.PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{SP.PresDirektur_Approval_Date|default_if_none:""}}</div>
+                    <div>{{SP.PresDirektur|default_if_none:""}}</div>
+                </td>
+                <td><div>
+                    <div>Need Finance Checking</div>
+                    <br>
+                    <a href="/SP/ListInput/{{SP.SP_Number}}" class="btn btn-warning">Input</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </form>
+        </div>
+
+        <div id ="itemhead">
+        <table id="table1" class="table table-bordered" style="text-align: center;" class="display">
+            <thead style ="text-align:center;font-size:small;background-color: rgb(251, 255, 224);" >
+            <tr>
+                <th style="vertical-align: middle;">No</th>
+                <th style="vertical-align: middle;">SP Number</th>
+                <th style="vertical-align: middle;">Product Status</th>
+                <th style="vertical-align: middle;">Date Created</th>
+                <th style="vertical-align: middle;">Supervisor Name</th>
+                <th style="vertical-align: middle;">Dept Head Approval</th>
+                <th style="vertical-align: middle;">Div Head Approval</th>
+                <th style="vertical-align: middle;">President Director Approval</th>
+                <th style="vertical-align: middle;">Finance Dept Approval</th>
+                <th style="vertical-align: middle;">Status</th>
+            </tr>
+            </thead>
+            {% for SP in listdone %}
+            <tr style="font-size:small;">
+                <td>{{forloop.counter}}</td>
+                <td>
+                    <div><a href="/SP/ListSP/{{SP.SP_Number}}/">{{SP.SP_Number}}</a></div>
+                </td>
+                <td>{{SP.Product_Status}}</td>
+                <td>{{SP.Submit_Date}}</td>
+                <td>{{SP.SPV}}</td>
+                <td>
+                    <div>{{SP.Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{SP.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                    <div>{{SP.Dept_Head|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{SP.Div_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{SP.Div_Head_Approval_Date|default_if_none:""}}</div>
+                    <div>{{SP.Div_Head|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{SP.PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{SP.PresDirektur_Approval_Date|default_if_none:""}}</div>
+                    <div>{{SP.PresDirektur|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{SP.Dept_Acc_Confirm_Status|default_if_none:"Waiting Confirmation"}}</div>
+                    <div>{{SP.Dept_Acc_Confirm_Date|default_if_none:""}}</div>
+                    <div>{{SP.Dept_Acc|default_if_none:""}}</div>
+                </td>
+                <td><div>
+                    <div>Done Checking</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+        <style>
+            thead input {
+                width: 100%;
+            }
+
+            thead {
+                width: auto;
+            }
+
+            table {
+                width: 100%;
+            }
+        </style>
+
+        <script>
+        $(document).ready(function () {
+            $('#table thead tr').clone(true).appendTo( '#table thead' );
+            $('#table thead tr:eq(1) th').each( function (i) {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        
+                $( 'input', this ).on( 'keyup change', function () {
+                    if ( table.column(i).search() !== this.value ) {
+                        table
+                            .column(i)
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+
+            $('#table1 thead tr').clone(true).appendTo( '#table1 thead' );
+            $('#table1 thead tr:eq(1) th').each( function (i) {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        
+                $( 'input', this ).on( 'keyup change', function () {
+                    if ( table.column(i).search() !== this.value ) {
+                        table
+                            .column(i)
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        
+            var table = $('#table').DataTable( {
+                orderCellsTop: true,
+                fixedHeader: true
+            } );
+
+            var table = $('#table1').DataTable( {
+                orderCellsTop: true,
+                fixedHeader: true
+            } );
+        
+        
+            $("#sphead").show();
+            $("#itemhead").hide();
+
+            });
+
+            function ChangeList(select){
+                console.log(select.value);
+                if (select.value == "Header"){
+                    $("#sphead").show();
+                $("#itemhead").hide();
+                }
+                else if (select.value == "Item"){
+                    $("#sphead").hide();
+                    $("#itemhead").show();
+                };
+            };
+        </script>
+    </div>
+</div>
+{% endblock %}

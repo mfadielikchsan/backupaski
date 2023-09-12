@@ -1,0 +1,128 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h6>{{Judul}}</h6>
+        </center>
+
+
+
+        <table style="width: 50%;">
+            <tr>
+                <td>BS Number</td>
+                <td>:</td>
+                <td>{{BS.BS_Number}}</td>
+            </tr>
+            <tr>
+                <td>Paid By</td>
+                <td>:</td>
+                <td>{{BS.PaidBy}}</td>
+            </tr>
+            {% if BS.Bank is not None %}
+            <tr>
+                <td>Bank</td>
+                <td>:</td>
+                <td>{{BS.Bank}}</td>
+            </tr>
+            <tr>
+                <td>Nomor Rekening</td>
+                <td>:</td>
+                {% if user.username in "admin , ADMINFINANCE" %}
+                <td>{{BS.Nomor_Rekening}}</td>
+                {% else %}
+                
+                <td>{{BS.Nomor_Rekening|slice:":-5" }}XXXXX</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Nama Pemilik</td>
+                <td>:</td>
+                <td>{{BS.Nama_Rekening}}</td>
+            </tr>
+            {% endif %}
+
+
+        </table>
+        <br>
+        <table class="table table-bordered" style="text-align: center;">
+            <tr>
+                <th>Date Created</th>
+                <th>Temporary Bon Note</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>
+                    <div style="min-height: 100px;">{{BS.Date_Created}}</div>
+                </td>
+                <td style="text-align: left;">{{BS.Note|linebreaks}}</td>
+                <td> Rp. {{BS.Jumlah}},-</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <h6 style="text-align: left;">Terbilang</h6>
+                    <div style="text-align: left;">{{BS.Terbilang}}</div>
+                </td>
+            </tr>
+
+        </table>
+
+        <h6 style="text-align: center;">Harus dipertanggung jawabkan paling lambat 2 (dua) hari</h6>
+        <br>
+        <h6>Approval</h6>
+        <table class="table table-bordered" style="text-align: center;width: 75%;">
+            <tr>
+                <td style="width: 25%;">Received by</td>
+                <td style="width: 25%;">Approved by</td>
+                <td style="width: 25%;">Approved by</td>
+                <td style="width: 25%;">Created by</td>
+            </tr>
+            <tr style="height: 80px;">
+                <td>
+                    <div>{{BS.Received_Date|default_if_none:""}}</div>
+                </td>
+               
+                <td>
+                    <div>{{BS.Finance_Approval|default_if_none:""}}</div>
+                    <div>{{BS.Finance_Approval_Date|default_if_none:"Waiting Approval"}}</div>
+                </td>
+                <td>
+                    <div>{{BS.DeptHead_Approval|default_if_none:""}}</div>
+                    <div>{{BS.DeptHead_Approval_Date|default_if_none:"Waiting Approval"}}</div>
+                </td>
+                <td>Created <div>{{BS.Date_Created}}</div>
+                </td>
+            </tr>
+            <tr>
+                {% if BS.Receiver_Name is None %}
+                <td>
+                    {%if user.username in "admin , ADMINFINANCE" and BS.BS_Status == 'Approved'%}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                    <table class="table-borderless" >
+                        <td><input type="" name="ReceiveBy" class="form-control" ></td>
+                        <td><button class="btn btn-success" type="submit">Save</button></td>
+
+                    </table>
+                        
+            
+                    
+                    
+                    </form>
+                    {% endif %}
+                </td>
+                {% else %}
+                <td>{{BS.Receiver_Name|default_if_none:""}}</td>
+                {% endif %}
+                <td>{{BS.Finance}}</td>
+                <td>{{BS.DeptHead}}</td>
+                <td>{{BS.User_Name}}</td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

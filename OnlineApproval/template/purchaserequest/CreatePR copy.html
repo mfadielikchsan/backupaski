@@ -1,0 +1,49 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<center><h1>Form Create Purchase Request</h1></center>
+
+<br>
+<br>
+
+<form method="POST">
+{% csrf_token %}
+{% for header in PRheader %}
+<div class="form-group">
+    <div class="row">
+        <div class="col-sm-2">
+            {{header.label}}
+        </div>
+        <div class="col-sm-6">
+           
+            {{header|add_class:"form-control"}}
+           
+        </div>
+    </div>
+</div>
+{%endfor%}
+<div class="row">
+<button type="submit" class="btn btn-success" style="margin-right: 20px;margin-left: auto;width: 200px;">Submit</button>
+</div>
+</form>
+<form method="POST">
+{% csrf_token %}
+{% for item in PRitem %}
+<div class="form-group">
+    <div class="row">
+        <div class="col-sm-2">
+            {{item.label}}
+        </div>
+        <div class="col-sm-6">
+           
+            {{item|add_class:"form-control"}}
+           
+        </div>
+    </div>
+</div>
+{%endfor%}
+<button type="submit" class="btn btn-success" >Add</button>
+</form>
+{% endblock %}
+

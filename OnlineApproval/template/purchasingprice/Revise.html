@@ -1,0 +1,359 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <br>
+        <h6 style="margin-left: 1px">Purchasing Price Upload</h6>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token%}
+            {{PPForm.PP_Number|add_class:"form-control"|attr:"readonly"|attr:"hidden"}}
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 10%">Upload New PP</td>
+                    <td style="width: 1%">:</td>
+                    <td style="width: 40%">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile02" name="PP_Item"
+                                    required>
+                                <label class="custom-file-label" for="inputGroupFile02"
+                                    aria-describedby="inputGroupFileAddon02">Choose file</label>
+                            </div>
+
+                        </div>
+                    </td>
+                    <td><button class="btn btn-warning" style="width: 150px;margin-left: 10px;display: block"
+                            type="submit" name="upload">Upload</button></td>
+                    <td><button class="btn btn-dark" style="margin-left: auto;margin-right: 0px;display: block;"><a
+                                href="/Media/Uploads/{{OldPP_Number}}.xlsx" style="color: white;">Download {{OldPP_Number}}</a></button></td>
+                </tr>
+                <tr>
+                    <td>Revise Request</td>
+                    <td>:</td>
+                    <td colspan="4">{{Revise_Request}}</td>
+                </tr>
+            </table>
+        </form>
+        <hr>
+
+        <form action="" id="header" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <h6>Purchasing Price Data</h6>
+            
+            <table style="width: 50%;">
+                <tbody>
+                    <tr>
+                        <td style="width: 5%;white-space: nowrap;padding-right: 16px;">Doc Number</td>
+                        <td>:</td>
+                        <td>{{PPForm.PP_Number|add_class:"form-control"|attr:"readonly"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Part Type</td>
+                        <td>:</td>
+                        <td>{{PPForm.Type|add_class:"form-control"|attr:"onchange=ChangeType(this)"}}</td>
+                    </tr>
+                    <tr>
+                        <td>Revision Note</td>
+                        <td>:</td>
+                        <td>{{PPForm.Revise_Note|add_class:"form-control"|attr:"required"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+
+            
+            <table name="table " class="table table-bordered" style="text-align: center;font-size: small;">
+                <tr>
+                    <th>Vendor Code</th>
+                    <th>Vendor Name</th>
+                    <th>Material No</th>
+                    <th>Material Description</th>
+                    <th>Qty</th>
+                    <th>UoM</th>
+                    <th>Old Price</th>
+                    <th>Old Delivery </th>
+                    <th>New Price</th>
+                    <th>New Delivery </th>
+                    <th>Ratio Variance </th>
+                </tr>
+                {% for Item in PPItem%}
+                <tr>
+                    <td>{{Item.Vend_Code}}</td>
+                    <td>{{Item.Vend_Name}}</td>
+                    <td>{{Item.Material}}</td>
+                    <td>{{Item.Material_Desc}}</td>
+                    <td>{{Item.Qty}}</td>
+                    <td>{{Item.UoM}}</td>
+                    <td>{{Item.Currency}} {{Item.Old_Price}}</td>
+                    <td>{{Item.Old_Delivery}}</td>
+                    <td>{{Item.Currency}} {{Item.New_Price}}</td>
+                    <td>{{Item.New_Delivery}}</td>
+                    <td>{{Item.Ratio}}</td>
+                </tr>
+                {%endfor%}
+
+
+            </table>
+            <h6>Note :</h6>
+            <div id = "Note">{{Note|safe}}</div>
+            <div class="row">
+                
+                {{PPForm.Note|add_class:"form-control"|attr:"hidden"}}
+            </div>
+            <br>
+
+            <table class="table table-bordered" style="text-align: center;font-size: small;">
+                <thead>
+                    <tr>
+                        <th style="width: 12,5%;">Created By</th>
+                        <th style="width: 12,5%;">Checked By</th>
+                        <th style="width: 12,5%;">Checked By</th>
+                        <th style="width: 12,5%;">Approved By</th>
+                        <th style="width: 12,5%;">Approved By</th>
+                        <th style="width: 12,5%;">Approved By</th>
+                        <th style="width: 12,5%;">Input By</th>
+                        <th style="width: 12,5%;">Confirm By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="height: 120px;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>{{PPForm.Admin|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{PPForm.SPV|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                        <td>{{PPForm.Dept_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{PPForm.Mkt_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{PPForm.Div_Head|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{PPForm.PresDirektur|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{PPForm.Fin|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                        <td>{{PPForm.Dept_Fin|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}
+                        </td>
+                    </tr>
+                    {{PPForm.Submit|attr:"hidden"}}
+                    {{PPForm.Admin_Email|attr:"hidden"}}
+                    {{PPForm.SPV_Email|attr:"hidden"}}
+                    {{PPForm.Dept_Head_Email|attr:"hidden"}}
+                    {{PPForm.Mkt_Head_Email|attr:"hidden"}}
+                    {{PPForm.Div_Head_Email|attr:"hidden"}}
+                    {{PPForm.PresDirektur_Email|attr:"hidden"}}
+                    {{SPForm.Fin_Email|attr:"hidden"}}
+                    {{SPForm.Dept_Fin_Email|attr:"hidden"}}
+                    {{PPForm.Status|attr:"hidden"}}
+                    <tr>
+                        <td>Purchasing Admin</td>
+                        <td>Purchasing SPV</td>
+                        <td>Purchasing Dept Head </td>
+                        <td>Marketing Dept Head</td>
+                        <td>Administration Div Head</td>
+                        <td>Presiden Director</td>
+                        <td>Finance Admin</td>
+                        <td>Finance Dept Head</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="height: 10px;"><br></div>
+            <table style="width: 50%;">
+                <tbody>
+                    <tr>
+                        <td style="width:150px;">Attachment1</td>
+                        <td>:</td>
+                        <td>{{PPForm.Attachment1|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px;">Attachment2</td>
+                        <td>:</td>
+                        <td>{{PPForm.Attachment2|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px;">Attachment3</td>
+                        <td>:</td>
+                        <td>{{PPForm.Attachment3|add_class:"form-control"}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px;">Attachment4</td>
+                        <td>:</td>
+                        <td>{{PPForm.Attachment4|add_class:"form-control"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+            <h6>Vendor Confirmation</h6>
+            <table width ="100%">
+                <tr>
+                    <td width = "5%">No</td>  
+                    <td width = "2%">:</td>
+                    <td width = "43%">{{PP_Number}}</td>
+                    <td width = "15%"></td>
+                    <td width = "15%"></td>
+                    <td width = "15%"></td>
+                </tr>
+                <tr>
+                    <td>Hal</td>
+                    <td>:</td>
+                    <td>Confirmation For Part / Material Price Change</td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td>Messrs</td>
+                </tr>
+                <tr>
+                    <td colspan="3">{{PPForm.Vendor|add_class:"form-control"|attr:"readonly"}}</td>
+                </tr>
+                <tr>
+                    <td>Att</td>
+                    <td></td>
+                    <td>{{PPForm.Attn1|add_class:"form-control"|attr:"required"}}</td>
+                </tr>
+                <tr>
+                    <td>Att</td>
+                    <td></td>
+                    <td>{{PPForm.Attn2|add_class:"form-control"}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td></td>
+                    <td>{{PPForm.Vendor_Email|add_class:"form-control"}}</td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td colspan="6">
+                        <div>Dear Sir / Madam,</div>
+                        <div style="display: flex; ">Regarding quotation on {{PPForm.QuotDate|add_class:"form-control"|attr:"style:width:200px;margin-top:-8px;"|attr:"required"}}, herewith we confirm you for Part / Material as below:</div>
+                    </td>
+                </tr>
+                <tr><td></td></tr>
+                <tr>
+                    <td colspan="6">
+                        <style>
+                            #Item tr td{
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                                padding-left: 8px;
+                                padding-right: 8px;
+                            }
+                        </style>
+                        <table id="Item" style="text-align: center;">
+                            <tr >
+                                <td rowspan="2">No</td>
+                                <td rowspan="2">Material Description</td>
+                                <td rowspan="2">Per</td>
+                                <td rowspan="2">UoM</td>
+                                <td colspan="2">Old Price</td>
+                                <td colspan="2">New Price</td>
+                            </tr>
+                            <tr>
+                                <td>Price</td>
+                                <td>Delivery</td>
+                                <td>Price</td>
+                                <td>Delivery</td>
+                            </tr>
+                            {% for Item in PPItem%}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td style="text-align: start;">{{Item.Material_Desc}}</td>
+                                <td>{{Item.Qty}}</td>
+                                <td>{{Item.UoM}}</td>
+                                <td>{{Item.Currency}} {{Item.Old_Price}}</td>
+                                <td>{{Item.Old_Delivery}}</td>
+                                <td>{{Item.Currency}} {{Item.New_Price}}</td>
+                                <td>{{Item.New_Delivery}}</td>
+            
+                            </tr>
+                            {%endfor%}
+                        </table>
+                    </td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr><td colspan="6">Term & Condition :</td></tr>
+                <tr>
+                    <td colspan="6">
+                        {{PPForm.ConfNote|add_class:"form-control"|attr:"required"}}
+                    </td>
+                </tr>
+            </table>
+            <br>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-success" name="Finish" id="Finish"
+                        style="width: 150px;margin-left: auto;margin-right: 0px;display: block;">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+        <br>
+    </div>
+</div>
+
+<script>
+    $('#inputGroupFile02').on('change', function (e) {
+        var fileName = e.target.files[0].name;
+        $(this).next('.custom-file-label').html(fileName);
+    })
+
+    var approve = {{ Data| safe}};
+    console.log(approve);
+    $(document).ready(function () {
+        
+        document.getElementById("id_Admin").value = approve[0].fields.Admin;
+        document.getElementById("id_SPV").value = approve[0].fields.SPV;
+        document.getElementById("id_Dept_Head").value = approve[0].fields.Dept_Head;
+        
+        document.getElementById("id_Div_Head").value = approve[0].fields.Div_Head;
+        document.getElementById("id_PresDirektur").value = approve[0].fields.PresDirektur;
+
+        document.getElementById("id_Fin").value = approve[0].fields.Fin;
+        document.getElementById("id_Dept_Fin").value = approve[0].fields.Dept_Fin;
+
+        document.getElementById("id_Admin_Email").value = approve[0].fields.Admin_Email;
+        document.getElementById("id_SPV_Email").value = approve[0].fields.SPV_Email;
+        document.getElementById("id_Dept_Head_Email").value = approve[0].fields.Dept_Head_Email;
+        
+        document.getElementById("id_Div_Head_Email").value = approve[0].fields.Div_Head_Email;
+        document.getElementById("id_PresDirektur_Email").value = approve[0].fields.PresDirektur_Email;
+
+        document.getElementById("id_Fin_Email").value = approve[0].fields.Fin_Email;
+        document.getElementById("id_Dept_Fin").value = approve[0].fields.Dept_Fin_Email;
+
+    });
+
+
+    function ChangeType(type){
+        console.log(type.value);
+        if(type.value=="Otomotif"){
+            document.getElementById("id_Mkt_Head").value = approve[0].fields.Mkt_Auto;
+            document.getElementById("id_Mkt_Head_Email").value = approve[0].fields.Mkt_Auto_Email;
+        }else {
+            document.getElementById("id_Mkt_Head").value = approve[0].fields.Mkt_Non_Auto;
+            document.getElementById("id_Mkt_Head_Email").value = approve[0].fields.Mkt_Non_Auto_Email;
+        }
+
+    }
+</script>
+{% endblock %}

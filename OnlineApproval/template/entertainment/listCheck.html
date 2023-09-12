@@ -1,0 +1,185 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5>{{Judul}}</h5>
+        </center>
+        <div class="row" >
+            <h6 style="margin-left: 12px;margin-right: 8px;margin-top: 10px;">Show List BE Check by</h6>
+            <select name="listtype" id="id_listtype" class="form-control" style="width:fit-content;" onchange="ChangeList(this)">
+                <option value="Header"><b>Need Checking</b></option>
+                <option value="Item"><b>Done Check</b></option>
+            </select>
+        </div>
+        <hr>
+        <div id="behead">
+
+        <form method="POST">
+            {% csrf_token %}
+        <table  id ="table" class="table table-bordered" style="text-align: center; font-size: small;">
+            <thead style="background-color: beige;">
+            <tr>
+                <th style="text-align: center;">No</th>
+                <th>BE Number</th>
+                <th>Date Created</th>
+                <th>Tahun Pajak</th>
+                <th>SPV Name</th>
+                <th>Dept Head Approval</th>
+                <th>Presdir Approval</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for BE in list%}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                        <div><a href="{{BE.BE_Number}}/">{{BE.BE_Number}}</a></div>
+                        
+                    </td>
+                    <td>{{BE.Submit_Date}}</td>
+                    <td>{{BE.Tahun_Pajak}}</td>
+                    <td>{{BE.SPV|default_if_none:""}}</td>
+                    <td>
+                        <div>{{BE.Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{BE.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                        <div>{{BE.Dept_Head|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        <div>{{BE.PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                        <div>{{BE.PresDirektur_Approval_Date|default_if_none:""}}</div>
+                        <div>{{BE.PresDirektur|default_if_none:""}}</div>
+                    </td>
+                    <td>
+                        <div>Need Checking</div>
+                        <br>
+                        <a href="/BE/ListCheck/{{BE.BE_Number}}" class="btn btn-warning">Check</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </form>
+        </div>
+
+        <div id ="itemhead">
+            <table  id ="table1" class="table table-bordered" style="text-align: center; font-size: small;">
+                <thead style="background-color: beige;">
+                <tr>
+                    <th style="text-align: center;">No</th>
+                    <th>BE Number</th>
+                    <th>Date Created</th>
+                    <th>Tahun Pajak</th>
+                    <th>SPV Name</th>
+                    <th>Dept Head Approval</th>
+                    <th>Presdir Approval</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for BE in listDone%}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>
+                            <div><a href="/BE/ListBE/{{BE.BE_Number}}/">{{BE.BE_Number}}</a></div>
+                            
+                        </td>
+                        <td>{{BE.Submit_Date}}</td>
+                        <td>{{BE.Tahun_Pajak}}</td>
+                        <td>{{BE.SPV|default_if_none:""}}</td>
+                        <td>
+                            <div>{{BE.Dept_Head_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                            <div>{{BE.Dept_Head_Approval_Date|default_if_none:""}}</div>
+                            <div>{{BE.Dept_Head|default_if_none:""}}</div>
+                        </td>
+                        <td>
+                            <div>{{BE.PresDirektur_Approval_Status|default_if_none:"Waiting Approval"}}</div>
+                            <div>{{BE.PresDirektur_Approval_Date|default_if_none:""}}</div>
+                            <div>{{BE.PresDirektur|default_if_none:""}}</div>
+                        </td>
+                        <td>
+                            <div>{{BE.Finance_Status}}</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <style>
+            thead input {
+                width: 100%;
+            }
+
+            thead {
+                width: auto;
+            }
+
+            table {
+                width: 100%;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                $('#table thead tr').clone(true).appendTo( '#table thead' );
+                $('#table thead tr:eq(1) th').each( function (i) {
+                    var title = $(this).text();
+                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            
+                    $( 'input', this ).on( 'keyup change', function () {
+                        if ( table.column(i).search() !== this.value ) {
+                            table
+                                .column(i)
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                } );
+            
+                $('#table1 thead tr').clone(true).appendTo( '#table1 thead' );
+                $('#table1 thead tr:eq(1) th').each( function (i) {
+                    var title = $(this).text();
+                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            
+                    $( 'input', this ).on( 'keyup change', function () {
+                        if ( table.column(i).search() !== this.value ) {
+                            table
+                                .column(i)
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                } );
+            
+                var table = $('#table').DataTable( {
+                    orderCellsTop: true,
+                    fixedHeader: true
+                } );
+            
+                var table = $('#table1').DataTable( {
+                    orderCellsTop: true,
+                    fixedHeader: true
+                } );
+            
+            
+                $("#behead").show();
+                $("#itemhead").hide();
+            });
+        
+            function ChangeList(select){
+                console.log(select.value);
+                if (select.value == "Header"){
+                    $("#behead").show();
+                    $("#itemhead").hide();
+                }
+                else if (select.value == "Item"){
+                    $("#behead").hide();
+                    $("#itemhead").show();
+                };
+            };
+            </script>
+    </div>
+</div>
+{% endblock %}

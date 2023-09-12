@@ -1,0 +1,274 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h6>{{Judul}}</h6>
+        </center>
+
+
+        <h5>A. Pengecekan</h5>
+        <h6>A.1. Payment Request</h6>
+
+        <table class="table table-bordered" style="text-align: center;">
+            <tr>
+                <th>No</th>
+                <th>FP Number</th>
+                <th>Date Created</th>
+                <th>User Name</th>
+                <th>Description</th>
+                <th>Value</th>
+                <th>Dept Head</th>
+                <th>Finance</th>
+                <th>Direktur</th>
+                <th>Received By</th>
+                <th>Status</th>
+                <!-- <th>PDF</th> -->
+            </tr>
+            {% for FP in ListFPCheck %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><a href="FP/{{FP.FP_Number}}/">{{FP.FP_Number}}</a></td>
+                <td>{{FP.Date_Created}}</td>
+                <td>{{FP.User_Name}}</td>
+                <td>{{FP.Description|slice:"0:10"}}...</td>
+                <td>Rp. {{FP.Amount}},-</td>
+                <td>
+                    <div>{{FP.DeptHead_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{FP.DeptHead_Approval_Date|default_if_none:""}}</div>
+                    <div>{{FP.DeptHead|default_if_none:"N/A"}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Finance_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{FP.Finance_Approval_Date|default_if_none:""}}</div>
+                    <div>{{FP.Finance|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Dir_Finance_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{FP.Dir_Finance_Approval_Date|default_if_none:""}}</div>
+                    <div>{{FP.Dir_Finance|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Received_Date|default_if_none:""}}</div>
+                    <div>{{FP.Receiver_Name|default_if_none:""}}</div>
+                </td>
+                <td>{{FP.FP_Status}}</td>
+                <!-- <td>
+            {% if BS.BS_Status == "Finished" %}
+            <a href="/Media/Document/{{BS.BS_Number}}.pdf">Download</a>
+            {% endif %}
+        </td> -->
+            </tr>
+            {% endfor %}
+
+        </table>
+        <hr>
+        <h5>B. Pembayaran</h5>
+
+        <h6>B.1. Bon Sementara</h6>
+        <table class="table table-bordered" style="text-align: center;">
+            <tr>
+                <th>No</th>
+                <th>BS Number</th>
+                <th>Date Created</th>
+                <th>User Name</th>
+                <th>Note</th>
+                <th>Value</th>
+                <th>DeptHead</th>
+                <th>Finance</th>
+                <th>Received By</th>
+                <th>Status</th>
+                <!-- <th>PDF</th> -->
+            </tr>
+            {% for BS in ListBS %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><a href="BS/{{BS.BS_Number}}/">{{BS.BS_Number}}</a></td>
+                <td>{{BS.Date_Created}}</td>
+                <td>{{BS.User_Name}}</td>
+                <td>{{BS.Note|slice:"0:10"}}...</td>
+                <td>Rp. {{BS.Jumlah}},-</td>
+                <td>
+                    <div>{{BS.DeptHead_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{BS.DeptHead_Approval_Date|default_if_none:""}}</div>
+                    <div>{{BS.DeptHead|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{BS.Finance_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{BS.Finance_Approval_Date|default_if_none:""}}</div>
+                    <div>{{BS.Finance|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{BS.Received_Date|default_if_none:""}}</div>
+                    <div>{{BS.Receiver_Name|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{BS.BS_Status}}</div>
+                    <div>{% if BS.BS_Status == "Finished" %}
+                        <a href="/Media/Document/{{BS.BS_Number}}.pdf">Download</a>
+                        {% endif %}
+                    </div>
+                </td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        <h6>B.2. Payment Request</h6>
+
+        <table class="table table-bordered" style="text-align: center;">
+            <tr>
+                <th>No</th>
+                <th>FP Number</th>
+                <th>Date Created</th>
+                <th>User Name</th>
+                <th>Description</th>
+                <th>Value</th>
+                <th>Dept Head</th>
+                <th>Finance</th>
+                <th>Direktur Finance</th>
+                <th>Received By</th>
+                <th>Status</th>
+                <!-- <th>PDF</th> -->
+            </tr>
+            {% for FP in ListFP %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><a href="FP/{{FP.FP_Number}}/">{{FP.FP_Number}}</a></td>
+                <td>{{FP.Date_Created}}</td>
+                <td>{{FP.User_Name}}</td>
+                <td>{{FP.Description|slice:"0:10"}}...</td>
+                <td>Rp. {{FP.Amount}},-</td>
+                <td>
+                    <div>{{FP.DeptHead_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{FP.DeptHead_Approval_Date|default_if_none:""}}</div>
+                    <div>{{FP.DeptHead|default_if_none:"N/A"}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Finance_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{FP.Finance_Approval_Date|default_if_none:""}}</div>
+                    <div>{{FP.Finance|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Dir_Finance_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{FP.Dir_Finance_Approval_Date|default_if_none:""}}</div>
+                    <div>{{FP.Dir_Finance|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{FP.Received_Date|default_if_none:""}}</div>
+                    <div>{{FP.Receiver_Name|default_if_none:""}}</div>
+                </td>
+                <td>{{FP.FP_Status}}</td>
+                <!-- <td>
+            {% if BS.BS_Status == "Finished" %}
+            <a href="/Media/Document/{{BS.BS_Number}}.pdf">Download</a>
+            {% endif %}
+        </td> -->
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        <hr>
+        <h5>C. Monitoring Bon Belum Closing</h5>
+        <table class="table table-bordered" style="text-align: center;">
+            <tr>
+                <th>No</th>
+                <th>BS Number</th>
+                <th>Date Created</th>
+                <th>User Name</th>
+                <th>Note</th>
+                <th>Value</th>
+                <th>DeptHead</th>
+                <th>Finance</th>
+                <th>Received By</th>
+                <th>Status</th>
+                <!-- <th>PDF</th> -->
+            </tr>
+            {% for BS in ListBSOpen %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><a href="BS/{{BS.BS_Number}}/">{{BS.BS_Number}}</a></td>
+                <td>{{BS.Date_Created}}</td>
+                <td>{{BS.User_Name}}</td>
+                <td>{{BS.Note|slice:"0:10"}}...</td>
+                <td>Rp. {{BS.Jumlah}},-</td>
+                <td>
+                    <div>{{BS.DeptHead_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{BS.DeptHead_Approval_Date|default_if_none:""}}</div>
+                    <div>{{BS.DeptHead|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{BS.Finance_Approval|default_if_none:"Waiting Approval"}}</div>
+                    <div>{{BS.Finance_Approval_Date|default_if_none:""}}</div>
+                    <div>{{BS.Finance|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <div>{{BS.Received_Date|default_if_none:""}}</div>
+                    <div>{{BS.Receiver_Name|default_if_none:""}}</div>
+                </td>
+                <td>
+                    <!-- <div>{{BS.BS_Status}}</div> -->
+
+                    <div>{% if BS.BS_Status == "Finished" %}
+                        <a href="/Media/Document/{{BS.BS_Number}}.pdf">Download</a>
+                        {% endif %}
+                    </div>
+
+                    <a class=" btn btn-warning" onclick="OpenModal('{{BS.BS_Number}}')">Close</a>
+                </td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+
+
+        <!-- Button trigger modal -->
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Launch demo modal
+  </button> -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Closing Bon by Finance</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="closing" action="" method="post">
+                            {% csrf_token %}
+                            <h6>BS Number</h6>
+                            <input type="text" class="form-control" name="BS_Number_Closing" id="BS_Number_Closing" readonly>
+                            <h6>Note</h6>
+                            <input type="text" class="form-control" name="Note_Closing" id="Note_Closing" maxlength="50">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning" form="closing">Close Temp Bon</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+       // $('#exampleModal').modal('show')
+    });
+    function OpenModal(ID) {
+        document.getElementById("BS_Number_Closing").value = ID;
+        $('#exampleModal').modal('show')
+    }
+</script>
+{% endblock %}

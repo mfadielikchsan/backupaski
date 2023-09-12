@@ -1,0 +1,428 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="card" style="min-height: 78vh;">
+  <div class="card-body">
+    <br>
+    <div class="row">
+      <div class="col sm-12">
+        <center>
+          <h6>Manage Budget</h6>
+        </center>
+
+
+
+        <div class="card">
+          <div class="card-body">
+            <table class="display compact" style="font-size: small;" id="table">
+              <thead style="text-align:center;font-size:small;background-color: lightcyan;">
+                <tr>
+                  <th>No</th>
+                  <th>Budget No</th>
+                  <th>Plant</th>
+                  <th>Description</th>
+                  <th>Project</th>
+                  <th>Year</th>
+                  <th>Budget Value</th>
+                  <th>Current Value</th>
+                  <th>Budget Unit</th>
+                  <th>Created</th>
+                  <th>Modified</th>
+                  <th>User</th>
+                  <th>Note</th>
+
+                </tr>
+              </thead>
+
+              <tbody style="text-align:center;font-size:small;">
+                {% for Budget in ListBudget %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{Budget.Budget_No}}</td>
+                  <td>{{Budget.Plant}}</td>
+                  <td>{{Budget.Description}}</td>
+                  <td>{{Budget.Project|default_if_none:''}}</td>
+                  <td>{{Budget.Year}}</td>
+                  <td>{{Budget.Budget_Value|default_if_none:''}}</td>
+                  <td>{{Budget.Current_Budget_Value|default_if_none:''}}</td>
+                  <td>{{Budget.Budget_Unit}}</td>
+                  <td>{{Budget.Created_At}}</td>
+                  <td>{{Budget.Modified_At}}</td>
+                  <td>{{Budget.Budget_User}}</td>
+                  <td>{{Budget.Budget_Note|default_if_none:''}}</td>
+
+                </tr>
+                {% endfor %}
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <br>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success" style="width: 150px;" data-toggle="modal" data-target="#AddBudget">
+      Add New Budget
+    </button>
+
+    <button type="button" class="btn btn-warning" style="width: 150px;" data-toggle="modal" data-target="#EditBudget">
+      Edit Budget
+    </button>
+
+    <button type="button" class="btn btn-danger" style="width: 150px;" data-toggle="modal" data-target="#DeleteBudget">
+      Delete Budget
+    </button>
+
+    <a class="btn btn-info"  href="/PR/BudgetExport/"> Download Budget as .xls</a>
+    <a class="btn btn-info" href="/PR/BudgetUsageExport/"> Download Budget Usage as .xls</a>
+
+    <!-- Modal -->
+    <div class="modal fade" id="AddBudget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true" >
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add New Budget</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST" >
+            {% csrf_token %}
+            <div class="modal-body">
+              {% for Budget in BudgetForm %}
+              {% if Budget.label == 'Current Budget Value' %}
+              {% elif Budget.label == 'Budget User' %}
+              <div class="row">
+                <div class="col-sm-3">
+                  {{Budget.label}}
+                </div>
+                <div class="col-sm-9">
+                  <select type="text" style="width: 100%;" name="Budget_User_Select" maxlength="200" class="form-control2"
+                  id="id_Budget_User_Select" multiple="multiple" onchange="Change()" required>
+                  <option value=""></option>
+                  {% for User in ListUser  %}
+                    <option value="{{User.User}}">{{User.User}}</option>
+                  {% endfor %}
+                    
+                </select>
+                <input type="text" name="Budget_User" id="id_Budget_User" value ="" hidden>
+                </div>
+              </div>
+              <div style="height: 5px;"><br></div>
+              {% elif Budget.label == 'Budget Value' %}
+              <div class="row">
+                <div class="col-sm-3">
+                  {{Budget.label}}
+                </div>
+                <div class="col-sm-9">
+                  {{Budget|add_class:"form-control"|attr:"onkeyup:Calculate(this)"}}
+                </div>
+              </div>
+              <div style="height: 5px;"><br></div>
+              {% else %}
+              <div class="row">
+                <div class="col-sm-3">
+                  {{Budget.label}}
+                </div>
+                <div class="col-sm-9">
+                  {{Budget|add_class:"form-control"}}
+                </div>
+              </div>
+              <div style="height: 5px;"><br></div>
+              {% endif %}
+              {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button style="width: 150px;" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button style="width: 150px;" type="submit" class="btn btn-success" name="add">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="EditBudget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle2"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle2">Edit Budget</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+              {% for Budget in BudgetForm %}
+              {% if Budget.label in 'Budget No,Plant,' %} 
+              <div class="row">
+                <div class="col-sm-3">
+                  {{Budget.label}}
+                </div>
+                <div class="col-sm-9">
+                  <select type="text" name="{{Budget.label}} Edit" maxlength="200" class="form-control"
+                    id="id_{{Budget.label}} Edit">
+                  </select>
+                </div>
+              </div>
+              <div style="height: 5px;"><br></div>
+              {% elif Budget.label in 'Budget User' %} 
+              <div class="row">
+                <div class="col-sm-3">
+                  {{Budget.label}}
+                </div>
+                <div class="col-sm-9">
+                  <select type="text" style="width: 100%;" name="Select_User" maxlength="200" class="form-control3"
+                    id="id_Select_User" multiple="multiple" onchange="ChangeEdit()">
+                    <option value=""></option>
+                    {% for User in ListUser  %}
+                      <option value="{{User.User}}">{{User.User}}</option>
+                    {% endfor %}
+                      
+                  </select>
+                  <input type="text" name="{{Budget.label}} Edit" maxlength="200" class="form-control"
+                  id="id_{{Budget.label}} Edit" hidden>
+                </div>
+              </div>
+              <div style="height: 5px;"><br></div>
+              {% else %}
+              <div class="row">
+                <div class="col-sm-3">
+                  {{Budget.label}}
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" name="{{Budget.label}} Edit" maxlength="200" class="form-control"
+                    id="id_{{Budget.label}} Edit">
+              
+                </div>
+              </div>
+              <div style="height: 5px;"><br></div>
+              {% endif %}
+              {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button style="width: 150px;" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button style="width: 150px;" type="submit" class="btn btn-success" name="edit">Save Edit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function Calculate(Item) {
+        document.getElementById("id_Budget_Value").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      function Change(){
+        document.getElementById("id_Budget_User").value = "";
+        for (i=0; i<document.getElementById("id_Budget_User_Select").options.length; i++) { 
+        if (document.getElementById("id_Budget_User_Select").options[i].selected) {
+            document.getElementById("id_Budget_User").value += document.getElementById("id_Budget_User_Select").options[i].value +" ";
+        } 
+        } 
+        
+      }
+
+      function ChangeEdit(){
+        document.getElementById("id_Budget User Edit").value = "";
+        for (i=0; i<document.getElementById("id_Select_User").options.length; i++) { 
+        if (document.getElementById("id_Select_User").options[i].selected) {
+            document.getElementById("id_Budget User Edit").value += document.getElementById("id_Select_User").options[i].value +" ";
+        } 
+        } 
+        
+      }
+
+      $('#AddBudget').on('show.bs.modal', function () {
+        console.log("load1");
+        //$('#id_Budget_User_Select').val(null).trigger('change');
+        for (i=0; i<document.getElementById("id_Budget_User_Select").options.length; i++) { 
+          document.getElementById("id_Budget_User_Select").options[i].selected= false;
+          } 
+          $('#id_Budget_User_Select').trigger('change');
+        })
+        
+        $('#EditBudget').on('show.bs.modal', function () {
+          console.log("load2");
+          for (i=0; i<document.getElementById("id_Select_User").options.length; i++) { 
+          document.getElementById("id_Select_User").options[i].selected= false;
+          } 
+          $('#id_Select_User').trigger('change');
+        })
+
+    </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="DeleteBudget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deletebudgettitle">Delete Budget</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+              <h6>Select item to delete</h6>
+              <select style="width: 100%;" class="form-control2" name="DeleteBudget" id="DeleteBudget">
+                <option value disabled selected></option>
+                {% for Budget in ListBudget %}
+                <option value="{{Budget.Budget_No}}">
+                  {{Budget.Budget_No}}-{{Budget.Plant}}-{{Budget.Description}}-{{Budget.Description}}
+                </option>
+                {% endfor %}
+              </select>
+
+
+            </div>
+            <div class="modal-footer">
+              <button style="width: 150px;" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button style="width: 150px;" type="submit" class="btn btn-danger" name="delete">Delete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script>
+      var listJSON = {{ listJSON| safe}};
+
+      $(document).ready(function () {
+        $('.form-control2').select2();
+        $('.form-control3').select2();
+        $('#table').DataTable();
+
+
+        document.getElementById("id_Budget_No").readOnly = true;
+        document.getElementById("id_Year").onchange = function () { ChangeYear(this) };
+        ChangeYear(document.getElementById("id_Year"));
+        var option = document.createElement("option");
+        document.getElementById("id_Budget No Edit").add(option);
+        for (var i = 0; i < listJSON.length; i++) {
+          var option = document.createElement("option");
+          option.value = listJSON[i].fields.Budget_No.toString();
+          option.innerHTML = listJSON[i].fields.Budget_No.toString()+"-"+listJSON[i].fields.Description.toString();
+          document.getElementById("id_Budget No Edit").add(option);
+        }
+        var option = document.createElement("option");
+          document.getElementById("id_Plant Edit").add(option);
+
+          var option = document.createElement("option");
+          option.text = "Plant1";
+          document.getElementById("id_Plant Edit").add(option);
+          var option = document.createElement("option");
+          option.text = "Plant2";
+          document.getElementById("id_Plant Edit").add(option);
+          var option = document.createElement("option");
+          option.text = "Common";
+          document.getElementById("id_Plant Edit").add(option);
+          document.getElementById("id_Year Edit").readOnly = true;
+          document.getElementById("id_Budget Unit Edit").readOnly = true;
+          document.getElementById("id_Budget_Unit").readOnly = true;
+          document.getElementById("id_Budget No Edit").onchange = function () { ChangeNumber(this) };
+
+          // document.getElementById("id_Plant Edit").style.display = "none";
+          //   document.getElementById("id_Description Edit").style.display = "none";
+          //   document.getElementById("id_Year Edit").style.display = "none";
+          //   document.getElementById("id_Budget Value Edit").style.display = "none";
+          //   document.getElementById("id_Budget Unit Edit").style.display = "none";
+          //   document.getElementById("id_Budget User Edit").style.display = "none";
+          //   document.getElementById("id_Project Edit").style.display = "none";
+          //   document.getElementById("id_Budget Note Edit").style.display = "none";
+          //   document.getElementById("id_Current Budget Value Edit").style.display = "none";
+          document.getElementById("id_Budget Value Edit").onkeyup = function () { Calculate1edit(this) };
+          document.getElementById("id_Current Budget Value Edit").onkeyup = function () { Calculate2edit(this) };
+
+      });
+
+      function ChangeNumber(Item){
+        //console.log(Item.value);
+        for (var i = 0; i < listJSON.length; i++) {
+          if(Item.value == listJSON[i].fields.Budget_No){
+            document.getElementById("id_Plant Edit").value = listJSON[i].fields.Plant;
+            document.getElementById("id_Description Edit").value = listJSON[i].fields.Description;
+            document.getElementById("id_Year Edit").value = listJSON[i].fields.Year;
+            document.getElementById("id_Budget Value Edit").value = listJSON[i].fields.Budget_Value;
+            document.getElementById("id_Budget Unit Edit").value = listJSON[i].fields.Budget_Unit;
+            document.getElementById("id_Budget User Edit").value = listJSON[i].fields.Budget_User;
+            var user = listJSON[i].fields.Budget_User.split(" ");
+            $('#id_Select_User').val(user);
+            $('#id_Select_User').trigger('change');
+
+
+            document.getElementById("id_Project Edit").value = listJSON[i].fields.Project;
+            document.getElementById("id_Budget Note Edit").value = listJSON[i].fields.Budget_Note;
+            document.getElementById("id_Current Budget Value Edit").value = listJSON[i].fields.Current_Budget_Value;
+
+          }
+         
+        }
+            // document.getElementById("id_Plant Edit").style.display = "block";
+            // document.getElementById("id_Description Edit").style.display = "block";
+            // document.getElementById("id_Year Edit").style.display = "block";
+            // document.getElementById("id_Budget Value Edit").style.display = "block";
+            // document.getElementById("id_Budget Unit Edit").style.display = "block";
+            // document.getElementById("id_Budget User Edit").style.display = "block";
+            // document.getElementById("id_Project Edit").style.display = "block";
+            // document.getElementById("id_Budget Note Edit").style.display = "block";
+            // document.getElementById("id_Current Budget Value Edit").style.display = "block";
+
+      }
+
+      function Calculate1edit(Item) {
+        document.getElementById("id_Budget Value Edit").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+      function Calculate2edit(Item) {
+        document.getElementById("id_Current Budget Value Edit").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      function ChangeYear(year) {
+        var number = 0;
+        for (var i = 0; i < listJSON.length; i++) {
+          if (listJSON[i].fields.Year == year.value) {
+            if (number < parseInt(listJSON[i].fields.Budget_No.toString().replace("ASKI", "").replace("-", "")))
+              number = parseInt(listJSON[i].fields.Budget_No.toString().replace("ASKI", "").replace("-", ""))
+          }
+        }
+        if (number == 0) number = parseInt(year.value.toString() + "001")
+        else number++;
+
+        document.getElementById("id_Budget_No").value = "ASKI" + number.toString().slice(0, 4) + "-" + number.toString().slice(4, 7);
+      }
+
+    </script>
+
+    <style>
+      .select2-selection__rendered {
+        line-height: 31px !important;
+      }
+
+      .select2-container .select2-selection--single {
+        height: 40px !important;
+        padding-left: 10px;
+        padding-top: 2px;
+
+      }
+
+      .select2-selection__arrow {
+        height: 34px !important;
+      }
+    </style>
+
+  </div>
+</div>
+
+{% endblock %}

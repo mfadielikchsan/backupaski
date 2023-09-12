@@ -1,0 +1,1239 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<style>
+    .progressbardot {
+        margin: 0;
+
+        padding: 20px;
+        counter-reset: step;
+    }
+
+    .progressbardot li {
+        list-style-type: none;
+        width: 25%;
+        float: left;
+        font-size: 10px;
+        position: relative;
+        text-align: center;
+        text-transform: uppercase;
+        color: #7d7d7d;
+    }
+
+    .progressbardot li:before {
+        width: 20px;
+        height: 20px;
+        content: counter(step);
+        counter-increment: step;
+        line-height: 16px;
+        border: 2px solid #7d7d7d;
+        display: block;
+        text-align: center;
+        margin: 0 auto 9px auto;
+        border-radius: 50%;
+        background-color: white;
+        color: #7d7d7d;
+        z-index: 2;
+    }
+
+    .progressbardot li:after {
+        width: 95%;
+        margin-left: 8px;
+        height: 2px;
+        content: '';
+        position: absolute;
+        background-color: #7d7d7d;
+        top: 9px;
+        left: -50%;
+        z-index: 0;
+    }
+
+    .progressbardot li:first-child:after {
+        content: none;
+    }
+
+    .progressbardot li.active {
+
+        font-weight: bold;
+    }
+
+    .progressbardot li.active:before {
+        border-color: lightgreen;
+    }
+
+    .progressbardot li.active+li:after {
+        background-color: lightgreen;
+    }
+</style>
+
+
+{% if mode == "create" %}
+<div class="card" style="min-height: 78vh;">
+
+    <div class="card-body">
+        <center>
+            <h5>Create Purchase Request</h5>
+        </center>
+
+        <ul class="progressbardot">
+            <li class="active">input data header</li>
+            <li>add item purchase</li>
+            <li>approval & attachment</li>
+            <li>send approval email</li>
+        </ul>
+
+
+
+        <br>
+        <h6>PR Header</h6>
+        <br>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-10">
+                    {% csrf_token %}
+
+                    {% for header in PRheader %}
+                    {% if header.label == "Date Created" %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+
+                                {{header.label}}
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"|attr:"readonly"}}
+                            </div>
+                        </div>
+                    </div>
+                    {% elif header.label == "PP Number" %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                {{header.label}}
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"|attr:" readonly"}}
+
+                            </div>
+                        </div>
+                    </div>
+                    {% elif header.label == "User Name" %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                {{header.label}}
+                            </div>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="User_Select" id="id_User_Select" 
+                                    onchange="GetSelectedTextValue(this)">
+                                    {% for App in Approval %}
+                                    <option value="{{forloop.counter}}">{{App|cut:user.get_username|slice:"1:"}}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif header.label == "User Email" %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                {{header.label}}
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"|attr:" readonly"}}
+                            </div>
+                        </div>
+                    </div>
+                    {% elif header.label ==  'Company'  %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                Plant
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"}}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% elif header.label ==  'Budget No'  %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <span id="BudgetLabel1">{{header.label}}</span>
+                            </div>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="Budget_No" id="id_Budget_No" onchange="Budget(this)">
+                                    <option value disabled selected></option>
+                                    {% for budg in Budget %}
+                                    <option value="{{budg.Budget_No}}">
+                                        {{budg.Budget_No}}-{{budg.Plant}}-{{budg.Description}}
+                                    </option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif header.label ==  'Budget Rp'  %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <span id="BudgetLabel2">Budget Value</span>
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"|attr:"readonly"}}
+
+                            </div>
+                        </div>
+                    </div>
+                    {% elif header.label ==  'PP diProses'  %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <span id="BudgetLabel3">{{header.label}}</span>
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"|attr:"readonly"}}
+                            </div>
+                        </div>
+                    </div>
+                    {% elif header.label ==  'Sisa Budget'  %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <span id="BudgetLabel4">{{header.label}}</span>
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"|attr:"readonly"}}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {% elif header.label ==  'Jenis PP'  %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                {{header.label}}
+                            </div>
+                            <div class="col-sm-8">
+                                {{header|add_class:"form-control"|attr:"onchange:Change(this)"}}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {%endfor%}
+
+
+
+
+                    <input type="hidden" id="Bussiness_Area" name="Bussiness_Area" value="AK">
+                    <input type="hidden" id="User_Name" name="User_Name" value="">
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" name="create" class="btn btn-info"
+                        style="height: 50px;width: 150px;margin-right: 20px;">Next</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<select class="form-control" name="Budget_Rp_select" id="id_Budget_Rp_select" hidden>
+    <option value disabled selected></option>
+    {% for budg in Budget %}
+    <option value="{{budg.Budget_Value}} {{budg.Budget_Unit}}">{{budg.Budget_Value}} {{budg.Budget_Unit}}
+    </option>
+    {%endfor%}
+</select>
+<select class="form-control" name="Sisa_Budget_select" id="id_Sisa_Budget_select" hidden>
+    <option value disabled selected></option>
+    {% for budg in Budget %}
+    <option value="{{budg.Current_Budget_Value}} {{budg.Budget_Unit}}">{{budg.Current_Budget_Value|default_if_none:0}}
+        {{budg.Budget_Unit}}
+    </option>
+    {%endfor%}
+</select>
+
+<script type="text/javascript">
+    var approve = {{ Data| safe}};
+    document.getElementById("id_User_Email").value = approve[0].fields.Supervisor_email;
+    document.getElementById("User_Name").value = approve[0].fields.Supervisor;
+    document.getElementById("id_Budget_No").style.display = 'none';
+    document.getElementById("id_Budget_Rp").style.display = 'none';
+    document.getElementById("id_PP_diProses").style.display = 'none';
+    document.getElementById("id_Sisa_Budget").style.display = 'none';
+    document.getElementById("BudgetLabel1").style.display = 'none';
+    document.getElementById("BudgetLabel2").style.display = 'none';
+    document.getElementById("BudgetLabel3").style.display = 'none';
+    document.getElementById("BudgetLabel4").style.display = 'none';
+    document.getElementById("id_Budget_No").required = false;
+
+    $(document).ready(function () {
+
+        Change(document.getElementById("id_Jenis_PP"));
+
+        if (document.getElementById("id_Budget_No").required == true){
+            Budget(document.getElementById("id_Budget_No"));
+        }
+
+        GetSelectedTextValue(document.getElementById("id_User_Select"))
+    });
+
+    function GetSelectedTextValue(ddlFruits) {
+        var selectedText = ddlFruits.options[ddlFruits.selectedIndex].innerHTML;
+        var selectedValue = ddlFruits.value;
+
+
+        document.getElementById("id_User_Email").value = approve[selectedValue - 1].fields.Supervisor_email;
+        document.getElementById("User_Name").value = approve[selectedValue - 1].fields.Supervisor;
+
+    }
+
+    function Change(Item) {
+
+        if (Item.value == "ZRAT-PR Asset") {
+            document.getElementById("id_Budget_No").style.display = 'block';
+            document.getElementById("id_Budget_Rp").style.display = 'block';
+            document.getElementById("id_PP_diProses").style.display = 'block';
+            document.getElementById("id_Sisa_Budget").style.display = 'block';
+            document.getElementById("BudgetLabel1").style.display = 'block';
+            document.getElementById("BudgetLabel2").style.display = 'block';
+            document.getElementById("BudgetLabel3").style.display = 'block';
+            document.getElementById("BudgetLabel4").style.display = 'block';
+            document.getElementById("id_Budget_No").required = true;
+        }
+        else {
+            document.getElementById("id_Budget_No").style.display = 'none';
+            document.getElementById("id_Budget_Rp").style.display = 'none';
+            document.getElementById("id_PP_diProses").style.display = 'none';
+            document.getElementById("id_Sisa_Budget").style.display = 'none';
+            document.getElementById("BudgetLabel1").style.display = 'none';
+            document.getElementById("BudgetLabel2").style.display = 'none';
+            document.getElementById("BudgetLabel3").style.display = 'none';
+            document.getElementById("BudgetLabel4").style.display = 'none';
+            document.getElementById("id_Budget_No").required = false;
+        }
+    }
+
+    function Budget(Item) {
+        console.log(Item.selectedIndex);
+        document.getElementById("id_Budget_Rp_select").selectedIndex = Item.selectedIndex;
+        document.getElementById("id_Sisa_Budget_select").selectedIndex = Item.selectedIndex;
+        document.getElementById("id_Budget_Rp").value = document.getElementById("id_Budget_Rp_select").value;
+        document.getElementById("id_Sisa_Budget").value = document.getElementById("id_Sisa_Budget_select").value;
+        document.getElementById("id_PP_diProses").value = (parseInt(document.getElementById("id_Budget_Rp").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) - parseInt(document.getElementById("id_Sisa_Budget").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + document.getElementById("id_Sisa_Budget").value.toString().replace(/[0-9]/g, '').replace(/\./g, "");
+
+    }
+</script>
+
+
+{% elif mode == "additem" %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+        <center>
+            <h5 style="margin-bottom: -20px;">Create Purchase Request</h5>
+        </center>
+
+        <ul class="progressbardot">
+            <li class="active">input data header</li>
+            <li class="active">add item purchase</li>
+            <li>approval & attachment</li>
+            <li>send approval email</li>
+        </ul>
+
+        <br>
+        <br>
+        {% for header in PRheader %}
+        <div class="row" style="padding-left: 14px;">
+            <div class="col-sm-9">
+                <table>
+                    <tr>
+                        <td style="width: 140px;">Plant</td>
+                        <td>: {{header.Company}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bussiness Area</td>
+                        <td>: {{header.Bussiness_Area}}</td>
+                    </tr>
+                    <tr>
+                        <td>Date Created</td>
+                        <td>: {{header.Date_Created|date:'d M Y'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Jenis PP </td>
+                        <td>: {{header.Jenis_PP}}</td>
+                    </tr>
+                    <tr>
+                        <td>PP Number</td>
+                        <td>: {{header.PP_Number}}</td>
+                    </tr>
+                    <tr>
+                        <td>User Name</td>
+                        <td>: {{header.User_Name}}</td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="col-sm-3">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button class="btn btn-warning" onclick="history.back()"
+                            style="height: 50px;width: 150px;">Back</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {% for header in PRheader %}
+                            <input type="hidden" id="PP_Number" name="PP_Number" value="{{header.PP_Number}}">
+                            {% endfor %}
+                            {% if itemlist is not None %}
+                            <button type="submit" name="finishitem" class="btn btn-info"
+                                style="height: 50px;width: 150px;">Next</button>
+                            {%endif%}
+                        </form>
+                    </div>
+                </div>
+
+
+                <!-- <button type="submit" name = "finishitem" class="btn btn-info" style="height: 50px;width: 150px;" >Refresh</button> -->
+
+            </div>
+        </div>
+        {% endfor %}
+
+        <div style="max-height: 5px;"><br></div>
+
+
+
+        <table class="style" style=" font-size: small;text-align: center;">
+            <thead>
+                <tr style="border: 1px solid black; height: 50px; word-break: normal;">
+                    <th rowspan="2" style="border: 1px solid black;">NO</th>
+                    <th rowspan="2" style="border: 1px solid black;">A* (Exp)</th>
+                    <th rowspan="2" style="border: 1px solid black;">I* (Jenis)</th>
+                    <th rowspan="2" style="border: 1px solid black;">Kode Barang</th>
+                    <th rowspan="2" style="border: 1px solid black;">Nama Barang / Deskripsi Service</th>
+                    <th colspan="2" style="border: 1px solid black;">Dipesan</th>
+                    <th colspan="2" style="border: 1px solid black;">Perkiraan Harga</th>
+                    <th rowspan="2" style="border: 1px solid black;">Tanggal Kedatangan</th>
+                    <th colspan="2" style="border: 1px solid black; word-break: keep-all;">Account Assignment</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                        Minimal Stock</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                        Actual Stock</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                        Average Usage</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                        Budget</th>
+                    <th rowspan="2"
+                        style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                        Un-Budget</th>
+                    <th rowspan="2" style="border: 1px solid black; width: 100px;">Catatan</th>
+                    <th rowspan="2" style="border: none;">Delete?</th>
+                </tr>
+                <tr style="height:50px">
+                    <th style="border: 1px solid black;">Jumlah</th>
+                    <th style="border: 1px solid black;">UoM</th>
+                    <th style="border: 1px solid black;">Satuan</th>
+                    <th style="border: 1px solid black;">Total</th>
+                    <th style="border: 1px solid black;">Cost Center</th>
+                    <th style="border: 1px solid black;">Asset No./GL Account</th>
+
+                </tr>
+            </thead>
+            <tbody style="border: 1px solid black;">
+                {% for item in itemlist%}
+                <tr style="height: 30px;">
+                    <td style="border: 1px solid black;">{{forloop.counter}}</td>
+                    <td style="border: 1px solid black;">{{item.Expense|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Jenis_Barang|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Kode_Barang|default_if_none:''}}</td>
+                    <td style="border: 1px solid black; text-align: left;padding-left: 5px;">{{item.Nama_Barang}}
+                        {{item.Detail_Spec|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Jumlah_Order}}</td>
+                    <td style="border: 1px solid black;">{{item.Unit_Order}}</td>
+                    <td style="border: 1px solid black;">{{item.Harga_Satuan|default_if_none:''}}
+                        {{item.Currency|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Harga_Total|default_if_none:''}}
+                        {{item.Currency|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.PIC}}</td>
+                    <td style="border: 1px solid black;">{{item.Cost_Center|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Asset_No_GL_Account|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Minimal_Stock|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Actual_Stock|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{{item.Average_Usage|default_if_none:''}}</td>
+                    <td style="border: 1px solid black;">{%if item.Budget == 'Budget' %}x{% endif %}</td>
+                    <td style="border: 1px solid black;">{%if item.Budget == 'UnBudget' %}x{% endif %}</td>
+                    <td style="border: 1px solid black;">{{item.Note}}</td>
+                    <td style="border: 1px solid black;">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% for header in PRheader %}
+                            <input type="hidden" id="PP_Number" name="PP_Number" value="{{header.PP_Number}}">
+                            {% endfor %}
+                            <input type="hidden" value="{{item.Nama_Barang}}" name="deleteitem">
+                            <button class="btn btn-danger" style="font-size: xx-small;" type="Submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        <br>
+        <!-- Button trigger modal -->
+        <div class="row">
+            <div class="col-sm-1">
+                <button type="button" style="height: 40px;margin-top: 5px;" class="btn btn-success" data-toggle="modal"
+                    data-target="#ModalAdd"> Add Item </button>
+            </div>
+            <div class="col-sm-11">
+                {% if status.2 == 'Delete' %}
+                <div class="alert alert-danger" role="alert">
+                    Item "{{status.0}}" sudah di delete dari form PR {{status.1}} !!
+                </div>
+                {% elif status.2 == 'Fail' %}
+                <div class="alert alert-danger" role="alert">
+                    Item "{{status.0}}" tidak bisa ditambahkan karena sudah tersedia di form PR {{status.1}} !!
+                </div>
+                {% elif status.2 == 'Add' %}
+                <div class="alert alert-success" role="alert">
+                    Item "{{status.0}}" berhasil ditambahkan !
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <script>
+            var itemsel = {{ ItemSelect| safe}};
+            var date = new Date();
+            date.setDate(date.getDate() + 1);
+
+
+
+            $(document).ready(function () {
+                $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+                $('.form-control2').select2({
+                    dropdownParent: $('#ModalAdd')
+                });
+
+                $('.datepicker').datepicker({ startDate: date, format: 'dd/mm/yyyy', autoclose: true, toggleActive: true, todayHighlight: true, });
+                var sel = document.getElementById('select');
+
+                for (var i = 0; i < itemsel.length; i++) {
+                    var opt = document.createElement('option');
+                    opt.appendChild(document.createTextNode(itemsel[i].fields.Nama_Barang));
+                    opt.value = i;
+                    sel.appendChild(opt);
+                }
+            });
+
+
+
+            function SelectItem(Item) {
+                var selectedText = Item.options[Item.selectedIndex].innerHTML;
+                var selectedValue = Item.value;
+                //console.log(selectedText);
+                //console.log(selectedValue);
+                document.getElementById("id_Expense").value = itemsel[selectedValue].fields.Expense;
+                document.getElementById("id_Jenis_Barang").value = itemsel[selectedValue].fields.Jenis_Barang;
+                document.getElementById("id_Kode_Barang").value = itemsel[selectedValue].fields.Kode_Barang;
+                document.getElementById("id_Nama_Barang").value = itemsel[selectedValue].fields.Nama_Barang;
+                document.getElementById("id_Unit_Order").value = itemsel[selectedValue].fields.Unit_Order;
+
+
+
+            }
+
+
+
+        </script>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Purchase Request Item </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST">
+                        <div class="modal-body">
+
+
+
+                            <div class="row">
+                                <div class="col-sm-12">
+
+
+                                    {% csrf_token %}
+                                    {% for header in PRheader %}
+                                    <input type="hidden" id="PP_Number" name="PP_Number" value="{{header.PP_Number}}">
+                                    {% endfor %}
+                                    <script>
+                                        function Calculate1(Item) {
+                                   
+                                            document.getElementById("id_Harga_Satuan").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            if (document.getElementById("id_Jumlah_Order").value.toString() != "") document.getElementById("id_Harga_Total").value = (parseInt(Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(document.getElementById("id_Jumlah_Order").value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            else document.getElementById("id_Harga_Total").value = "";
+                                            //console.log(Item.value)
+                                            //console.log(document.getElementById("id_Jumlah_Order").value.toString())
+                                            //console.log(document.getElementById("id_Harga_Total").value)
+                                        }
+                                        function Calculate2(Item) {
+
+                                            //document.getElementById("id_Harga_Satuan").value = Item.value.toString().replace(/\D/g,'').replace(/\./g,"").replace(".","").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+ 
+                                            if (document.getElementById("id_Harga_Satuan").value.toString() != "") document.getElementById("id_Harga_Total").value = (parseInt(document.getElementById("id_Harga_Satuan").value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) * parseInt(Item.value)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            else document.getElementById("id_Harga_Total").value = "";
+                                            //console.log(Item.value)
+                                            //console.log(document.getElementById("id_Harga_Satuan").value)
+                                            //console.log(document.getElementById("id_Harga_Total").value)
+                                        }
+                                    </script>
+
+                                    <style>
+                                        .select2-selection__rendered {
+                                            line-height: 31px !important;
+                                        }
+
+                                        .select2-container .select2-selection--single {
+                                            height: 40px !important;
+                                            padding-left: 10px;
+                                            padding-top: 2px;
+
+                                        }
+
+                                        .select2-selection__arrow {
+                                            height: 34px !important;
+                                        }
+                                    </style>
+
+                                    <div class="row">
+                                        <div class="col-sm-3"> Select Item</div>
+                                        <div class="col-sm-9">
+
+
+                                            <select style="width: 100%;vertical-align: middle;" class="form-control2"
+                                                id="select" name="state" onchange="SelectItem(this)" required>
+                                                <option disabled selected value> --------- </option>
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 5px;"><br></div>
+
+
+
+                                    {% for item in PRitem %}
+                                    {% if item.label == "PP Number" %}
+                                    <div></div>
+
+                                    {% elif item.label == "Tgl Kedatangan" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control datepicker"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+                                    {% elif item.label in 'Detail Spec,Currency,Expense,Jenis Barang,Kode Barang,Nama Barang,Harga Total,Asset No GL Account,Minimal Stock,Actual Stock,Average Usage,Budget' %}
+
+                                    <div class="row">
+                                        {{item|attr:"hidden"}}
+                                    </div>
+                                    {% elif item.label == "Cost Center" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            <select class="form-control2" style="width: 100%;" name="Cost_Center"
+                                                id="id_Cost_Center" required>
+                                                <option disabled selected value> --------- </option>
+                                                {% for cost in CostCenter %}
+                                                {% for header in PRheader %}
+                                                {% if '1' in header.Company %}
+                                                {%if cost.Plant in 'Plant 1,Common' %}
+                                                <option style="font-size: xx-small;" value="{{cost.Cost_Center}}">
+                                                    {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+                                                {% endif %}
+                                                {% else %}
+                                                {%if cost.Plant in 'Plant 2,Common' %}
+                                                <option style="font-size: xx-small;" value="{{cost.Cost_Center}}">
+                                                    {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+                                                {% endif %}
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+
+                                    {% elif item.label == "Jumlah Order" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control"|attr:"onchange:Calculate2(this)"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+                                    {% elif item.label == "Unit Order" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+
+                                    {% elif item.label == "Harga Satuan" %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control"|attr:"onchange:Calculate1(this)"|attr:"placeholder:harga dalam satuan Indonesian Rupiah (IDR)"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+                                    
+
+                                    {% else %}
+
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{item.label}}
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                            {{item|add_class:"form-control"}}
+
+                                        </div>
+                                    </div>
+                                    <div style="max-height: 2px;"><br></div>
+
+                                    {%endif%}
+                                    {%endfor%}
+
+
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="additem" class="btn btn-primary">Add Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% elif mode == "approval" %}
+<div class="card">
+
+    <div class="card-body">
+
+        <center>
+            <h5 style="margin-bottom: -20px;">Create Purchase Request</h5>
+        </center>
+
+        <ul class="progressbardot">
+            <li class="active">input data header</li>
+            <li class="active">add item purchase</li>
+            <li class="active">approval & attachment</li>
+            <li>send approval email</li>
+        </ul>
+        <br>
+        <br>
+
+
+        <div class="row" style="padding-left: 14px;">
+            <div class="col-sm-9">
+                <table>
+                    <tr>
+                        <td style="width: 140px;">Plant</td>
+                        <td>: {{PRheader.Company}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bussiness Area</td>
+                        <td>: {{PRheader.Bussiness_Area}}</td>
+                    </tr>
+                    <tr>
+                        <td>Date Created</td>
+                        <td>: {{PRheader.Date_Created|date:'d M Y'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Jenis PP </td>
+                        <td>: {{PRheader.Jenis_PP}}</td>
+                    </tr>
+                    <tr>
+                        <td>PP Number</td>
+                        <td>: {{PRheader.PP_Number}}</td>
+                    </tr>
+                    <tr>
+                        <td>User Name</td>
+                        <td>: {{PRheader.User_Name}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-3">
+
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button class="btn btn-warning" onclick="history.back()"
+                            style="height: 50px;width: 150px;">Back</button>
+                        <!-- <button type="submit" name = "finishitem" class="btn btn-info" style="height: 50px;width: 150px;" >Refresh</button> -->
+                    </div>
+                    <div class="col-sm-6">
+                        <button id="finish" type="submit" name="finish" class="btn btn-info"
+                            style="height: 50px;width: 150px;" form="formsubmit">Finish</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div style="max-height: 5px;"><br></div>
+
+        <form id="formsubmit" action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="PP_Number" name="PP_Number" value="{{PRheader.PP_Number}}">
+
+            <table class="style" id="table" style="border: 1px solid black; font-size: small;text-align: center;">
+                <thead style="border: 1px solid black;">
+                    <tr style="border: 1px solid black; height: 50px; word-break: normal;">
+                        <th rowspan="2" style="border: 1px solid black;">NO</th>
+                        <th rowspan="2" style="border: 1px solid black;">A* (Exp)</th>
+                        <th rowspan="2" style="border: 1px solid black;">I* (Jenis)</th>
+                        <th rowspan="2" style="border: 1px solid black;">Kode Barang</th>
+                        <th rowspan="2" style="border: 1px solid black;">Nama Barang / Deskripsi Service</th>
+                        <th colspan="2" style="border: 1px solid black;">Dipesan</th>
+                        <th colspan="2" style="border: 1px solid black;">Perkiraan Harga</th>
+                        <th rowspan="2" style="border: 1px solid black;">Tanggal Kedatangan</th>
+                        <th colspan="2" style="border: 1px solid black; word-break: keep-all;">Account Assignment</th>
+                        <th rowspan="2"
+                            style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                            Minimal Stock</th>
+                        <th rowspan="2"
+                            style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                            Actual Stock</th>
+                        <th rowspan="2"
+                            style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                            Average Usage</th>
+                        <th rowspan="2"
+                            style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                            Budget</th>
+                        <th rowspan="2"
+                            style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">
+                            Un-Budget</th>
+                        <th rowspan="2" style="border: 1px solid black; width: 100px;">Catatan</th>
+                    </tr>
+                    <tr style="height:50px">
+                        <th style="border: 1px solid black;">Jumlah</th>
+                        <th style="border: 1px solid black;">UoM</th>
+                        <th style="border: 1px solid black;">Satuan</th>
+                        <th style="border: 1px solid black;">Total</th>
+                        <th style="border: 1px solid black;">Cost Center</th>
+                        <th style="border: 1px solid black;">Asset No./GL Account</th>
+                    </tr>
+                </thead>
+                <tbody style="border: 1px solid black;">
+                    {% for item in itemlist%}
+                    <tr style="height: 30px;">
+                        <td style="border: 1px solid black;">{{forloop.counter}}</td>
+                        <td style="border: 1px solid black;">{{item.Expense|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Jenis_Barang|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Kode_Barang|default_if_none:''}}</td>
+                        <td style="border: 1px solid black; text-align: left;padding-left: 5px;">{{item.Nama_Barang}}
+                            {{item.Detail_Spec|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Jumlah_Order}}</td>
+                        <td style="border: 1px solid black;">{{item.Unit_Order}}</td>
+                        <td style="border: 1px solid black;">{{item.Harga_Satuan|default_if_none:''}}
+                            {{item.Currency|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Harga_Total|default_if_none:''}}
+                            {{item.Currency|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.PIC}}</td>
+                        <td style="border: 1px solid black;">{{item.Cost_Center|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Asset_No_GL_Account|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Minimal_Stock|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Actual_Stock|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{{item.Average_Usage|default_if_none:''}}</td>
+                        <td style="border: 1px solid black;">{%if item.Budget == 'Budget' %}x{% endif %}</td>
+                        <td style="border: 1px solid black;">{%if item.Budget == 'UnBudget' %}x{% endif %}</td>
+                        <td style="border: 1px solid black;">{{item.Note}}</td>
+                    </tr>
+
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+            <br>
+            <h6>Approval</h6>
+
+            <div style="max-height: 5px;"><br></div>
+            {% if PRheader.Jenis_PP == 'ZRAT-PR Asset' %}
+            <div class="row">
+                <div class="col-sm-9">
+
+
+                    {%endif%}
+
+
+                    {% if Approval.DivHead is None %}
+                    <table class="table-bordered" style="font-size: small;margin-left: auto;margin-right: auto;">
+                        <tbody>
+                            <tr style="height:150px;">
+                                <td id="USER"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{PRheader.User_Name|upper}}</td>
+                                <td id="DEPTHEAD"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.DeptHead}}</td>
+                                <td id="FINANCE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Finance}}</td>
+                                <td id="DIREKTUR"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Direktur}}</td>
+                                <td id="PURCHASE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Purchase}}</td>
+                            </tr>
+                            <tr style="height:15px;">
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    User</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Dept Head</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Finance</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Pres Dir</td>
+                                <td id="PURCHASE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Purchase</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% elif Approval.DeptHead is None %}
+                    <table class="table-bordered" style="font-size: small;margin-left: auto;margin-right: auto;">
+                        <tbody>
+                            <tr style="height:150px;">
+                                <td id="USER"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{PRheader.User_Name|upper}}</td>
+                                <td id="DIVHEAD"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.DivHead}}</td>
+                                <td id="FINANCE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Finance}}</td>
+                                <td id="DIREKTUR"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Direktur}}</td>
+                                <td id="PURCHASE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Purchase}}</td>
+                            </tr>
+                            <tr style="height:15px;">
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    User</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Div Head</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Finance</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Pres Dir</td>
+                                <td id="PURCHASE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Purchase</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <table class="table-bordered" style="font-size: small;margin-left: auto;margin-right: auto;">
+                        <tbody>
+                            <tr style="height:150px;">
+                                <td id="USER"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{PRheader.User_Name|upper}}</td>
+                                <td id="DEPTHEAD"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.DeptHead}}</td>
+                                <td id="DIVHEAD"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.DivHead|default_if_none:''}}</td>
+                                <td id="FINANCE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Finance}}</td>
+                                <td id="DIREKTUR"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Direktur}}</td>
+                                <td id="PURCHASE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    {{Approval.Purchase}}</td>
+                            </tr>
+                            <tr style="height:15px;">
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    User</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Dept Head</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Div Head</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Finance</td>
+                                <td
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Pres Dir</td>
+                                <td id="PURCHASE"
+                                    style="border-width: 1px;border-color: black;width: 200px;text-align: center;vertical-align: bottom;">
+                                    Purchase</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% endif %}
+
+                    {% if PRheader.Jenis_PP == 'ZRAT-PR Asset' %}
+                </div>
+                <div class="col-sm-3">
+                    <table style="font-size: 12px;width:100%;border: 1px solid black;">
+                        <tr>
+                            <td style="width:5%;"></td>
+                            <td style="width:40%;height: 25px;"></td>
+                            <td></td>
+                            <td style="text-align: right;"> Khusus PP Asset(ZRAT)
+                            <td>
+                            <td style="width:15%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:5%;"></td>
+                            <td style="height: 25px;">Budget No</td>
+                            <td>:</td>
+                            <td>{{PRheader.Budget_No}}
+                            <td>
+                            <td style="width:15%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:5%;"></td>
+                            <td style="height: 25px;">Budget</td>
+                            <td>:</td>
+                            <td style="text-align: right;">{{PRheader.Budget_Rp}}
+                            <td>
+                            <td style="width:15%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:5%;"></td>
+                            <td style="height: 25px;">PP diproses</td>
+                            <td>:</td>
+                            <td style="text-align: right;border-bottom: 1px solid black;">{{PRheader.PP_diProses}}
+                            <td>
+                            <td style="width:15%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:5%;"></td>
+                            <td style="height: 25px;">Sisa</td>
+                            <td>:</td>
+                            <td style="text-align: right;"><span id="sisabudget">{{PRheader.Sisa_Budget}}</span>
+                            <td>
+                            <td style="width:15%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:5%;"></td>
+                            <td style="height: 25px;">PP diajukan</td>
+                            <td>:</td>
+                            <td style="text-align: right;border-bottom: 1px solid black;"><span id="PP_calc"></span>
+                            <td>
+                            <td style="width:15%;"></td>
+                        </tr>
+                        <tr>
+                            <td style="width:5%;"></td>
+                            <td style="height: 25px;">Sisa</td>
+                            <td>:</td>
+                            <td style="text-align: right;"><span id="final_calc"></span>
+                            <td>
+                            <td style="width:15%;"></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <script>
+
+                $(document).ready(function () {
+
+
+                    var table = document.getElementById("table"), sumVal = 0;
+
+
+                    //console.log(table.rows[2].cells[8].innerHTML);
+                    for (var i = 2; i < table.rows.length; i++) {
+                        sumVal = sumVal + parseInt((table.rows[i].cells[8].innerHTML).toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""));
+                    }
+
+                    document.getElementById("PP_calc").innerText = sumVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " IDR";
+                    document.getElementById("final_calc").innerText = (parseInt(document.getElementById("sisabudget").innerText.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "")) - sumVal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " IDR";
+                    document.getElementById("id_PP_diAjukan").value = document.getElementById("PP_calc").innerText;
+                    document.getElementById("id_Sisa_Final").value = document.getElementById("final_calc").innerText;
+                    var sisa = parseInt(document.getElementById("final_calc").innerText.toString().replace(/\./g, "").replace(".", ""));
+                    console.log(sisa);
+                    if (sisa < 0) {
+                        alert("Budget anda tidak cukup untuk memproses purchase request ini, check ulang item dan lakukan penambahan budget terlebih dahulu!");
+                        document.getElementById("finish").style.display = 'none';
+                    }
+                    //console.log(sumVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                });
+            </script>
+            {% endif%}
+
+
+
+            {% with 'Attachment1,Attachment2,Attachment3' as list %}
+            {% for form in PRheaderform %}
+            {% if forloop.counter == 25 %}
+
+            <input type="email" id="SPV_Email" name="SPV_Email" value="{{Approval.Supervisor_email}}" hidden>
+            {% if Approval.DeptHead is not None %}
+            <input type="email" id="Dept_Head_Email" name="Dept_Head_Email" value="{{Approval.DeptHead_email}}" hidden>
+            {% endif %}
+            {% if Approval.DivHead is not None %}
+            <input type="email" id="Div_Head_Email" name="Div_Head_Email" value="{{Approval.DivHead_email}}" hidden>
+            {% endif %}
+            <input type="email" id="Finance_Email" name="Finance_Email" value="{{Approval.Finance_email}}" hidden>
+            <input type="email" id="Direktur_Email" name="Direktur_Email" value="{{Approval.Direktur_email}}" hidden>
+            <input type="email" id="Purchase_Email" name="Purchase_Email" value="{{Approval.Purchase_email}}" hidden>
+
+
+
+
+            <br>
+            <h6>Upload Quotation (Penawaran) as Attachment</h6>
+
+            {% endif %}
+            {% if form.label in list %}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-2">
+                        {{form.label}}
+                    </div>
+                    <div class="col-sm-8">
+                        {{form|add_class:"form-control"}}
+                    </div>
+                </div>
+            </div>
+            {% elif 'mail' in form.label%}
+            {% if form.label == "User Email"%}
+            {{form|attr:"hidden"}}
+            {% endif %}
+            {% elif form.label == "PP diAjukan"%}
+            <input type="text" id="id_PP_diAjukan" name="PP_diAjukan" value="" hidden>
+            {% elif form.label == "Sisa Final"%}
+            <input type="text" id="id_Sisa_Final" name="Sisa_Final" value="" hidden>
+            {% else %}
+            {{form|attr:"hidden"}}
+            {% endif %}
+
+            {% endfor %}
+            {% endwith %}
+
+        </form>
+    </div>
+</div>
+
+
+
+{% elif mode == "finish" %}
+<div class="card">
+    <div class="card-body" style="min-height: 78vh;">
+        <center>
+            <h5 style="margin-bottom: -20px;">Create Purchase Request</h5>
+        </center>
+
+        <ul class="progressbardot">
+            <li class="active">input data header</li>
+            <li class="active">add item purchase</li>
+            <li class="active">approval & attachment</li>
+            <li class="active">send approval email</li>
+        </ul>
+        <br>
+        <br>
+
+        <center>
+            <h6>Purchase Request With ID <span><a
+                        href="/PR/ListPP/{{PRheader.PP_Number}}">{{PRheader.PP_Number}}</a></span></h6>
+        </center>
+
+        <center>
+            <h1>Finish created!</h1>
+        </center>
+    </div>
+</div>
+{%endif%}
+
+
+{% endblock %}

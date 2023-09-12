@@ -1,0 +1,311 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card" style="min-height: 78vh;">
+    <div class="card-body">
+
+        <center>
+            <h6>{{Judul}}</h6>
+        </center>
+        <br>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+      
+                        <table style="width: 100%;">
+                            <tr>
+                                <td width="10%">Bussiness Unit</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{FP.Bussiness_Unit|add_class:"form-control"|attr:"value:AK"}}</td>
+                                <td width="1%"></td>
+                                <td width="10%">Note</td>
+                                <td width="1%">:</td>
+                                <td width="20%">{{FP.Note|add_class:"form-control"}}</td>
+                                <td width="1%"></td>
+                                <td width="10%"><div class="BANK">Bank Name</div> </td>
+                                <td width="1%"><div class="BANK">:</div></td>
+                                <td width="20%"><div class="BANK">{{FP.Bank|add_class:"form-control"}}</div></td>
+                            </tr>
+                            <tr>
+                                <td>Div / Dept</td>
+                                <td>:</td>
+                                <td>{{FP.Dept|add_class:"form-control"}}</td>
+                                <td></td>
+                                <td>Paid by</td>
+                                <td>:</td>
+                                <td>{{FP.PaidBy|add_class:"form-control"|attr:"onchange:banking(this)"}}</td>
+                                <td></td>
+                                <td><div class="BANK">Nomor Rekening</div></td>
+                                <td><div class="BANK">:</div></td>
+                                <td><div class="BANK">{{FP.Nomor_Rekening|add_class:"form-control"}}</div></td>
+                            </tr>
+                            <tr>
+                                <td>User</td>
+                                <td>:</td>
+                                <td>
+                                    <select class="form-control" name="User_Select" id="id_User_Select"
+                                        onchange="GetSelectedTextValue(this)">
+                                        {% for App in Approval %}
+                                        <option value="{{forloop.counter}}">{{App|cut:user.get_username|slice:"1:"}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td></td>
+                                <td>PayReq Number</td>
+                                <td>:</td>
+                                <td>{{FP.FP_Number|add_class:"form-control"|attr:"readonly"}}</td>
+                                <td></td>
+                                <td><div class="BANK">Pemilik Rekening</div></td>
+                                <td><div class="BANK">:</div></td>
+                                <td><div class="BANK">{{FP.Nama_Rekening|add_class:"form-control"}}</div></td>
+                            </tr>
+                            <tr>
+                                <td>Cost Center</td>
+                                <td>:</td>
+                                <td>
+                                    <select class="form-control2" style="width: 100%;height: auto;" name="CostCenter"
+                                                id="id_CostCenter" required>
+                                                <option disabled selected value> --------- </option>
+                                                {% for cost in CostCenter %}
+                                               
+                                                <option style="font-size: small;" value="{{cost.Cost_Center}}">
+                                                    {{cost.Cost_Center}} - {{cost.Area}} - {{cost.Description}}</option>
+                                                
+                                                {% endfor %}
+                                            </select>
+                                </td>
+                                <td></td>
+                                <td>Temp Bon Reference </td>
+                                <td>:</td>
+                                <td>{{FP.Reference|add_class:"form-control"|attr:"readonly"}}</td>
+                            </tr>
+                        </table>
+                   
+
+         
+
+            <hr style="border: 1px solid black;">
+            <table style="width: 100%;">
+                <tr>
+                <td style="width: 100px;"><h6>Paid to</h6></td>
+                <td>{{FP.PaidTo|add_class:"form-control"}}</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top;"><h6>Description</h6></td>
+                    <td>{{FP.Description|add_class:"form-control"}}</td>
+                </tr>
+                <tr>
+                    <td><h6>Amount</h6></td>
+                    <td>
+                        <table>
+                        <tr>
+                            <td>Rp.</td>
+                            <td>{{FP.Amount|add_class:"form-control"|attr:"style: text-align: right"|attr:"onkeyup:calculate(this)"}}</td>
+                            <td>,-</td>
+                            
+                        </tr>
+                    </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Says</h6></td>
+                    <td> {{FP.Says|add_class:"form-control"}}</td>
+                </tr>
+            </table>
+            <hr style="border: 1px solid black;">
+            <div class="row" style="align-self: center;">
+                <div style="padding-left: 15px;" class="col-sm-4">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td><h6>Entertainment Number : </h6></td>
+                            <td>
+                                <select class="form-control" style="width: 100%;height: auto;" name="Entertaint"
+                                    id="id_Entertaint" onchange="ChangeEntertaint(this)">
+                                    <option selected value> --------- </option>
+                               
+                                    {% for entertaint in Entertainment %}
+                                    <option style="font-size: small;" value="{{entertaint.BE_Number}}">{{entertaint.BE_Number}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        {{FP.Entertainment|attr:"hidden"}}
+                    </table>
+                </div>
+                <div class="col-sm-8">
+                    <embed type="application/pdf" id="preview" src=""
+                    style="background-color: whitesmoke;padding: 2px;" width="100%" height="650px" ></embed>
+                </div>
+                <script>
+                    function ChangeEntertaint(item) {
+                        console.log('selection change');
+                        if (item.value == '')
+                        {document.getElementById("preview").style.visibility = "hidden";
+                        document.getElementById("preview").style.height = "10px";
+
+                        }
+                        else{
+                            var selectedText = item.options[item.selectedIndex].innerHTML;
+                        document.getElementById("preview").style.height = "650px";
+                        var selectedValue = item.value;
+                        document.getElementById("preview").style.visibility = "visible";
+                        document.getElementById("preview").src = "/Media/Entertaint/"+[selectedValue]+".pdf#toolbar=0";
+                        document.getElementById('id_Entertainment').value = [selectedValue];
+                        }
+                    }
+                </script>
+            </div>
+            <hr style="border: 1px solid black;">
+            <h6>Attachment</h6>
+            <table style = "width:100%">
+            <tr>
+                <td>1.</td>
+                <td>{{FP.Attachment1|add_class:"form-control"}}</td>
+            </tr>
+            <tr>
+                <td>2.</td>
+                <td>{{FP.Attachment2|add_class:"form-control"}}</td>
+            </tr>
+            <tr>
+                <td>3.</td>
+                <td>{{FP.Attachment3|add_class:"form-control"}}</td>
+            </tr>
+            <tr>
+                <td>4.</td>
+                <td>{{FP.Attachment4|add_class:"form-control"}}</td>
+            </tr>
+            <tr>
+                <td>5.</td>
+                <td>{{FP.Attachment5|add_class:"form-control"}}</td>
+            </tr>
+
+            </table>
+            <hr style="border: 1px solid black;">
+            <h6>Approval</h6>
+            <table class="table table-bordered" style="text-align: center;width: 90%;">
+                <tr>
+                    <td style="width: 15%;">Received by</td>
+                    <td style="width: 15%;">Payment Approved by</td>
+                    <td style="width: 15%;">Request Approved by</td>
+                    <td style="width: 15%;">Request Approved by</td>
+                    <td style="width: 15%;">Requested by</td>
+                </tr>
+                <tr style="height: 100px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>{{FP.Dir_Finance|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                    <td>{{FP.Finance|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                    <td>{{FP.DeptHead|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                    <td>{{FP.User_Name|add_class:"form-control"|attr:"readonly"|attr:"style:text-align:center"}}</td>
+                </tr>
+                <tr>
+                    <td>Receiver</td>
+                    <td>Direktur</td>
+                    <td>Finance</td>
+                    <td>Dept/Div Head</td>
+                    <td>User</td>
+                </tr>
+            </table>
+            {{FP.Dir_Finance_Email|attr:"hidden"}}
+            {{FP.Finance_Email|attr:"hidden"}}
+            {{FP.DeptHead_Email|attr:"hidden"}}
+            {{FP.User_Email|attr:"hidden"}}
+            {{FP.FP_Status|attr:"hidden"}}
+
+            <button class="btn btn-success" style="float: right;width:150px;"> Submit</button>
+        </form>
+        <br>
+        <br>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var approve = {{ Data| safe}};
+
+    
+    $(document).ready(function () {
+        document.getElementById("preview").style.visibility = "hidden";
+        document.getElementById("preview").style.height = "10px";
+        $('.form-control2').select2();
+        document.getElementById("id_User_Email").value = approve[0].fields.Supervisor_email;
+        document.getElementById("id_User_Name").value = approve[0].fields.Supervisor;
+        if(approve[0].fields.DeptHead == null){
+        document.getElementById("id_DeptHead_Email").value = approve[0].fields.DivHead_email;
+        document.getElementById("id_DeptHead").value =  approve[0].fields.DivHead;
+        }
+        else{
+        document.getElementById("id_DeptHead_Email").value = approve[0].fields.DeptHead_email;
+        document.getElementById("id_DeptHead").value = approve[0].fields.DeptHead;
+        }
+       
+        document.getElementById("id_Finance_Email").value = approve[0].fields.Finance_email;
+        document.getElementById("id_Finance").value = approve[0].fields.Finance;
+        document.getElementById("id_Dir_Finance_Email").value = approve[0].fields.Dir_Finance_email;
+        document.getElementById("id_Dir_Finance").value = approve[0].fields.Dir_Finance;
+        var list = document.getElementsByClassName("BANK")
+        for (var i = 0; i < list.length; i ++) {
+                list[i].style.display = 'none';
+            }
+        document.getElementById("id_Entertainemnt").value = document.getElementById("id_Entertainemnt").value
+        
+    })
+
+    function GetSelectedTextValue(item) {
+        var selectedText = item.options[item.selectedIndex].innerHTML;
+        var selectedValue = item.value;
+
+        document.getElementById("id_User_Email").value = approve[selectedValue - 1].fields.Supervisor_email;
+        document.getElementById("id_User_Name").value = approve[selectedValue - 1].fields.Supervisor;
+        if(approve[selectedValue - 1].fields.DeptHead === null){
+        document.getElementById("id_DeptHead_Email").value = approve[selectedValue - 1].fields.DivHead_email;
+        document.getElementById("id_DeptHead").value =  approve[selectedValue - 1].fields.DivHead;
+        }
+        else{
+        document.getElementById("id_DeptHead_Email").value = approve[selectedValue - 1].fields.DeptHead_email;
+        document.getElementById("id_DeptHead").value = approve[selectedValue - 1].fields.DeptHead;
+        }
+       
+        document.getElementById("id_Finance_Email").value = approve[selectedValue - 1].fields.Finance_email;
+        document.getElementById("id_Finance").value = approve[selectedValue - 1].fields.Finance;
+        document.getElementById("id_Dir_Finance_Email").value = approve[selectedValue - 1].fields.Dir_Finance_email;
+        document.getElementById("id_Dir_Finance").value = approve[selectedValue - 1].fields.Dir_Finance;
+
+    }
+
+    function calculate(input){
+
+        while (parseInt(input.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", ""))>1000000)
+        {
+            input.value = input.value.slice(0, -1)
+        }
+        
+
+        document.getElementById("id_Amount").value = input.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                            
+    }
+
+    function banking(input){
+        var list = document.getElementsByClassName("BANK")
+        
+        if (input.value=="BANK"){
+            for (var i = 0; i < list.length; i ++) {
+                list[i].style.display = 'block';
+            }
+        }
+        else {
+            for (var i = 0; i < list.length; i ++) {
+                list[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+{% endblock %}

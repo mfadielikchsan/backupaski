@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="pdfkit-page-size" content="A4" />
+    <meta name="pdfkit-orientation" content="Landscape" />
+</head>
+
+<body>
+
+    <style>
+        .table-header {
+            table-layout: auto;
+            border: 1px solid #dee2e6;
+            width: 100%;
+            font-size: small;
+            border-collapse: collapse;
+            align-items: center;
+        }
+
+        .table-header td {
+            white-space: nowrap;
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+
+        .table-header tr td {
+            border: 1px solid #000000;
+            padding: 5px;
+        }
+
+        .table-approve {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+            padding: 5px;
+            font-size: small;
+        }
+
+        .table-approve tr th,
+        .table-approve tr td {
+            border: 1px solid #000000;
+        }
+
+        #watermark {
+        position: relative;
+        overflow: hidden;
+        }
+
+        #watermark h4 {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            display: block;
+            width: 150%;
+            height: 150%;
+            z-index:-1;
+            color: #ffffcc;
+            opacity: 1;
+            line-height: 3em;
+            letter-spacing: 2px;
+            font-size: 30px;
+            pointer-events: none;
+            /* -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg); */
+        }
+    </style>
+
+    <table class="table-header">
+        <tr>
+            <td rowspan="3" style="width: 15%;">
+                <img src="http://127.0.0.1:8000/static/image/ASKI.png"
+                    style="width: 80%;margin-left: auto;margin-right: auto;display: block;" alt="GAMBARR">
+            </td>
+            <td rowspan="3" style="text-align: center;">
+                <h2>PEMBUATAN HARGA PENJUALAN di SAP</h2>
+            </td>
+            <td style="width: 7%;">No. Document</td>
+            <td style="text-align: center;">:</td>
+            <td style="text-align: center; width: 7%;">FR-FACT.02.001</td>
+        </tr>
+
+        <tr>
+            <td>Revision</td>
+            <td style="text-align: center;">:</td>
+            <td style="text-align: center;">0</td>
+        </tr>
+        <tr>
+            <td>Effective Start</td>
+            <td style="text-align: center;">:</td>
+            <td style="text-align: center;">25 Agustus 2022</td>
+        </tr>
+
+    </table>
+
+    <table style="width: 100%; font-size: small;">
+        <br><br><br>
+        <tr>
+            <th>
+            <th>
+            <th>
+            <th>
+            <th>
+            <th>
+            <th>
+            <th>
+            <th>
+            <th>
+            <td>Submit Date : </td>
+            <td style="width: 15%;">23 Agustus 2022</td>
+            </th>
+            </th>
+            </th>
+            </th>
+            </th>
+            </th>
+            </th>
+            </th>
+            </th>
+
+            </th>
+        </tr>
+        <tr>
+            <th>
+            <td >Cust Code : </td>
+            <td style="width: 18%;">SIS01001</td>
+            </th>
+            <th>
+            <td style="width: 7%;">Cust Name : </td>
+            <td style="width: 25%;">PT SUZUKI INDOMOBILSALES</td>
+            </th>
+            <th>
+            <td style="width: 7%;">Dist Channel : </td>
+            <td style="width: 15%;">01</td>
+            </th>
+            <th>
+            <td style="width: 7%;">No : </td>
+            <td style="width: 15%;">ASKISELLINGPRICE00018rev1</td>
+            </th>
+        </tr>
+    </table>
+
+    <table class="table-approve" style="width: 100%;">
+        <thead>
+            <tr style=" height: 50px; word-break: normal; border: 1px solid">
+                <th rowspan="2" style="vertical-align: middle;">Type</th>
+                <th rowspan="2" style="vertical-align: middle;">Material No</th>
+                <th rowspan="2" style="vertical-align: middle;">Material Description</th>
+                <th rowspan="2" style="vertical-align: middle;">Customer Material</th>
+                <th colspan="5">Old Price</th>
+                <th colspan="5">New Price</th>
+                <th rowspan="2" style="vertical-align: middle;">Ratio</th>
+                <th rowspan="2" style="vertical-align: middle;">Note</th>
+            </tr>
+            <tr style="font-size: 12px;text-align: center;font-weight: normal; border: 1px solid">
+                <th style="padding: 5px;">Price</th>
+                <th style="padding: 5px;">Depreciation</th>
+                <th style="padding: 5px;">Total</th>
+                <th style="padding: 5px;">UoM</th>
+                <th style="padding: 5px;">Valid From</th>
+                <th style="padding: 5px;">Price</th>
+                <th style="padding: 5px;">Depreciation</th>
+                <th style="padding: 5px;">Total</th>
+                <th style="padding: 5px;">UoM</th>
+                <th style="padding: 5px;">Valid From</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 5px;">ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+                <td>ss</td>
+            </tr>
+        </tbody>    
+    </table>
+    <br>
+    <br>
+    <table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;" >
+        <tbody >
+            <tr style="height:10px;">
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Created By</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Checked By</td>
+                <td colspan="3" style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Approved By</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">SAP Input By</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Confrimed By</td>
+            </tr>
+            <tr style="height:40px;">
+                <td style="padding:20px;border-right: 1px solid black; border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">Created </td>
+                <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">Checked </td>
+                <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green; border-right: 1px solid black;" >Approved </td>
+                <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;" >Approved </td>
+                <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green; border-left: 1px solid black;" >Approved </td>
+                <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">Input </td>
+                <td style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">Confirm </td>
+            </tr>
+            <tr style="height:20px;">
+                <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;"></td>
+                <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;"></td>
+                <td style="text-align: center;vertical-align: bottom; border-right: 1px solid black;"></td>
+                <td style="text-align: center;vertical-align: bottom;"></td>
+                <td style="text-align: center;vertical-align: bottom; border-left: 1px solid black;"></td>
+                <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;"></td>
+                <td style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;"></td>
+            </tr>
+            <tr style="height:10px;">
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing SPV</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Marketing Dept Head</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Bussiness Dev Div Head</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Director</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Press Director</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Finance Admin</td>
+                <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Finance Dept Head</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

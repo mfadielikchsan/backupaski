@@ -1,0 +1,382 @@
+{%extends 'base.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<!-- <center><h1>{{Judul}}</h1></center> -->
+<div class="card">
+<div class="card-body">
+    <br>
+<center><h5>Add Asset Number {{PP_Number}}</h5></center>
+
+<h6>Item Purchase Request</h6>
+
+
+<form action="" method="POST" enctype="multipart/form-data" id="asset">
+    {% csrf_token %}
+
+<div class="row" style="padding-left: 14px;">
+    <div class="col-sm-10">
+    <table>
+        <tr>
+            <td style ="width: 140px;">Company</td>
+            <td>: {{PRheader.Company}}</td>
+        </tr>
+        <tr>
+            <td>Bussiness Area</td>
+            <td>: {{PRheader.Bussiness_Area}}</td>
+        </tr>
+        <tr>
+            <td>Date Created</td>
+            <td>: {{PRheader.Date_Created|date:'d M Y'}}</td>
+        </tr>
+        <tr>
+            <td>Jenis PP </td>
+            <td>: <span style="display: inline-block;margin-right:10px;" >{{PRheader.Jenis_PP}}</span>
+                <select style="display: inline-block;width:max-content;"  class="form-control" type="text" id="JenisPP {{PRheader.PP_Number}} Data" name="JenisPP {{PRheader.PP_Number}} Data" >
+                <option value="">Change?</option>
+                <option value="ZRMT-PR Material">ZRMT-PR Material</option>
+                <option value="ZRSV-PR Service">ZRSV-PR Service</option>
+                <option value="ZRAT-PR Asset">ZRAT-PR Asset</option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td>PP Number</td>
+            <td>: {{PRheader.PP_Number}}</td>
+        </tr>
+        <tr>
+            <td>User Name</td>
+            <td>: {{PRheader.User_Name}}</td>
+        </tr>
+    </table>
+</div>
+<div class="col-sm-2">
+</div>
+</div>
+
+
+
+<div style="max-height: 5px;"><br></div>
+
+    
+<table class="style" style="border: 1px solid black; font-size: small;text-align: center;">
+    <thead style="border: 1px solid black;">
+        <tr style="border: 1px solid black; height: 50px; word-break: normal;">
+            <th rowspan="2" style="border: 1px solid black;">NO</th>
+            <th rowspan="2" style="border: 1px solid black;">A* (Exp)</th>
+            <th rowspan="2" style="border: 1px solid black;">I* (Jenis)</th>
+            <th rowspan="2" style="border: 1px solid black;">Kode Barang</th>
+            <th rowspan="2" style="border: 1px solid black;">Nama Barang / Deskripsi Service</th>
+            <th colspan="2" style="border: 1px solid black;">Dipesan</th>
+            <th colspan="2" style="border: 1px solid black;">Perkiraan Harga</th>
+            <th rowspan="2" style="border: 1px solid black;">Tanggal Kedatangan</th>
+            <th colspan="2" style="border: 1px solid black; word-break: keep-all;">Account Assignment</th>
+            <th rowspan="2" style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">Minimal Stock</th>
+            <th rowspan="2" style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">Actual Stock</th>
+            <th rowspan="2" style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">Average Usage</th>
+            <th rowspan="2" style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">Budget</th>
+            <th rowspan="2" style="border: 1px solid black; transform: rotate(-90deg); width: 1%; vertical-align: middle; ">Un-Budget</th>
+            <th rowspan="2" style="border: 1px solid black; width: 100px;">Catatan</th>
+        </tr>
+        <tr style="height:50px">
+            <th style="border: 1px solid black;">Jumlah</th>
+            <th style="border: 1px solid black;">UoM</th>
+            <th style="border: 1px solid black;">Satuan</th>
+            <th style="border: 1px solid black;">Total</th>
+            <th style="border: 1px solid black;">Cost Center</th>
+            <th style="border: 1px solid black;">Asset No./GL Account</th>
+        </tr>
+    </thead>
+    <tbody style="border: 1px solid black;">
+        {% for item in itemlist%}
+        <tr style="height: 30px;">
+            <td style="border: 1px solid black;">{{forloop.counter}}</td>
+            <td style="border: 1px solid black;">{{item.Expense|default_if_none:''}}  
+                <select class = "form-control" style="height:30px;font-size: small;" type="text" id="Expense {{PRheader.PP_Number}} {{item.Nama_Barang}}" name="Expense {{PRheader.PP_Number}} {{item.Nama_Barang}}" >
+                    <option value="" disabled selected></option>
+                    <option value="F">Internal Order (F)</option>
+                    <option value="K">Cost Center (K)</option>
+                    <option value="P">Project (P)</option>
+                    <option value=" ">Blank</option>
+                </select></td>
+            <td style="border: 1px solid black;">{{item.Jenis_Barang|default_if_none:''}} 
+                <select class = "form-control" style="height:30px;font-size: small;" type="text" id="Jenis {{PRheader.PP_Number}} {{item.Nama_Barang}}" name="Jenis {{PRheader.PP_Number}} {{item.Nama_Barang}}" >
+                    <option value="" disabled selected></option>
+                    <option value="K">Konsiyasi (K)</option>
+                    <option value="L">Subcontracting (L)</option>
+                    <option value="D">Service (D)</option>
+                    <option value=" ">Blank</option>
+                </select></td>
+            <td style="border: 1px solid black;">{{item.Kode_Barang|default_if_none:''}}</td>
+            <td style="border: 1px solid black; text-align: left;padding-left: 5px;">{{item.Nama_Barang}} {{item.Detail_Spec|default_if_none:''}}</td>
+            <td style="border: 1px solid black;">{{item.Jumlah_Order}}</td>
+            <td style="border: 1px solid black;">{{item.Unit_Order}}</td>
+            <td style="border: 1px solid black;">{{item.Harga_Satuan|default_if_none:''}} {{item.Currency}}</td>
+            <td style="border: 1px solid black;">{{item.Harga_Total|default_if_none:''}} {{item.Currency}}</td>
+            <td style="border: 1px solid black;">{{item.Tgl_Kedatangan}}</td>
+            <td style="border: 1px solid black;">{{item.Cost_Center|default_if_none:''}} 
+                <select class ="form-control2" style="width: 150px;" type="text" id="Cost {{PRheader.PP_Number}} {{item.Nama_Barang}}" name="Cost {{PRheader.PP_Number}} {{item.Nama_Barang}}" >
+                    <option disabled selected value></option>
+                    {% for cost in CostCenter %}
+                                <option style ="font-size: x-small;" value="{{cost.Cost_Center}}">{{cost.Cost_Center}} -{{cost.Plant}}- {{cost.Area}} - {{cost.Description}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td style="border: 1px solid black;">{{item.Asset_No_GL_Account|default_if_none:''}}  <input type="text" id="Asset {{PRheader.PP_Number}} {{item.Nama_Barang}}" name="Asset {{PRheader.PP_Number}} {{item.Nama_Barang}}" ></input></td>
+            <td style="border: 1px solid black;">{{item.Minimal_Stock|default_if_none:''}}</td>
+            <td style="border: 1px solid black;">{{item.Actual_Stock|default_if_none:''}}</td>
+            <td style="border: 1px solid black;">{{item.Average_Usage|default_if_none:''}}</td>
+            <td style="border: 1px solid black;">{%if item.Budget == 'Budget' %}x{% endif %}</td>
+            <td style="border: 1px solid black;">{%if item.Budget == 'UnBudget' %}x{% endif %}</td>
+            <td style="border: 1px solid black;">{{item.Note}}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<script>
+     $(document).ready(function() {
+                $('.form-control2').select2();
+     });
+</script>
+
+<br>
+<h6>Approval</h6>
+
+<div style="max-height: 5px;"><br></div>
+
+
+
+
+<table style="border: 1px solid black; font-size: 12px;text-align: center;border-collapse: collapse;">
+    <tbody>
+        <tr style="height:10px;">
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Pemesan</td>
+            {%if Approval.DivHead is None%}
+            <td colspan="3"
+                style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Disetujui/Mengetahui</td>
+            {%elif Approval.DeptHead is None%}
+            <td colspan="3"
+                style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Disetujui/Mengetahui</td>
+            {% else %}
+            <td colspan="4"
+                style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Disetujui/Mengetahui</td>
+            {% endif %}
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Purchasing</td>
+        </tr>
+        <tr style="height:40px;">
+            <td
+                style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">
+                Created {{PRheader.Submit|date:'r'}}</td>
+            {%if Approval.DeptHead is not None%}
+            <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                id="DEPH">{{ PRheader.Dept_Head_Approval_Status|default_if_none:''}}
+                {{ PRheader.Dept_Head_Approval_Date |date:'r'|default_if_none:''}}</td>
+            {% endif %}
+            {%if Approval.DivHead is not None%}
+            <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                id="DIVH">{{ PRheader.Div_Head_Approval_Status |default_if_none:''}}
+                {{ PRheader.Div_Head_Approval_Date|date:'r' |default_if_none:''}}</td>
+            {% endif %}
+            <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                id="FIN">{{ PRheader.Finance_Approval_Status |default_if_none:''}}
+                {{ PRheader.Finance_Approval_Date|date:'r' |default_if_none:''}}</td>
+            <td style="padding:20px;text-align: center;vertical-align: bottom;font-style: italic;color: green;"
+                id="DIR">{{ PRheader.Direktur_Approval_Status |default_if_none:''}}
+                {{ PRheader.Direktur_Approval_Date|date:'r' |default_if_none:''}}</td>
+            <td
+                style="padding:20px;border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;font-style: italic;color: green;">
+            </td>
+        </tr>
+        <tr style="height:20px;">
+            <td
+                style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                {{PRheader.User_Name|upper}}</td>
+            {%if Approval.DeptHead is not None%}
+            <td style="text-align: center;vertical-align: bottom;">{{Approval.DeptHead}}</td>
+            {% endif %}          
+            {%if Approval.DivHead is not None%}
+            <td style="text-align: center;vertical-align: bottom;">{{Approval.DivHead |default_if_none:''}}
+            </td>
+            {% endif %}
+            <td style="text-align: center;vertical-align: bottom;">{{Approval.Finance}}</td>
+            <td style="text-align: center;vertical-align: bottom;">{{Approval.Direktur}}</td>
+            <td
+                style="border-right: 1px solid black;border-left: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                {{approval.Purchase}}</td>
+        </tr>
+        <tr style="height:10px;">
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">User
+            </td>
+            {%if Approval.DeptHead is not None%}
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Dept
+                Head</td>
+            {% endif %}    
+            {%if Approval.DivHead is not None%}
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">Div
+                Head</td>
+            {% endif %}
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Fin&Acc</td>
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Pres Dir</td>
+            <td style="border: 1px solid black;width: 230px;text-align: center;vertical-align: bottom;">
+                Purchasing</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+<br>
+<h6>Budget (Khusus PR Asset / ZRAT)</h6>
+<table>
+    <tr>
+        <td style="width: 100px;">Budget No</td>
+        {%for budg in Budget%}
+        {%if budg.Budget_No == PRheader.Budget_No%}
+        <td style="width: 500px;">: {{PRheader.Budget_No|default_if_none:'-'}} {{budg.Description}}</td>
+        {%endif%}
+        {% endfor %}
+        <td><select type="text" id="BudgetNo {{PRheader.PP_Number}} Data" name="BudgetNo {{PRheader.PP_Number}} Data" >
+            <option value="" selected></option>
+            <option value="delete">**Un-Select Budget**</option>
+            {% for budg in Budget %}
+            <option value="{{budg.Budget_No}}">
+                {{budg.Budget_No}}-{{budg.Plant}}-{{budg.Description}}
+            </option>
+            {%endfor%}
+                
+
+        </select></td>
+    </tr>
+    <tr>
+        <td style="width: 100px;">Budget Total</td>
+        <td style="width: 500px;">: {{PRheader.Budget_Rp|default_if_none:'-'}} </td>
+        <td><input type="text" id="BudgetRp {{PRheader.PP_Number}} Data" name="BudgetRp {{PRheader.PP_Number}} Data" onkeyup="Calculate1(this)"></input> IDR</td>
+    </tr>
+    <tr>
+        <td style="width: 100px;">PP diproses</td>
+        <td style="width: 500px;">: {{PRheader.PP_diProses|default_if_none:'-'}}</td>
+        <td><input type="text" id="PPproses {{PRheader.PP_Number}} Data" name="PPproses {{PRheader.PP_Number}} Data" onkeyup="Calculate2(this)" ></input> IDR</td>
+    </tr>
+    <tr>
+        <td style="width: 100px;">Sisa</td>
+        <td style="width: 500px;">: {{PRheader.Sisa_Budget|default_if_none:'-'}}</td>
+        <td><input type="text" id="SisaBudget {{PRheader.PP_Number}} Data" name="SisaBudget {{PRheader.PP_Number}} Data" onkeyup="Calculate3(this)"></input> IDR</td>
+    </tr>
+    <tr>
+        <td style="width: 100px;">PP diajukan</td>
+        <td style="width: 500px;">: {{PRheader.PP_diAjukan|default_if_none:'-'}}</td>
+        <td><input type="text" id="PPdiajukan {{PRheader.PP_Number}} Data" name="PPdiajukan {{PRheader.PP_Number}} Data" onkeyup="Calculate4(this)"></input> IDR</td>
+    </tr>
+    <tr>
+        <td style="width: 100px;">Sisa</td>
+        <td style="width: 500px;">: {{PRheader.Sisa_Final|default_if_none:'-'}}</td>
+        <td><input type="text" id="SisaFinal {{PRheader.PP_Number}} Data" name="SisaFinal {{PRheader.PP_Number}} Data"onkeyup="Calculate5(this)"></input> IDR</td>
+    </tr>
+</table>
+<script>
+
+        function Calculate1(Item) {
+        document.getElementById("BudgetRp {{PRheader.PP_Number}} Data").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        function Calculate2(Item) {
+        document.getElementById("PPproses {{PRheader.PP_Number}} Data").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        function Calculate3(Item) {
+        document.getElementById("SisaBudget {{PRheader.PP_Number}} Data").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        function Calculate4(Item) {
+        document.getElementById("PPdiajukan {{PRheader.PP_Number}} Data").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        function Calculate5(Item) {
+        document.getElementById("SisaFinal {{PRheader.PP_Number}} Data").value = Item.value.toString().replace(/\D/g, '').replace(/\./g, "").replace(".", "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+</script>
+<br>
+
+<h6>Quotation (Penawaran) Attachment</h6>
+
+
+<table>
+    {% if PRheader.Attachment1  %}
+    <tr>
+        <td style ="width: 140px;">Attachment </td>
+        <td>:  <a class="btn btn-outline-success" href="/Media/{{PRheader.Attachment1}}">{{PRheader.Attachment1|cut:"Uploads/"}}</a></td>
+    </tr>
+
+    {% endif %}
+    {% if PRheader.Attachment2  %}
+    <tr>
+        <td style ="width: 140px;">Attachment </td>
+        <td>:  <a class="btn btn-outline-success" href="/Media/{{PRheader.Attachment2}}">{{PRheader.Attachment2|cut:"Uploads/"}}</a></td>
+    </tr>
+   
+    {% endif %}
+    {% if PRheader.Attachment3  %}
+        <td style ="width: 140px;">Attachment </td>
+        <td>:  <a class="btn btn-outline-success" href="/Media/{{PRheader.Attachment3}}">{{PRheader.Attachment3|cut:"Uploads/"}}</a></td>
+    </tr>
+   
+    {% endif %}
+   
+</table>
+
+</form>
+
+ <!-- Modal -->
+ <div class="modal fade" id="RevisePR" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+ aria-hidden="true" >
+ <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h5 class="modal-title" id="exampleModalLongTitle">Send Revise Request to User</h5>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+       </button>
+     </div>
+     <form method="POST" id ="reviseform">
+       {% csrf_token %}
+       <div class="modal-body">
+
+        <h6>Revision Note</h6>
+        <input type="text" class ="form-control" name="revisemessage" id="revisemessage">
+        
+       </div>
+       <div class="modal-footer">
+         <button style="width: 150px;" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+         <button style="width: 150px;" type="submit" class="btn btn-success" name="revision" id="revision" >Send Revise</button>
+       </div>
+     </form>
+   </div>
+ </div>
+</div>
+
+<div class="row">
+   
+</div>
+
+<div class="row" >
+    <button  class="btn btn-light" style="width: 100px;margin-right: 10px;margin-left: auto;"><a href="mailto:{{PRheader.User_Email}}?subject=Ask User:{{PRheader.PP_Number}}&body=Ask User about Purchase Request with ID {{PRheader.PP_Number}} %0DAsk User Message: ">Ask User</a></button>
+    <button type="submit" name ="revise" class="btn btn-warning" style="width: 100px;margin-left: 0px;margin-right: 10px;" data-toggle="modal" data-target="#RevisePR">Revise</button>
+    <button type="submit" name ="save" class="btn btn-success" style="width: 100px;margin-left: 0px;margin-right: 10px;" form = "asset">Save</button>
+    <button type="submit" name ="finish" class="btn btn-info" style="width: 100px;margin-left: 0px;margin-right: 15px;" form = "asset">finish</button>
+ 
+</div>
+
+
+<br>
+<br>
+</div>
+</div>
+
+
+{% endblock %}
